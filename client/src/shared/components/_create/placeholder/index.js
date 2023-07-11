@@ -15,16 +15,14 @@ const Placeholder = ({ platform }) => {
       <Information>
         {platform === "desktop" ? (
           <div>
-            Before clicking <strong>"Continue"</strong> please have a pen and
-            pad, or trusted password manager ready. Also ensure you're not using
-            a public or unsecured wifi.
+            Before clicking <strong>"Continue"</strong> please have a pen and pad, or trusted password manager ready.
+            Also ensure you're not using a public or unsecured wifi.
           </div>
         ) : (
           <div>
-            Upon clicking <strong>"Next"</strong> your Haven Vault Seed Phrase
-            will be revealed. Have a Password Manager ready, ensure you're not
-            on public or unsecured wifi, and verify the domain is{" "}
-            <strong>https://havenprotocol.org</strong>
+            Upon clicking <strong>"Next"</strong> your Zephyr Wallet Seed Phrase will be revealed. Have a Password
+            Manager ready, ensure you're not on public or unsecured wifi, and verify the domain is{" "}
+            <strong>https://zephyrprotocol.com</strong>
           </div>
         )}
       </Information>

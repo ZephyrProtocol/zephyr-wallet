@@ -3,6 +3,7 @@ import media from "../../../../../assets/styles/media.js";
 import { NavLink } from "react-router-dom";
 
 import { ReactComponent as AssetIcon } from "../../../../../assets/menu/assets.svg";
+import { ReactComponent as ProtocolIcon } from "../../../../../assets/menu/protocol.svg";
 import { ReactComponent as ConvertIcon } from "../../../../../assets/menu/convert.svg";
 import { ReactComponent as TransferIcon } from "../../../../../assets/menu/transfer.svg";
 import { ReactComponent as SettingsIcon } from "../../../../../assets/menu/settings.svg";
@@ -39,18 +40,12 @@ export const Asset = styled(AssetIcon)`
   width: 24px;
 
   .dark_border {
-    fill: ${(props) =>
-      props.item === "assets"
-        ? props.theme.type.inverse
-        : props.theme.type.primary};
+    fill: ${(props) => (props.item === "assets" ? props.theme.type.inverse : props.theme.type.primary)};
     fill-opacity: ${(props) => (props.item === "assets" ? 1 : 0.5)};
   }
 
   .light_border {
-    fill: ${(props) =>
-      props.item === "assets"
-        ? props.theme.type.inverse
-        : props.theme.type.primary};
+    fill: ${(props) => (props.item === "assets" ? props.theme.type.inverse : props.theme.type.primary)};
     fill-opacity: ${(props) => (props.item === "assets" ? 0.5 : 0.3)};
   }
 
@@ -69,36 +64,57 @@ export const Asset = styled(AssetIcon)`
   `};
 `;
 
-export const Convert = styled(ConvertIcon)`
+export const Protocol = styled(ProtocolIcon)`
   height: 24px;
   width: 24px;
 
   .dark_border {
-    fill: ${(props) =>
-      props.item === "convert"
-        ? props.theme.type.inverse
-        : props.theme.type.primary};
+    fill: ${(props) => (props.item === "protocol" ? props.theme.type.inverse : props.theme.type.primary)};
+    fill-opacity: ${(props) => (props.item === "protocol" ? 1 : 0.5)};
+  }
+
+  .light_border {
+    fill: ${(props) => (props.item === "protocol" ? props.theme.type.inverse : props.theme.type.primary)};
+    fill-opacity: ${(props) => (props.item === "protocol" ? 0.5 : 0.3)};
+  }
+
+  ${media.laptop`
+
+    .dark_border {
+      fill: ${(props) => props.item === "protocol" && props.theme.type.primary};
+      fill-opacity: ${(props) => (props.item === "protocol" ? 1 : 0.5)};
+    }
+
+    .light_border {
+      fill: ${(props) => props.item === "protocol" && props.theme.type.secondary};
+      fill-opacity: ${(props) => (props.item === "protocol" ? 0.8 : 0.3)};
+    }
+
+  `};
+`;
+
+export const Convert = styled(ConvertIcon)`
+  height: 28px;
+  width: 28px;
+
+  .dark_border {
+    fill: ${(props) => (props.item === "convert" ? props.theme.type.inverse : props.theme.type.primary)};
     fill-opacity: ${(props) => (props.item === "convert" ? 1 : 0.5)};
   }
 
   .light_border {
-    fill: ${(props) =>
-      props.item === "convert"
-        ? props.theme.type.inverse
-        : props.theme.type.primary};
+    fill: ${(props) => (props.item === "convert" ? props.theme.type.inverse : props.theme.type.primary)};
     fill-opacity: ${(props) => (props.item === "convert" ? 0.5 : 0.3)};
 
     ${media.laptop`
 
       .dark_border {
-        fill: ${(props) =>
-          props.item === "convert" && props.theme.type.primary};
+        fill: ${(props) => props.item === "convert" && props.theme.type.primary};
         fill-opacity: ${(props) => (props.item === "convert" ? 1 : 0.5)};
       }
 
       .light_border {
-        fill: ${(props) =>
-          props.item === "convert" && props.theme.type.secondary};
+        fill: ${(props) => props.item === "convert" && props.theme.type.secondary};
         fill-opacity: ${(props) => (props.item === "convert" ? 0.8 : 0.3)};
       }
 
@@ -111,18 +127,12 @@ export const Transfer = styled(TransferIcon)`
   width: 24px;
 
   .dark_border {
-    fill: ${(props) =>
-      props.item === "transfer"
-        ? props.theme.type.inverse
-        : props.theme.type.primary};
+    fill: ${(props) => (props.item === "transfer" ? props.theme.type.inverse : props.theme.type.primary)};
     fill-opacity: ${(props) => (props.item === "transfer" ? 1 : 0.5)};
   }
 
   .light_border {
-    fill: ${(props) =>
-      props.item === "transfer"
-        ? props.theme.type.inverse
-        : props.theme.type.primary};
+    fill: ${(props) => (props.item === "transfer" ? props.theme.type.inverse : props.theme.type.primary)};
     fill-opacity: ${(props) => (props.item === "transfer" ? 0.5 : 0.3)};
   }
 
@@ -134,8 +144,7 @@ export const Transfer = styled(TransferIcon)`
     }
 
     .light_border {
-      fill: ${(props) =>
-        props.item === "transfer" && props.theme.type.secondary};
+      fill: ${(props) => props.item === "transfer" && props.theme.type.secondary};
       fill-opacity: ${(props) => (props.item === "transfer" ? 0.8 : 0.3)};
     }
 
@@ -147,18 +156,12 @@ export const Settings = styled(SettingsIcon)`
   width: 24px;
 
   .dark_border {
-    fill: ${(props) =>
-      props.item === "settings"
-        ? props.theme.type.inverse
-        : props.theme.type.primary};
+    fill: ${(props) => (props.item === "settings" ? props.theme.type.inverse : props.theme.type.primary)};
     fill-opacity: ${(props) => (props.item === "settings" ? 1 : 0.5)};
   }
 
   .light_border {
-    fill: ${(props) =>
-      props.item === "settings"
-        ? props.theme.type.inverse
-        : props.theme.type.primary};
+    fill: ${(props) => (props.item === "settings" ? props.theme.type.inverse : props.theme.type.primary)};
     fill-opacity: ${(props) => (props.item === "settings" ? 0.5 : 0.3)};
   }
 
@@ -170,8 +173,7 @@ export const Settings = styled(SettingsIcon)`
     }
 
     .light_border {
-      fill: ${(props) =>
-        props.item === "settings" && props.theme.type.secondary};
+      fill: ${(props) => props.item === "settings" && props.theme.type.secondary};
       fill-opacity: ${(props) => (props.item === "settings" ? 0.8 : 0.3)};
     }
 

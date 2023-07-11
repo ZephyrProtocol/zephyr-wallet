@@ -77,10 +77,7 @@ class OwnAddressContainer extends Component<OwnAddressProps, OwnAddressState> {
 
     const { selected, addresses } = this.props;
 
-    const handleLabel =
-      selected!.label === undefined
-        ? `Address ${selected!.index}`
-        : selected!.label;
+    const handleLabel = selected!.label === undefined ? `Address ${selected!.index}` : selected!.label;
 
     const first = selected!.address.substring(0, 4);
     const last = selected!.address.substring(selected!.address.length - 4);

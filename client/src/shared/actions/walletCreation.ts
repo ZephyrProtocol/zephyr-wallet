@@ -1,11 +1,9 @@
 import { getNetworkByName, isDesktop, isWeb } from "constants/env";
 import { NotificationType } from "constants/notificationList";
-import { DesktopAppState, HavenAppState } from "platforms/desktop/reducers";
+import { DesktopAppState, ZephyrAppState } from "platforms/desktop/reducers";
 import { selectStorePath } from "platforms/desktop/reducers/storedWallets";
 import { NodeLocation } from "platforms/desktop/types";
-import {
-  getWalletCacheByName
-} from "platforms/web/actions/storage";
+import { getWalletCacheByName } from "platforms/web/actions/storage";
 import { webWalletConnection } from "platforms/web/nodes";
 import { Chain } from "shared/reducers/chain";
 import { ICreateWallet, IMonerRPCConnection, IOpenWallet } from "typings";
@@ -13,23 +11,23 @@ import { walletProxy } from "../core/proxy";
 import { addNotificationByMessage } from "./notification";
 import {
   CREATE_WALLET_FAILED,
-  CREATE_WALLET_FETCHING, CREATE_WALLET_SUCCEED,
-  GET_WALLET_HEIGHT_SUCCEED, OPEN_WALLET_FAILED, OPEN_WALLET_FETCHING,
+  CREATE_WALLET_FETCHING,
+  CREATE_WALLET_SUCCEED,
+  GET_WALLET_HEIGHT_SUCCEED,
+  OPEN_WALLET_FAILED,
+  OPEN_WALLET_FETCHING,
   OPEN_WALLET_SUCCEED,
   QUERY_MNEMONIC_FOR_WALLET_GENERATION_SUCCEED,
-  RESTORE_WALLET_BY_SEED_FAILED, RESTORE_WALLET_BY_SEED_FETCHING,
-  RESTORE_WALLET_BY_SEED_SUCCEED
+  RESTORE_WALLET_BY_SEED_FAILED,
+  RESTORE_WALLET_BY_SEED_FETCHING,
+  RESTORE_WALLET_BY_SEED_SUCCEED,
 } from "./types";
 import { startWalletSession } from "./walletSession";
 
 /** collection of actions to open, create and store wallet */
 
 /** used by browser */
-export const openWalletByData = (
-  keysData: Uint8Array,
-  password: string,
-  walletName: string
-) => {
+export const openWalletByData = (keysData: Uint8Array, password: string, walletName: string) => {
   return async (dispatch: any, getState: any) => {
     const cacheData = await getWalletCacheByName(walletName);
     const walletData: IOpenWallet = {
@@ -39,7 +37,7 @@ export const openWalletByData = (
       password,
       networkType: getNetworkByName(),
       server: getNodeForWallet(getState),
-      proxyToWorker:true
+      proxyToWorker: true,
     };
     dispatch(openWallet(walletData, walletName));
   };
@@ -55,7 +53,7 @@ export const openWalletByFile = (filename: string, password: string) => {
       password,
       networkType: getNetworkByName(),
       server: getNodeForWallet(getStore),
-      proxyToWorker:true
+      proxyToWorker: true,
     };
 
     dispatch(openWallet(walletData, filename));
@@ -67,39 +65,25 @@ const openWallet = (walletData: IOpenWallet, path: string) => {
     dispatch(openWalletFetching());
 
     try {
-
-     await walletProxy.openWallet(
-        walletData
-      );
+      await walletProxy.openWallet(walletData);
 
       dispatch(openWalletSucceed(path));
-  /*     dispatch(
+      /*     dispatch(
         addNotificationByMessage(
           NotificationType.SUCCESS,
-          "Vault was successfully unlocked"
+          "Wallet was successfully unlocked"
         )
       ); */
       dispatch(startWalletSession(path));
-
-
-    } catch(e) {
-
-      addNotificationByMessage(
-        NotificationType.ERROR,
-        "Open vault is not working, please try again soon..."
-      );
+    } catch (e) {
+      addNotificationByMessage(NotificationType.ERROR, "Open wallet is not working, please try again soon...");
       dispatch(openWalletFailed(e as object));
-
     }
   };
 };
 
-export const createNewWallet = (
-  path: string | undefined,
-  password: string,
-  walletName: string
-) => {
-  return async (dispatch: any, getStore: () => HavenAppState) => {
+export const createNewWallet = (path: string | undefined, password: string, walletName: string) => {
+  return async (dispatch: any, getStore: () => ZephyrAppState) => {
     dispatch(createWalletFetch(walletName));
 
     let storePath = path;
@@ -113,26 +97,18 @@ export const createNewWallet = (
       password,
       server: getNodeForWallet(getStore),
       networkType: getNetworkByName(),
-      proxyToWorker: true
+      proxyToWorker: true,
     };
 
     try {
-
-      await walletProxy.createWallet(
-        walletData
-      );
+      await walletProxy.createWallet(walletData);
 
       const mnemomic = await walletProxy.getMnemonic();
       dispatch(queryMnemonicForWalletGenerationSucceed(mnemomic));
       dispatch(createWalletSucceed());
-      addNotificationByMessage(NotificationType.SUCCESS, "Vault is open");
-
-    }catch (e) {
-
-      addNotificationByMessage(
-        NotificationType.ERROR,
-        "Open vault is not working, please try again soon..."
-      );
+      addNotificationByMessage(NotificationType.SUCCESS, "Wallet is open");
+    } catch (e) {
+      addNotificationByMessage(NotificationType.ERROR, "Open wallet is not working, please try again soon...");
       dispatch(createWalletFailed(e as object));
     }
   };
@@ -150,9 +126,9 @@ export const restoreWalletByMnemomic = (
   mnemonic: string,
   password: string,
   walletName: string | undefined,
-  restoreHeight?: number
+  restoreHeight?: number,
 ) => {
-  return async (dispatch: any, getStore: () => HavenAppState) => {
+  return async (dispatch: any, getStore: () => ZephyrAppState) => {
     let storePath = path;
 
     if (isDesktop()) {
@@ -166,28 +142,18 @@ export const restoreWalletByMnemomic = (
       networkType: getNetworkByName(),
       server: getNodeForWallet(getStore),
       restoreHeight,
-      proxyToWorker:true
+      proxyToWorker: true,
     };
 
     dispatch(restoreWalletFetching(walletName));
 
     try {
-
-      await walletProxy.createWallet(
-        walletData
-      );
+      await walletProxy.createWallet(walletData);
 
       dispatch(restoreWalletSucceed(walletName));
-      addNotificationByMessage(
-        NotificationType.SUCCESS,
-        "Restored vault with Mnemomic"
-      );
-    } catch(e) {
-
-      addNotificationByMessage(
-        NotificationType.ERROR,
-        "Restore vault is not working, please try again soon..."
-      );
+      addNotificationByMessage(NotificationType.SUCCESS, "Restored wallet with Mnemomic");
+    } catch (e) {
+      addNotificationByMessage(NotificationType.ERROR, "Restore wallet is not working, please try again soon...");
       dispatch(restoreWalletFailed(e));
     }
   };
@@ -199,48 +165,29 @@ export const restoreWalletByKeys = (
   privateSpendKey: string,
   privateVieKey: string,
   password: string,
-  walletName: string
+  walletName: string,
 ) => {
-
-
   return async (dispatch: any, getStore: any) => {
-
-
-      const walletData: ICreateWallet = {
-    path,
-    networkType: getNetworkByName(),
-    server: getNodeForWallet(getStore),
-    password,
-  };
+    const walletData: ICreateWallet = {
+      path,
+      networkType: getNetworkByName(),
+      server: getNodeForWallet(getStore),
+      password,
+    };
 
     dispatch(createWalletFetch(walletName));
 
     try {
-
-      await walletProxy.createWallet(
-        walletData
-      );
+      await walletProxy.createWallet(walletData);
 
       dispatch(restoreWalletSucceed(path));
-      addNotificationByMessage(
-        NotificationType.SUCCESS,
-        "Restored vault with Keystore"
-      );
-
-    } catch(e) {
-
-      addNotificationByMessage(
-        NotificationType.ERROR,
-        "Open vault is not working, please try again soon..."
-      );
+      addNotificationByMessage(NotificationType.SUCCESS, "Restored wallet with Keystore");
+    } catch (e) {
+      addNotificationByMessage(NotificationType.ERROR, "Open wallet is not working, please try again soon...");
       dispatch(restoreWalletFailed(e));
-
-
     }
   };
 };
-
-
 
 export const onWalletSyncUpdateSucceed = (heights: Partial<Chain>) => {
   return { type: GET_WALLET_HEIGHT_SUCCEED, payload: heights };
@@ -276,7 +223,6 @@ const queryMnemonicForWalletGenerationSucceed = (key: string) => ({
   payload: key,
 });
 
-
 const restoreWalletFetching = (walletName: string | undefined) => ({
   type: RESTORE_WALLET_BY_SEED_FETCHING,
   payload: walletName,
@@ -294,10 +240,7 @@ export const rescanBlockchain = async () => {
   return walletProxy.rescanBlockchain();
 };
 
-const createStorePath = (
-  getStore: () => DesktopAppState,
-  filename: string | undefined
-) => {
+const createStorePath = (getStore: () => DesktopAppState, filename: string | undefined) => {
   if (filename === undefined) {
     return filename;
   }
@@ -310,21 +253,16 @@ const createStorePath = (
   return filename;
 };
 
-
-export const getNodeForWallet = (getState: () => HavenAppState): IMonerRPCConnection | undefined => {
-
-
+export const getNodeForWallet = (getState: () => ZephyrAppState): IMonerRPCConnection | undefined => {
   if (isWeb()) {
     return webWalletConnection();
   }
 
   const selectedNode = (getState() as DesktopAppState).connectedNode;
 
-  if (selectedNode.location === NodeLocation.None)
-  {
+  if (selectedNode.location === NodeLocation.None) {
     return undefined;
-  } 
+  }
 
   return { uri: selectedNode.address! + ":" + selectedNode.port!, username: "super", password: "super" };
-
-}
+};

@@ -1,12 +1,12 @@
 import React from "react";
 import { Container, Icon, Title } from "./styles";
-import haven from "../../../assets/loading/rounded.svg";
+import zephyr from "../../../assets/loading/rounded.svg";
 
 const Loader = () => {
   return (
     <Container>
-      <Icon src={haven} />
-      <Title>Haven is loading...</Title>
+      <Icon src={zephyr} />
+      <Title>Zephyr is loading...</Title>
     </Container>
   );
 };

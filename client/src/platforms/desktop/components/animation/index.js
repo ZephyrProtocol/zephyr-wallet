@@ -21,8 +21,7 @@ import {
   Gpu,
   RemoteNode,
 } from "./styles.js";
-import icon from "../../../../assets/haven.svg";
-import light from "../../../../assets/haven-dark.svg";
+import icon from "../../../../assets/zephyr.png";
 import { Information } from "../../../../assets/styles/type.js";
 
 const Mining = ({ status, mining, hash, children, isLocalNode }) => {
@@ -32,7 +31,7 @@ const Mining = ({ status, mining, hash, children, isLocalNode }) => {
     <Container>
       <Header>
         <Brand>
-          <Logo src={themeContext.value === "Dark Theme" ? icon : light} />
+          <Logo src={themeContext.value === "Dark Theme" ? icon : icon} />
           <Gpu>GPU Miner</Gpu>
         </Brand>
 
@@ -66,9 +65,8 @@ const Mining = ({ status, mining, hash, children, isLocalNode }) => {
       {!isLocalNode && (
         <RemoteNode>
           <Information>
-            It appears that you are currently connected to a{" "}
-            <strong>Remote Node</strong>. To start mining please connect and
-            sync a <strong>Local Node</strong>.
+            It appears that you are currently connected to a <strong>Remote Node</strong>. To start mining please
+            connect and sync a <strong>Local Node</strong>.
           </Information>
         </RemoteNode>
       )}

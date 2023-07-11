@@ -24,11 +24,7 @@ interface CreateProps {
   isLoggedIn: boolean;
   mnemonicString: string;
   storeKeyFileToDisk: (fileName: string) => void;
-  createNewWallet: (
-    path: string | undefined,
-    password: string,
-    walletName: string
-  ) => void;
+  createNewWallet: (path: string | undefined, password: string, walletName: string) => void;
   isRequestingLogin: boolean;
   walletName: string;
 }
@@ -76,23 +72,13 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
   }
 
   nextCreateStep = () => {
-    const {
-      step,
-      mnemonicString,
-      verify_seed,
-      confirm_vault_password,
-      create_vault_password,
-    } = this.state;
+    const { step, mnemonicString, verify_seed, confirm_vault_password, create_vault_password } = this.state;
     const validationSucceed = verify_seed === mnemonicString;
     const passwordConfirmed = confirm_vault_password === create_vault_password;
 
     switch (step) {
       case 1:
-        return this.props.createNewWallet(
-          undefined,
-          this.state.create_vault_password,
-          this.state.create_vault_name
-        );
+        return this.props.createNewWallet(undefined, this.state.create_vault_password, this.state.create_vault_name);
         break;
       case 2:
         return this.setState({ step: step + 1 });
@@ -159,15 +145,15 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
         return (
           <>
             <Input
-              label="Vault Name"
-              placeholder="Create a vault name"
+              label="Wallet Name"
+              placeholder="Create a wallet name"
               name="create_vault_name"
               type="text"
               value={this.state.create_vault_name}
               onChange={this.handleChange}
             />
             <Toggle
-              label="Vault Password"
+              label="Wallet Password"
               placeholder="Enter a password"
               name="create_vault_password"
               type={this.state.reveal === true ? "text" : "password"}
@@ -176,16 +162,15 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
               onChange={this.handleChange}
               onClick={this.showPassword}
               readOnly={false}
-              onKeyUp={()=>{}}
+              onKeyUp={() => {}}
               error=""
               width={undefined}
             />
 
             <Information>
-              Enter a unique name and strong password to create a vault. You
-              will be asked to confirm this password on the final step. This
-              process will generate an encrypted vault file that enables you to
-              store, send and convert assets in complete privacy.
+              Enter a unique name and strong password to create a wallet. You will be asked to confirm this password on
+              the final step. This process will generate an encrypted wallet file that enables you to store, send and
+              convert assets in complete privacy.
             </Information>
           </>
         );
@@ -193,8 +178,8 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
         return (
           <>
             <InputButton
-              label="Vault File"
-              name="Vault File"
+              label="Wallet File"
+              name="Wallet File"
               placeholder="Error"
               value={this.props.walletName}
               button={"Save"}
@@ -203,16 +188,14 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
               onClick={this.onDownLoad}
             />
             <Checkbox
-              label="I have saved my vault file to my device"
+              label="I have saved my wallet file to my device"
               checked={this.state.checked}
               onChange={this.downloadedFile}
             />
 
             <Information>
-              A vault file uses military grade encryption to secure your assets.
-              Store this file in a safe location. To avoid permanent loss of
-              assets, never share your seed phrase, vault file or password with
-              anyone.
+              A wallet file uses military grade encryption to secure your assets. Store this file in a safe location. To
+              avoid permanent loss of assets, never share your seed phrase, wallet file or password with anyone.
             </Information>
           </>
         );
@@ -226,11 +209,9 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
               readOnly={true}
             />
             <Information>
-              A seed phrase provides full access to your account. It can be used
-              to generate new vault files or login directly. If you lose this
-              seed phrase then it’s impossible to recover your funds. Store it
-              in a reputable password manager or on a piece of paper. Do not
-              share it with anyone.
+              A seed phrase provides full access to your account. It can be used to generate new wallet files or login
+              directly. If you lose this seed phrase then it’s impossible to recover your funds. Store it in a reputable
+              password manager or on a piece of paper. Do not share it with anyone.
             </Information>
           </>
         );
@@ -248,10 +229,9 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
               onChange={this.handleChange}
             />
             <Information>
-              Re-enter the seed phrase that was provided on the previous step.
-              As a reminder, if you lose both your vault file and password or
-              seed phrase then your funds are lost forever with no possibility
-              of being recovered. Store them in a safe and secure location.
+              Re-enter the seed phrase that was provided on the previous step. As a reminder, if you lose both your
+              vault file and password or seed phrase then your funds are lost forever with no possibility of being
+              recovered. Store them in a safe and secure location.
             </Information>
           </>
         );
@@ -268,15 +248,14 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
               onChange={this.handleChange}
               onClick={this.showPassword}
               readOnly={false}
-              onKeyUp={()=>{}}
+              onKeyUp={() => {}}
               error={this.state.confirm_vault_error}
               width
             />
             <Information>
-              Re-enter the password that you used to create this vault file. If
-              you have forgotten it, please start again. This step is
-              intentionally frictional and requires password revalidation to
-              ensure you can access your vault file next time you login.
+              Re-enter the password that you used to create this vault file. If you have forgotten it, please start
+              again. This step is intentionally frictional and requires password revalidation to ensure you can access
+              your vault file next time you login.
             </Information>
           </>
         );
@@ -289,14 +268,7 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
       return <Navigate to="/wallet/assets" />;
     }
 
-    const {
-      step,
-      verify_seed,
-      create_vault_name,
-      create_vault_password,
-      checked,
-      clickedSaveButton,
-    } = this.state;
+    const { step, verify_seed, create_vault_name, create_vault_password, checked, clickedSaveButton } = this.state;
 
     // Simple method to force the user to confirm they downloaded the seed
     const disabled =
@@ -310,7 +282,7 @@ class CreateWalletWeb extends Component<CreateProps, CreateState> {
       <MultiCreate
         link="/login"
         route="Login"
-        label="Have a Vault?"
+        label="Have a Wallet?"
         step={step}
         nextStep={this.nextCreateStep}
         prevStep={this.prevCreateStep}

@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    havenProcess: any;
+    zephyrProcess: any;
   }
 }
 
@@ -10,33 +10,23 @@ export enum NodeLocation {
   None = "None",
 }
 
-
-
-
 export interface BasicNode {
-
   address?: string;
   port?: string;
-  location: NodeLocation
+  location: NodeLocation;
   default?: boolean;
 }
 
 export interface RemoteNode extends BasicNode {
-  provider:string;
-} 
-
-export interface SelectedNode extends BasicNode {
-
-
+  provider: string;
 }
 
+export interface SelectedNode extends BasicNode {}
 
 export interface NodeConnection {
-
-  isWalletConectedToDaemon: boolean,
-  isAppConnectedToDaemon: boolean,
-  isConnecting: boolean
-
+  isWalletConectedToDaemon: boolean;
+  isAppConnectedToDaemon: boolean;
+  isConnecting: boolean;
 }
 
 export interface LocalNode {
@@ -45,10 +35,7 @@ export interface LocalNode {
   connections: { in: number; out: number };
 }
 
-
-
 export interface DesktopConfig {
   theme: string;
   selectedNode: Partial<BasicNode>;
 }
-

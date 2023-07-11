@@ -5,17 +5,17 @@ import { WebAppState } from "platforms/web/reducers";
 
 export enum NotificationDuration {
   STICKY = -1,
-  DEFAULT = 3500, 
+  DEFAULT = 3500,
 }
 
-export interface HavenNotification {
+export interface ZephyrNotification {
   id: string;
   type: string;
   message: string;
   duration: NotificationDuration;
 }
 
-const INITIAL_STATE: { notifications: HavenNotification[] } = {
+const INITIAL_STATE: { notifications: ZephyrNotification[] } = {
   notifications: [],
 };
 
@@ -27,7 +27,7 @@ export default function (state = INITIAL_STATE, action: AnyAction) {
       return {
         //check for matching ids, only return element if the new filtered array doesn't match this one to be removed
         notifications: state.notifications.filter(
-          (notification: HavenNotification) => notification.id !== action.payload
+          (notification: ZephyrNotification) => notification.id !== action.payload,
         ),
       };
     default:
@@ -35,8 +35,6 @@ export default function (state = INITIAL_STATE, action: AnyAction) {
   }
 }
 
-export const getNotification = (
-  state: DesktopAppState | WebAppState
-): HavenNotification[] => {
+export const getNotification = (state: DesktopAppState | WebAppState): ZephyrNotification[] => {
   return state.notification.notifications;
 };

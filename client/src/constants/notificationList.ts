@@ -105,7 +105,7 @@ export const notificationList = [
   {
     key: "",
     code: -13,
-    message: "This Vault is not open. Please wait and try again.",
+    message: "This Wallet is not open. Please wait and try again.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_NOT_OPEN",
   },
@@ -147,8 +147,7 @@ export const notificationList = [
   {
     key: "",
     code: -19,
-    message:
-      "There's an issue creating this transaction. Please wait and try again.",
+    message: "There's an issue creating this transaction. Please wait and try again.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_NOT_ENOUGH_OUTS_TO_MIX",
   },
@@ -162,7 +161,7 @@ export const notificationList = [
   {
     key: "",
     code: -21,
-    message: "Oops, this Vault already exists. Please try again.",
+    message: "Oops, this Wallet already exists. Please try again.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_WALLET_ALREADY_EXISTS",
   },
@@ -176,7 +175,7 @@ export const notificationList = [
   {
     key: "",
     code: -23,
-    message: "Sorry, your Vault directory can't be found.",
+    message: "Sorry, your Wallet directory can't be found.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_NO_WALLET_DIR",
   },
@@ -197,7 +196,7 @@ export const notificationList = [
   {
     key: "",
     code: -26,
-    message: "Your Vault HEX is bad. Please try again.",
+    message: "Your Wallet HEX is bad. Please try again.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_BAD_HEX",
   },
@@ -232,7 +231,7 @@ export const notificationList = [
   {
     key: "",
     code: -31,
-    message: "This is not a multi-sign Vault. Please check and try again.",
+    message: "This is not a multi-sign Wallet. Please check and try again.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_NOT_MULTISIG",
   },
@@ -260,15 +259,14 @@ export const notificationList = [
   {
     key: "",
     code: -35,
-    message: "Your Vaults multi-sig data is bad. Please check and try again.",
+    message: "Your Wallets multi-sig data is bad. Please check and try again.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_MULTISIG_SIGNATURE",
   },
   {
     key: "",
     code: -36,
-    message:
-      "There was an issue with the multi-sigs signature. Please try again.",
+    message: "There was an issue with the multi-sigs signature. Please try again.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_MULTISIG_SUBMISSION",
   },
@@ -303,8 +301,7 @@ export const notificationList = [
   {
     key: "",
     code: -41,
-    message:
-      "There was an issue with your transaction signature. Please try again.",
+    message: "There was an issue with your transaction signature. Please try again.",
     type: NotificationType.ERROR,
     description: "WALLET_RPC_ERROR_CODE_SIGNED_SUBMISSION",
   },
@@ -325,35 +322,35 @@ export const notificationList = [
   {
     key: IS_SYNCING_MESSAGE,
     code: 0,
-    message: "Vault is syncing and will be fully functional soon.",
+    message: "Wallet is syncing and will be fully functional soon.",
     type: NotificationType.SUCCESS,
     description: IS_SYNCING_MESSAGE,
   },
   {
     key: SYNCING_SUCCEED_MESSAGE,
     code: 0,
-    message: "Vault has synced and can now be used. Enjoy.",
+    message: "Wallet has synced and can now be used. Enjoy.",
     type: NotificationType.SUCCESS,
     description: SYNCING_SUCCEED_MESSAGE,
   },
   {
     key: WALLET_IS_CONNECTING,
     code: 0,
-    message: (host: string) => `Vault is connecting to ${host}`,
+    message: (host: string) => `Wallet is connecting to ${host}`,
     type: NotificationType.SUCCESS,
     description: WALLET_IS_CONNECTING,
   },
   {
     key: WALLET_CONNECT_SUCCEED,
     code: 0,
-    message: (host: string) => `Vault is now connected to ${host}`,
+    message: (host: string) => `Wallet is now connected to ${host}`,
     type: NotificationType.SUCCESS,
     description: WALLET_CONNECT_SUCCEED,
   },
   {
     key: WALLET_NEEDS_CONNECTION,
     code: 0,
-    message: `Please select a node in settings to start syncing your Vault`,
+    message: `Please select a node in settings to start syncing your Wallet`,
     type: NotificationType.ERROR,
     description: WALLET_NEEDS_CONNECTION,
   },

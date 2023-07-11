@@ -2,16 +2,7 @@
 import React, { Component } from "react";
 
 // Relative Imports
-import {
-  Container,
-  Main,
-  Header,
-  Footer,
-  Route,
-  Label,
-  Title,
-  Description,
-} from "./styles";
+import { Container, Main, Header, Footer, Route, Label, Title, Description } from "./styles";
 import { DesktopAppState } from "../../../reducers";
 import { connect } from "react-redux";
 import { getSavedWallets } from "platforms/desktop/actions/storedWallets";
@@ -55,16 +46,13 @@ class MultiLoginPage extends Component<MultiLoginProps, MultiloginState> {
     return (
       <Container>
         <Header>
-          <Title>Vault Login</Title>
-          <Description>
-            Privately store, exchange and transfer assets
-          </Description>
+          <Title>Zephyr Wallet</Title>
+          <Description>The Untraceable Stablecoin</Description>
         </Header>
         <Main>
           <OpenWalletDesktop wallets={this.props.wallets} />
         </Main>
         <Footer>
-          <Label>Need a Vault?</Label>
           <Route to="/create">Create or Restore</Route>
         </Footer>
       </Container>

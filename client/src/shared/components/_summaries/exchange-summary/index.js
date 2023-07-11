@@ -25,36 +25,40 @@ export const ExchangeSummary = ({
   let rate = xRate;
   let conversion_info = "";
 
-  if (fromTicker === Ticker.xUSD && toTicker !== null) {
+  if (fromTicker === Ticker.ZEPHUSD && toTicker !== null) {
     xToTicker = fromTicker;
     xFromTicker = toTicker;
     rate = 1 / xRate;
-  } else if ( toTicker === null || fromTicker === null ){
+  } else if (toTicker === null || fromTicker === null) {
     rate = 1;
     xFromTicker = "-";
     xToTicker = "-";
   }
 
-  if( fromTicker === Ticker.XHV || toTicker === Ticker.XHV ){
-    if( usingSpot){
+  if (fromTicker === Ticker.ZEPH || toTicker === Ticker.ZEPH) {
+    if (usingSpot) {
       conversion_info = " (Spot Rate)";
-    }else{
+    } else {
       conversion_info = " (Moving Average)";
     }
   }
 
   //unlock times
-  let unlock_time = "--";
-  if(fromTicker !== null && toTicker != null){
-    if( fromTicker === Ticker.XHV && toTicker === Ticker.xUSD){
-      unlock_time = "~21d";
-    }else if( fromTicker === Ticker.xUSD && toTicker === Ticker.XHV ){
-      unlock_time = "~21d";
-    }else{
-      unlock_time = "~48h"
-    }
-  }
+  let unlock_time = "~20m";
+  // if (fromTicker !== null && toTicker != null) {
+  //   if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
+  //     unlock_time = "~21d";
+  //   } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPH) {
+  //     unlock_time = "~21d";
+  //   } else {
+  //     unlock_time = "~48h";
+  //   }
+  // }
 
+  let conversionFee = toAmount * 0.02;
+  if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHRSV) {
+    conversionFee = 0;
+  }
 
   return (
     <Wrapper>
@@ -65,7 +69,7 @@ export const ExchangeSummary = ({
             {!hasLatestXRate ? (
               <Error>Fetching latest rates...</Error>
             ) : (
-              `1 ${xFromTicker} : ${iNum(rate)} ${xToTicker}`
+              `1 ${xToTicker} : ${iNum(rate)} ${xFromTicker}`
             )}
           </Value>
         </Row>
@@ -80,6 +84,13 @@ export const ExchangeSummary = ({
           <Key>Converting To</Key>
           <Value>
             {toAmount}&#160;
+            {toTicker ? toTicker : "--"}
+          </Value>
+        </Row>
+        <Row>
+          <Key>Conversion Fee</Key>
+          <Value>
+            {iNum(conversionFee)}&#160;
             {toTicker ? toTicker : "--"}
           </Value>
         </Row>

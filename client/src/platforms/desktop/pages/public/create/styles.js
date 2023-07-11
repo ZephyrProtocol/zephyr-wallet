@@ -22,18 +22,20 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: ${(props) => {
-    switch (props.theme) {
-      case "light":
-        return `url(${light})`;
-      case "dark":
-        return `url(${dark})`;
-      case "sepia":
-        return `url(${sepia})`;
-      default:
-    }
-  }};
+  background-color: #000;
 `;
+
+// background-image: ${(props) => {
+//   switch (props.theme) {
+//     case "light":
+//       return `url(${light})`;
+//     case "dark":
+//       return `url(${dark})`;
+//     case "sepia":
+//       return `url(${sepia})`;
+//     default:
+//   }
+// }};
 
 export const Microcopy = styled.div`
   height: auto;

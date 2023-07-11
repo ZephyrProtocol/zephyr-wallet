@@ -23,6 +23,9 @@ class Menu extends Component {
           <Item to="/wallet/transfer">Transfer</Item>
         </Wrapper>
         <Wrapper>
+          <Item to="/wallet/protocol">Protocol</Item>
+        </Wrapper>
+        <Wrapper>
           <Item to="/wallet/settings">Settings</Item>
         </Wrapper>
       </Container>

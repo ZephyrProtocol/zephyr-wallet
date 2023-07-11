@@ -15,6 +15,7 @@ import {
   Convert,
   Transfer,
   Settings,
+  Protocol,
   ChevronInactive,
 } from "./styles";
 
@@ -49,28 +50,13 @@ class Menu extends Component {
           <Item to="/wallet/assets" onClick={() => this.handleClick("assets")}>
             <Aligner>
               <Asset item={item} />
-              <Label>Assets</Label>
+              <Label>Balances</Label>
             </Aligner>
             {item === "assets" ? <Chevron /> : <ChevronInactive />}
           </Item>
         </Wrapper>
         <Wrapper>
-          <Item
-            to="/wallet/convert"
-            onClick={() => this.handleClick("convert")}
-          >
-            <Aligner>
-              <Convert item={item} />
-              <Label>Convert</Label>
-            </Aligner>
-            {item === "convert" ? <Chevron /> : <ChevronInactive />}
-          </Item>
-        </Wrapper>
-        <Wrapper>
-          <Item
-            to="/wallet/transfer"
-            onClick={() => this.handleClick("transfer")}
-          >
+          <Item to="/wallet/transfer" onClick={() => this.handleClick("transfer")}>
             <Aligner>
               <Transfer item={item} />
               <Label>Transfer</Label>
@@ -79,10 +65,25 @@ class Menu extends Component {
           </Item>
         </Wrapper>
         <Wrapper>
-          <Item
-            to="/wallet/settings"
-            onClick={() => this.handleClick("settings")}
-          >
+          <Item to="/wallet/convert" onClick={() => this.handleClick("convert")}>
+            <Aligner>
+              <Convert item={item} />
+              <Label>Exchange</Label>
+            </Aligner>
+            {item === "convert" ? <Chevron /> : <ChevronInactive />}
+          </Item>
+        </Wrapper>
+        <Wrapper>
+          <Item to="/wallet/protocol" onClick={() => this.handleClick("protocol")}>
+            <Aligner>
+              <Protocol item={item} />
+              <Label>Protocol</Label>
+            </Aligner>
+            {item === "protocol" ? <Chevron /> : <ChevronInactive />}
+          </Item>
+        </Wrapper>
+        <Wrapper>
+          <Item to="/wallet/settings" onClick={() => this.handleClick("settings")}>
             <Aligner>
               <Settings item={item} />
               <Label>Settings</Label>

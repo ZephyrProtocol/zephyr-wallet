@@ -12,48 +12,22 @@ import { AssetList } from "constants/assets";
 import { convertBalanceToMoney } from "utility/utility";
 import { Ticker } from "shared/reducers/types";
 import { DesktopAppState } from "platforms/desktop/reducers";
-import {
-  selectValueInOtherAsset,
-  XBalances,
-  XViewBalance,
-} from "shared/reducers/xBalance";
+import { selectValueInOtherAsset, XBalances, XViewBalance } from "shared/reducers/xBalance";
 import { WebAppState } from "platforms/web/reducers";
-import {
-  BlockHeaderRate,
-  selectXRate,
-} from "shared/reducers/blockHeaderExchangeRates";
-import { ProtocolHealth } from "shared/components/protocol_health";
-import { Row } from "./styles";
+import { BlockHeaderRate, selectXRate } from "shared/reducers/blockHeaderExchangeRates";
+import { Row, Row3 } from "./styles";
 import Statistic from "shared/components/statistic";
-import { selectOffshoreVBS, selectOnshoreVBS } from "shared/reducers/circulatingSupply";
-import { selectBlockap } from "shared/reducers/chain";
-
+import { ReserveInfo } from "shared/reducers/reserveInfo";
 
 interface AssetsProps {
   balances: XBalances;
   rates: BlockHeaderRate[];
   assetsInUSD: XViewBalance;
   showPrivateDetails: boolean;
-  offshoreVBS:number | null;
-  onshoreVBS:number | null;
-  blockCap: number;
-  
+  reserveInfo: ReserveInfo | null;
 }
 
 interface AssetsState {}
-
-const Enabled_TICKER = [
-  Ticker.xUSD,
-  Ticker.XHV,
-  Ticker.XAG,
-  Ticker.XAU,
-  Ticker.xCNY,
-  Ticker.xEUR,
-  Ticker.xBTC,
-  Ticker.xAUD,
-  Ticker.xGBP,
-  Ticker.xCHF
-];
 
 class AssetsPage extends Component<AssetsProps, any> {
   state = {
@@ -64,130 +38,102 @@ class AssetsPage extends Component<AssetsProps, any> {
     window.scrollTo(0, 0);
   }
 
-  renderEnabledTokens = () => {
-    const enabledTokens = AssetList.filter((asset: any) =>
-      Enabled_TICKER.includes(asset.id as Ticker)
+  renderBalance = (ticker: keyof XBalances) => {
+    const numDecimals = 2;
+
+    const unlockedBalance = convertBalanceToMoney(this.props.balances[ticker].unlockedBalance, numDecimals);
+
+    const totalBalance = convertBalanceToMoney(this.props.balances[ticker].balance, numDecimals);
+
+    const lockedBalance = convertBalanceToMoney(this.props.balances[ticker].lockedBalance, numDecimals);
+
+    const name = ticker === Ticker.ZEPHRSV ? "Reserve" : "Stable";
+    const toTicker = ticker === Ticker.ZEPHRSV ? Ticker.ZEPH : ticker;
+    let value = selectValueInOtherAsset(this.props.balances[ticker], this.props.rates, ticker, toTicker); // this.props.assetsInUSD[xTicker]!.unlockedBalance;
+    const xRate = selectXRate(this.props.rates, ticker, toTicker);
+
+    if (ticker === Ticker.ZEPHRSV) {
+      const spotPrice = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
+      value.balance *= spotPrice;
+      value.unlockedBalance *= spotPrice;
+      value.lockedBalance *= spotPrice;
+    }
+
+    return (
+      <Cell
+        fullwidth="fullwidth"
+        key={ticker}
+        tokenName={name}
+        ticker={ticker}
+        price={xRate}
+        value={value}
+        totalBalance={totalBalance}
+        lockedBalance={lockedBalance}
+        unlockedBalance={unlockedBalance}
+        showPrivateDetails={this.props.showPrivateDetails}
+      />
     );
-    return enabledTokens.map((data) => {
-      const { token, ticker, id } = data;
-
-      const xTicker = id;
-
-      const numDecimals = (xTicker === Ticker.XAG || xTicker === Ticker.XAU || xTicker === Ticker.xBTC) ? 4 : 2;
-
-      const unlockedBalance = convertBalanceToMoney(
-        this.props.balances[xTicker].unlockedBalance, numDecimals
-      );
-
-      const totalBalance = convertBalanceToMoney(
-        this.props.balances[xTicker].balance, numDecimals
-      );
-
-      const lockedBalance = convertBalanceToMoney(
-        this.props.balances[xTicker].lockedBalance, numDecimals
-      );
-
-      const value = selectValueInOtherAsset(
-        this.props.balances[xTicker],
-        this.props.rates,
-        xTicker,
-        Ticker.xUSD
-      ); // this.props.assetsInUSD[xTicker]!.unlockedBalance;
-      const xRate = selectXRate(this.props.rates, xTicker, Ticker.xUSD);
-
-      return (
-        <Cell
-          fullwidth="fullwidth"
-          key={token}
-          tokenName={token}
-          ticker={xTicker}
-          price={xRate}
-          value={value}
-          totalBalance={totalBalance}
-          lockedBalance={lockedBalance}
-          unlockedBalance={unlockedBalance}
-          showPrivateDetails={this.props.showPrivateDetails}
-        />
-      );
-    });
-  };
-
-  renderDisabledTokens = () => {
-    const disabledTokens = AssetList.filter(
-      (asset: any) => !Enabled_TICKER.includes(("x" + asset.ticker) as Ticker)
-    );
-
-    return disabledTokens.map((data) => {
-      const { token, ticker, symbol, id } = data;
-
-      const xTicker = id;
-      const rates = this.props.rates;
-      const xRate = selectXRate(rates, xTicker, Ticker.xUSD);
-      const xRateString = symbol + xRate.toFixed(2);
-
-      return (
-        <CellDisabled
-          fullwidth="fullwidth"
-          key={token}
-          tokenName={token}
-          ticker={"x" + ticker}
-          price={xRateString}
-          balance={"0.00"}
-        />
-      );
-    });
   };
 
   render() {
-    const unlockedBalance = convertBalanceToMoney(
-      this.props.balances.XHV.unlockedBalance
-    );
+    const unlockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.unlockedBalance);
 
-    const totalBalance = convertBalanceToMoney(this.props.balances.XHV.balance);
+    const totalBalance = convertBalanceToMoney(this.props.balances.ZEPH.balance);
 
-    const lockedBalance = convertBalanceToMoney(
-      this.props.balances.XHV.lockedBalance
-    );
+    const lockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.lockedBalance);
 
-    const xhvInUSD = selectValueInOtherAsset(
-      this.props.balances.XHV,
+    const zephInUSD = selectValueInOtherAsset(
+      this.props.balances.ZEPH,
       this.props.rates,
-      Ticker.xUSD,
-      Ticker.XHV
-    ).unlockedBalance;
+      Ticker.ZEPH,
+      Ticker.ZEPHUSD,
+      true,
+    );
 
-    const xRate = selectXRate(this.props.rates, Ticker.XHV, Ticker.xUSD);
-    const offshoreVBS = this.props.offshoreVBS ? Math.floor(this.props.offshoreVBS) : 0;
-    const onshoreVBS = this.props.onshoreVBS ? Math.floor(this.props.onshoreVBS) : 0;
-    const blockCap = this.props.blockCap;
+    const xRate = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
+    const reserveInfo = this.props.reserveInfo;
+
+    const zephReserve = convertBalanceToMoney(reserveInfo?.zeph_reserve ?? 0);
+    const liabilities = convertBalanceToMoney(reserveInfo?.liabilities ?? 0);
+
+    const assets = convertBalanceToMoney(reserveInfo?.assets ?? 0);
+    const assetsMA = convertBalanceToMoney(reserveInfo?.assets_ma ?? 0);
+
+    const equity = convertBalanceToMoney(reserveInfo?.equity ?? 0);
+    const equityMA = convertBalanceToMoney(reserveInfo?.equity_ma ?? 0);
+
+    const numStable = convertBalanceToMoney(reserveInfo?.num_stables ?? 0);
+    const numReserve = convertBalanceToMoney(reserveInfo?.num_reserves ?? 0);
+
+    const reserveRatio = convertBalanceToMoney(reserveInfo?.reserve_ratio?.multiply(100) ?? 0, 0).toLocaleString();
+
+    const spanStyle = { color: "#7f7f7f", fontSize: "0.9rem", fontWeight: "bold" };
 
     return (
       <Body>
-        <ProtocolHealth></ProtocolHealth>
-        <Row>
-          <Statistic label="Offshore VBS" value={offshoreVBS} />
-          <Statistic label="Onshore VBS" value={onshoreVBS} />
-        
-        </Row>
+        <Row3>
+          <Statistic label="Reserve" value={<div>${assets}</div>} />
+          <Statistic label="ZephUSD Circulation" value={<div>${liabilities}</div>} />
+          <Statistic label="Reserve ratio" value={<div>{reserveRatio}%</div>} />
+        </Row3>
+
         <Overview />
-        <Header
-          title="Available Assets"
-          description="Overview of all available Haven assets"
-        />
+        <Header title="All Balances" description="" />
         <Cell
           //@ts-ignore
           key={1}
-          tokenName={"Haven"}
-          ticker={"XHV"}
+          tokenName={"Zephyr"}
+          ticker={"ZEPH"}
           price={xRate}
-          value={xhvInUSD}
+          value={zephInUSD}
           fullwidth="fullwidth"
           totalBalance={totalBalance.toFixed(2)}
           lockedBalance={lockedBalance}
           unlockedBalance={unlockedBalance}
           showPrivateDetails={this.props.showPrivateDetails}
         />
-        {this.renderEnabledTokens()}
+        {this.renderBalance(Ticker.ZEPHUSD)}
+        {this.renderBalance(Ticker.ZEPHRSV)}
       </Body>
     );
   }
@@ -197,9 +143,7 @@ export const mapStateToProps = (state: DesktopAppState | WebAppState) => ({
   rates: state.blockHeaderExchangeRate,
   balances: state.xBalance,
   showPrivateDetails: state.walletSession.showPrivateDetails,
-  onshoreVBS: selectOnshoreVBS(state),
-  offshoreVBS: selectOffshoreVBS(state),
-  blockCap: selectBlockap(state)
+  reserveInfo: state.reserveInfo,
 });
 
 export const Assets = connect(mapStateToProps, {})(AssetsPage);

@@ -5,6 +5,7 @@ export const Container = styled.div`
   height: auto;
   min-height: 550px;
   max-width: 624px;
+  min-width: 420px;
   flex-direction: column;
   margin: 20px;
   border: 1px solid ${(props) => props.theme.body.border};
@@ -39,10 +40,8 @@ export const Tab = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  color: ${(props) =>
-    props.active ? props.theme.type.primary : props.theme.type.secondary};
-  background: ${(props) =>
-    props.active ? props.theme.body.background : props.theme.body.foreground};
+  color: ${(props) => (props.active ? props.theme.type.primary : props.theme.type.secondary)};
+  background: ${(props) => (props.active ? props.theme.body.background : props.theme.body.foreground)};
   border-top: none;
   transition: 500ms;
 
@@ -77,9 +76,7 @@ export const Description = styled.div`
 
 export const Step = styled.div`
   width: ${(props) =>
-    (props.width === 1 ? "10%" : null) ||
-    (props.width === 2 ? "50%" : null) ||
-    (props.width === 3 ? "100%" : null)};
+    (props.width === 1 ? "10%" : null) || (props.width === 2 ? "50%" : null) || (props.width === 3 ? "100%" : null)};
   background: #7289da;
   height: auto;
   border-radius: 4px;

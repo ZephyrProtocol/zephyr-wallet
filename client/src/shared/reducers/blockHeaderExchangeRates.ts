@@ -18,17 +18,17 @@ export interface XRates {
   rates: ConversionRate[];
 }
 
-
 type Rates = Record<Ticker, bigInt.BigInteger>;
 interface BlockHeader {
-
   height: number;
   signature: string;
-  UNUSED1: bigInt.BigInteger;
-  UNUSED2: bigInt.BigInteger;
-  UNUSED3: bigInt.BigInteger;
+  spot: bigInt.BigInteger;
+  moving_average: bigInt.BigInteger;
+  stable: bigInt.BigInteger;
+  stable_ma: bigInt.BigInteger;
+  reserve: bigInt.BigInteger;
+  reserve_ma: bigInt.BigInteger;
   timestamp: bigInt.BigInteger;
-
 }
 
 export type BlockHeaderRate = BlockHeader & Rates;
@@ -37,7 +37,7 @@ const INITIAL_STATE: BlockHeaderRate[] = [];
 
 export const blockHeaderExchangeRate = (
   state: BlockHeaderRate[] = INITIAL_STATE,
-  action: AnyAction
+  action: AnyAction,
 ): BlockHeaderRate[] => {
   switch (action.type) {
     case GET_BLOCK_HEADER_EXCHANGE_RATE_SUCCEED:
@@ -47,11 +47,11 @@ export const blockHeaderExchangeRate = (
   }
 };
 
-
 export const selectXRate = (
   blockHeaderExchangeRate: BlockHeaderRate[],
   fromTicker: Ticker | null,
-  toTicker: Ticker | null
+  toTicker: Ticker | null,
+  useSpot: boolean = false,
 ): number => {
   if (blockHeaderExchangeRate.length === 0) {
     return 0;
@@ -65,67 +65,45 @@ export const selectXRate = (
     return 0;
   }
 
-  // one of the ticker must be xUSD
-  if (fromTicker !== Ticker.xUSD && toTicker !== Ticker.xUSD) {
+  // one of the tickers must be ZEPH
+  if (fromTicker !== Ticker.ZEPH && toTicker !== Ticker.ZEPH) {
     return 0;
   }
 
-  const from = fromTicker === Ticker.xUSD ? "UNUSED1" : fromTicker;
-  const to = toTicker === Ticker.xUSD ? "UNUSED1" : toTicker;
+  const latestBlockerHeader: BlockHeaderRate = blockHeaderExchangeRate[blockHeaderExchangeRate.length - 1];
 
-  const latestBlockerHeader: BlockHeaderRate =
-    blockHeaderExchangeRate[blockHeaderExchangeRate.length - 1];
-
-    /**
-     * handles xUSD --> XHV and XHV -> xUSD
-     * Tokenomics change Feb2022: use the least favorable exchange rate on xhv - xusd conversions
-     */
-
-
-  if (from === Ticker.XHV && latestBlockerHeader[to]) {
-    //to is xUSD
-    let xusd_ma_rate = latestBlockerHeader["UNUSED1"].toJSNumber() / Math.pow(10, 12);
-    let xusd_spot_rate = latestBlockerHeader[Ticker.xUSD].toJSNumber() / Math.pow(10, 12);
-
-    //give the minimum
-    return Math.min(xusd_ma_rate,xusd_spot_rate);
-    //return latestBlockerHeader[to].toJSNumber() / Math.pow(10, 12);
-
-  } else if (to === Ticker.XHV) {
-    //from is xUSD
-
-    if (!latestBlockerHeader[from].isZero()) {
-
-      let xusd_ma_rate = Math.pow(10, 12) / latestBlockerHeader["UNUSED1"].toJSNumber();
-      let xusd_spot_rate = Math.pow(10, 12) / latestBlockerHeader[Ticker.xUSD].toJSNumber();
-      return Math.min(xusd_ma_rate,xusd_spot_rate);
-      //return Math.pow(10, 12) / latestBlockerHeader[from].toJSNumber();
-    }
+  if (useSpot && fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
+    let spot_rate = latestBlockerHeader["spot"].toJSNumber() / Math.pow(10, 12);
+    return spot_rate;
   }
 
-  if (fromTicker === Ticker.xUSD && latestBlockerHeader[toTicker]) {
-      return latestBlockerHeader[toTicker].toJSNumber() / Math.pow(10, 12);
-  } else {
-    if (!latestBlockerHeader[fromTicker].isZero()) {
-      return Math.pow(10, 12) / latestBlockerHeader[fromTicker].toJSNumber();
-    }
+  let stable_rate = latestBlockerHeader["stable"].toJSNumber() / Math.pow(10, 12);
+  let stable_ma_rate = latestBlockerHeader["stable_ma"].toJSNumber() / Math.pow(10, 12);
+
+  let reserve_rate = latestBlockerHeader["reserve"].toJSNumber() / Math.pow(10, 12);
+  let reserve_ma_rate = latestBlockerHeader["reserve_ma"].toJSNumber() / Math.pow(10, 12);
+
+  if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
+    return Math.max(stable_rate, stable_ma_rate);
+  } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPH) {
+    return Math.min(stable_rate, stable_ma_rate);
+  } else if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHRSV) {
+    return Math.max(reserve_rate, reserve_ma_rate);
+  } else if (fromTicker === Ticker.ZEPHRSV && toTicker === Ticker.ZEPH) {
+    return Math.min(reserve_rate, reserve_ma_rate);
   }
+
   return 0;
 };
 
-export const selectLastExchangeRates = (
-  state: DesktopAppState | WebAppState
-): BlockHeaderRate | null => {
-  const latestBlockerHeader: BlockHeaderRate =
-    state.blockHeaderExchangeRate[state.blockHeaderExchangeRate.length - 1];
+export const selectLastExchangeRates = (state: DesktopAppState | WebAppState): BlockHeaderRate | null => {
+  const latestBlockerHeader: BlockHeaderRate = state.blockHeaderExchangeRate[state.blockHeaderExchangeRate.length - 1];
   return latestBlockerHeader;
 };
 
 export const hasLatestXRate = (state: DesktopAppState) => {
   const chainHeight: number = state.chain.chainHeight;
-  return state.blockHeaderExchangeRate.some(
-    (xRate) => xRate.height === chainHeight - 1
-  );
+  return state.blockHeaderExchangeRate.some((xRate) => xRate.height === chainHeight - 1);
 };
 
 export const priceDelta = (state: DesktopAppState): number | null => {
@@ -133,11 +111,7 @@ export const priceDelta = (state: DesktopAppState): number | null => {
     return null;
   }
 
-  const latestBlockerHeader =
-    state.blockHeaderExchangeRate[state.blockHeaderExchangeRate.length - 1];
+  const latestBlockerHeader = state.blockHeaderExchangeRate[state.blockHeaderExchangeRate.length - 1];
 
-  return latestBlockerHeader.XUSD
-    .subtract(latestBlockerHeader.UNUSED1)
-    .abs()
-    .toJSNumber();
+  return latestBlockerHeader.stable.subtract(latestBlockerHeader.stable_ma).abs().toJSNumber();
 };

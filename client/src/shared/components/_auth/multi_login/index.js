@@ -2,25 +2,8 @@
 import React, { Component } from "react";
 
 // Relative Imports
-import {
-  Title,
-  Description as Subtitle,
-  Information,
-} from "../../../../assets/styles/type.js";
-import {
-  Container,
-  Main,
-  Header,
-  Buttons,
-  Submit,
-  Footer,
-  Cancel,
-  Body,
-  Route,
-  Label,
-  Tabs,
-  Tab,
-} from "./styles";
+import { Title, Description as Subtitle, Information } from "../../../../assets/styles/type.js";
+import { Container, Main, Header, Buttons, Submit, Footer, Cancel, Body, Route, Label, Tabs, Tab } from "./styles";
 import { Spinner } from "../../spinner";
 import Input from "../../_inputs/input";
 import InputButton from "../../_inputs/input_button";
@@ -73,20 +56,18 @@ export class MultiLogin extends Component {
     return (
       <Container>
         <Header>
-          <Title>Vault Login</Title>
-          <Subtitle>
-            To access your Vault please enter your preferred login option
-          </Subtitle>
+          <Title>Zephyr Wallet</Title>
+          <Subtitle>To access your Wallet please enter your preferred login option</Subtitle>
         </Header>
         <Tabs>
           <Tab active={keystore} onClick={this.selectKeystore}>
-            Open Vault
+            Open Wallet
           </Tab>
           <Tab active={seed} onClick={this.selectSeed}>
-            Create Vault
+            Create Wallet
           </Tab>
           <Tab active={ledger} onClick={this.selectLedger}>
-            Restore Vault
+            Restore VauWalletlt
           </Tab>
         </Tabs>
         <Main>
@@ -101,8 +82,8 @@ export class MultiLogin extends Component {
                   onChange={(event) => this.handleChange(event)}
                 />
                 <Information>
-                  Before entering your Seed Phrase please ensure you're not on a
-                  public wifi and no one is looking at your screen.
+                  Before entering your Seed Phrase please ensure you're not on a public wifi and no one is looking at
+                  your screen.
                 </Information>
               </>
             )}
@@ -116,8 +97,8 @@ export class MultiLogin extends Component {
                   onChange={(event) => this.handleChange(event)}
                 />
                 <Information>
-                  We recommend you login with a Ledger device as it's the most
-                  secure method possible for securing your funds.
+                  We recommend you login with a Ledger device as it's the most secure method possible for securing your
+                  funds.
                 </Information>
               </>
             )}
@@ -141,8 +122,8 @@ export class MultiLogin extends Component {
                   onChange={(event) => this.handleChange(event)}
                 />
                 <Information>
-                  Upload your encrypted Keystore File and enter the password
-                  associated with it to unlock and access your funds.
+                  Upload your encrypted Keystore File and enter the password associated with it to unlock and access
+                  your funds.
                 </Information>
               </>
             )}
@@ -156,8 +137,8 @@ export class MultiLogin extends Component {
           </Buttons>
         </Main>
         <Footer>
-          <Label>Need a Vault?</Label>
-          <Route to={"/create"}>Create or Restore a Vault</Route>
+          <Label>Need a Wallet?</Label>
+          <Route to={"/create"}>Create or Restore a Wallet</Route>
         </Footer>
       </Container>
     );

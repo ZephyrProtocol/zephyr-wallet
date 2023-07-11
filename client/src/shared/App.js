@@ -13,9 +13,10 @@ import { CreateWeb } from "platforms/web/pages/_auth/create";
 import { LoginWeb } from "platforms/web/pages/_auth/login/container";
 import Loader from "shared/components/loader";
 import { AssetsDesktop } from "platforms/desktop/pages/_wallet/assets";
-import { HavenDetailWithParams } from "platforms/desktop/pages/_wallet/details";
+import { ZephyrDetailWithParams } from "platforms/desktop/pages/_wallet/details";
 import { ExchangePage } from "shared/pages/_wallet/exchange";
-import { HavenTransfer } from "platforms/desktop/pages/_wallet/transfer";
+import { ProtocolInfo } from "shared/pages/_wallet/protocol";
+import { ZephyrTransfer } from "platforms/desktop/pages/_wallet/transfer";
 import { SettingsDesktop } from "platforms/desktop/pages/_wallet/settings";
 import { SettingsWeb } from "platforms/web/pages/_wallet/settings";
 import { RestoreDesktop } from "platforms/desktop/pages/_auth/restore";
@@ -27,26 +28,26 @@ class App extends Component {
     return (
       <ThemeProvider theme={this.props.theme}>
         <HashRouter>
-        {isDesktop() ? <NavigationDesktop /> : <NavigationWeb />}
-        <StatusComponent />
-        <ModalContainerDesktop />
-        {isDesktop() && <FixedStatus />}
-        <Suspense fallback={<Loader />}>
-        <Routes>
-
-        <Route path="/"  element={isDesktop() ?  <LoginDesktop /> : <CreateWeb /> } />
-        <Route path="/login"  element={ isDesktop() ? <RestoreDesktop /> :  <LoginWeb />} />
-        <Route path="/create" element={ isDesktop() ? <CreateDesktop /> : <Navigate to="/login" />} /> 
-        <Route path="/wallet" element={<PrivateRoutes />} > 
-          <Route path="assets" element={<AssetsDesktop />} />
-           <Route path="assets/:id" element={<HavenDetailWithParams />} />
-          <Route path="transfer" element={<HavenTransfer />}/>
-          <Route path="settings" element={isDesktop() ? <SettingsDesktop /> : <SettingsWeb />}/>
-          <Route path="convert"  element={<ExchangePage />} />
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        </Suspense>
+          {isDesktop() ? <NavigationDesktop /> : <NavigationWeb />}
+          <StatusComponent />
+          <ModalContainerDesktop />
+          {isDesktop() && <FixedStatus />}
+          <Suspense fallback={<Loader />}>
+            <Routes>
+              <Route path="/" element={isDesktop() ? <LoginDesktop /> : <CreateWeb />} />
+              <Route path="/login" element={isDesktop() ? <RestoreDesktop /> : <LoginWeb />} />
+              <Route path="/create" element={isDesktop() ? <CreateDesktop /> : <Navigate to="/login" />} />
+              <Route path="/wallet" element={<PrivateRoutes />}>
+                <Route path="assets" element={<AssetsDesktop />} />
+                <Route path="assets/:id" element={<ZephyrDetailWithParams />} />
+                <Route path="transfer" element={<ZephyrTransfer />} />
+                <Route path="settings" element={isDesktop() ? <SettingsDesktop /> : <SettingsWeb />} />
+                <Route path="convert" element={<ExchangePage />} />
+                <Route path="protocol" element={<ProtocolInfo />} />
+              </Route>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
         </HashRouter>
       </ThemeProvider>
     );
@@ -57,4 +58,4 @@ export const mapStateToProps = (state) => ({
   theme: state.theme,
 });
 
-export const HavenApp = connect(mapStateToProps)(App);
+export const ZephyrApp = connect(mapStateToProps)(App);

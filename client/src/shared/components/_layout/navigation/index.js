@@ -3,16 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 // Relative Imports
-import {
-  Container,
-  Haven,
-  Logo,
-  Brand,
-  Button,
-  Logout,
-  Tag,
-} from "./styles.js";
-import Icon from "../../../../assets/icons/haven.svg";
+import { Container, Zephyr, Logo, Brand, Button, Logout, Tag } from "./styles.js";
+import Icon from "../../../../assets/icons/zephyr.png";
 import { closeWallet } from "../../../closeWallet";
 import { selectIsLoggedIn } from "shared/reducers/walletSession";
 import { APP_VERSION, NET_TYPE_NAME } from "../../../../constants/env";
@@ -29,16 +21,12 @@ class Navigation extends Component {
       <Container>
         <Brand to={auth ? "/wallet/assets" : "/"}>
           <Logo src={Icon} />
-          <Haven>HAVEN</Haven>
+          <Zephyr>ZEPHYR</Zephyr>
           <Tag>
             v{APP_VERSION} {NET_TYPE_NAME}
           </Tag>
         </Brand>
-        {!auth ? (
-          <Button to="/login">Login</Button>
-        ) : (
-          <Logout onClick={this.handleLogout}>Logout</Logout>
-        )}
+        {!auth ? <Button to="/login">Login</Button> : <Logout onClick={this.handleLogout}>Logout</Logout>}
       </Container>
     );
   }

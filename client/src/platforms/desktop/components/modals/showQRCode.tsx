@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Modal } from "shared/components/modal";
 import QrCode from "../../../../shared/components/qrCode/index.js";
-import { HavenAppState } from "platforms/desktop/reducers/index.js";
+import { ZephyrAppState } from "platforms/desktop/reducers/index.js";
 import { connect } from "react-redux";
 import { hideModal } from "shared/actions/modal";
 
@@ -31,11 +31,9 @@ class ShowQRCodeModal extends React.Component<any, any> {
   }
 }
 
-const mapStateToProps = (state: HavenAppState) => ({
+const mapStateToProps = (state: ZephyrAppState) => ({
   selected: state.address.selected,
   addresses: state.address.entrys,
 });
 
-export const QRCodeModal = connect(mapStateToProps, { hideModal })(
-  ShowQRCodeModal
-);
+export const QRCodeModal = connect(mapStateToProps, { hideModal })(ShowQRCodeModal);

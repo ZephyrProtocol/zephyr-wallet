@@ -1,58 +1,57 @@
-# Haven Frontend for Web and Desktop
+# Zephyr Frontend for Web and Desktop
 
-
-Official Haven Frontend Monorepository for Haven Desktop and Haven Web Version.
+Official Zephyr Frontend Monorepository for Zephyr Desktop and Zephyr Web Version.
+Originally forked from: https://github.com/haven-protocol-org/haven-web-app
 
 **Main Libraries:** React, Redux, Electron, Styled Components
 
 **Languages:** Typescript, Javascript
 
 ## Web
+
 #### Environments
 
-* mainnet
-* stagenet
-* testnet
+- mainnet
+- stagenet
+- testnet
 
 #### Build & Develop
- 
+
 1. Navigate to client folder
 2. Build the app for given environment
-3. Start the app for given environment 
+3. Start the app for given environment
 
 ```bash
 cd client
-npm run build:web:testnet
-npm run start:web:testnet
+npm run build:web
+npm run start:web
 ```
 
 ## Desktop
 
-#### Build 
+#### Build
 
 1. Navigate to client folder
 2. Build the app for the environment
 
 ```bash
 cd client
-npm run build:desktop:testnet
+npm run build:desktop
 ```
 
 To build the final desktop build
 
 ```bash
-sh ./sh/make_testnet.sh
+sh ./sh/make.sh
 ```
 
-#### Develop 
+#### Develop
 
 1. Run start script to prepare client
 2. Start the build by executing shell script
 
 ```bash
-npm run start:desktop:testnet
+npm run start:desktop
 cd ../
-sh ./sh/develop_testnet.sh
+sh ./sh/develop.sh
 ```
-
-

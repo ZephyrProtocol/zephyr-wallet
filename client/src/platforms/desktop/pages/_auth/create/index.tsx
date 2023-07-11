@@ -8,10 +8,7 @@ import { startWalletSession } from "shared/actions/walletSession";
 import { createNewWallet } from "shared/actions/walletCreation";
 import { DesktopAppState } from "platforms/desktop/reducers";
 import { connect } from "react-redux";
-import {
-  selectErrorMessageForWalletCreation,
-  WalletCreation,
-} from "shared/reducers/walletCreation";
+import { selectErrorMessageForWalletCreation, WalletCreation } from "shared/reducers/walletCreation";
 import { Spinner } from "shared/components/spinner";
 import { Information } from "assets/styles/type";
 import Description from "shared/components/_inputs/description";
@@ -20,11 +17,7 @@ import InputButton from "shared/components/_inputs/input_button";
 import { selectIsRequestingLogin } from "shared/reducers/walletSession";
 
 interface CreateDesktopProps {
-  createNewWallet: (
-    path: string | undefined,
-    password: string,
-    walletName: string
-  ) => void;
+  createNewWallet: (path: string | undefined, password: string, walletName: string) => void;
   startWalletSession: (walletName: string) => void;
   walletCreation: WalletCreation;
   loading: boolean;
@@ -50,10 +43,7 @@ enum CREATION_STEPS {
   Verification,
 }
 
-class CreateDesktopContainer extends Component<
-  CreateDesktopProps,
-  CreateDesktopState
-> {
+class CreateDesktopContainer extends Component<CreateDesktopProps, CreateDesktopState> {
   state: CreateDesktopState = {
     step: CREATION_STEPS.Credentials,
     error: "",
@@ -71,7 +61,7 @@ class CreateDesktopContainer extends Component<
   componentDidUpdate(
     prevProps: Readonly<CreateDesktopProps>,
     prevState: Readonly<CreateDesktopState>,
-    snapshot?: any
+    snapshot?: any,
   ): void {
     if (
       prevProps.walletCreation.isCreated === false &&
@@ -87,13 +77,11 @@ class CreateDesktopContainer extends Component<
       }
 
       const wordsForSeed: SeedVerification[] = [];
-      this.props.walletCreation.mnemonicKey
-        .split(" ")
-        .forEach((word, index) => {
-          if (indexes.indexOf(index) > -1) {
-            wordsForSeed.push({ index, word });
-          }
-        });
+      this.props.walletCreation.mnemonicKey.split(" ").forEach((word, index) => {
+        if (indexes.indexOf(index) > -1) {
+          wordsForSeed.push({ index, word });
+        }
+      });
 
       wordsForSeed.sort((a, b) => a.index - b.index);
 
@@ -110,12 +98,7 @@ class CreateDesktopContainer extends Component<
 
   verifySeed(): boolean {
     const userInput = this.state.verify_seed.trim();
-    return (
-      userInput ===
-      this.state.wordsToVerify
-        .map((wordToVerify) => wordToVerify.word)
-        .join(" ")
-    );
+    return userInput === this.state.wordsToVerify.map((wordToVerify) => wordToVerify.word).join(" ");
   }
 
   componentWillReceiveProps(nextProps: CreateDesktopProps, nextContext: any) {
@@ -129,11 +112,7 @@ class CreateDesktopContainer extends Component<
     const { step } = this.state;
 
     if (step === CREATION_STEPS.Credentials) {
-      this.props.createNewWallet(
-        this.state.fileName,
-        this.state.pw,
-        this.state.fileName
-      );
+      this.props.createNewWallet(this.state.fileName, this.state.pw, this.state.fileName);
       return;
     }
 
@@ -159,11 +138,7 @@ class CreateDesktopContainer extends Component<
   };
 
   prevStep = () => {
-    if (
-      this.state.step === CREATION_STEPS.Info ||
-      this.state.step === CREATION_STEPS.Seed
-    )
-      return;
+    if (this.state.step === CREATION_STEPS.Info || this.state.step === CREATION_STEPS.Seed) return;
 
     const { step } = this.state;
     this.setState({ step: step - 1 });
@@ -194,8 +169,8 @@ class CreateDesktopContainer extends Component<
           <>
             <Input
               error={this.state.error}
-              label="Vault Name"
-              placeholder="Create a vault name"
+              label="Wallet Name"
+              placeholder="Create a wallet name"
               name="fileName"
               type={"text"}
               value={fileName}
@@ -204,8 +179,8 @@ class CreateDesktopContainer extends Component<
 
             <InputButton
               // @ts-ignore
-              label="Vault Password"
-              placeholder="Enter your vault password"
+              label="Wallet Password"
+              placeholder="Enter your wallet password"
               name="pw"
               type={this.state.showPassword === true ? "text" : "password"}
               button={this.state.showPassword === true ? "hide" : "show"}
@@ -215,10 +190,9 @@ class CreateDesktopContainer extends Component<
             />
 
             <Information>
-              Enter a unique name and strong password to create a vault. You
-              will be asked to confirm this password on the final step. This
-              process will generate an encrypted vault file that enables you to
-              store, send and convert assets in complete privacy.
+              Enter a unique name and strong password to create a wallet. You will be asked to confirm this password on
+              the final step. This process will generate an encrypted wallet file that enables you to store, send and
+              convert assets in complete privacy.
             </Information>
           </>
         );
@@ -232,11 +206,9 @@ class CreateDesktopContainer extends Component<
               readOnly={true}
             />
             <Information>
-              A seed phrase provides full access to your account. It can be used
-              to generate new vault files or login directly. If you lose this
-              seed phrase then it’s impossible to recover your funds. Store it
-              in a reputable password manager or on a piece of paper. Do not
-              share it with anyone.
+              A seed phrase provides full access to your account. It can be used to generate new wallet files or login
+              directly. If you lose this seed phrase then it’s impossible to recover your funds. Store it in a reputable
+              password manager or on a piece of paper. Do not share it with anyone.
             </Information>
           </>
         );
@@ -246,9 +218,7 @@ class CreateDesktopContainer extends Component<
             Enter seed words{" "}
             <span style={{ color: "#34d8ac" }}>
               {" "}
-              {this.state.wordsToVerify
-                .map((word) => "#" + (word.index + 1))
-                .join(" ")}{" "}
+              {this.state.wordsToVerify.map((word) => "#" + (word.index + 1)).join(" ")}{" "}
             </span>{" "}
             seperated by blank space
           </>
@@ -266,11 +236,9 @@ class CreateDesktopContainer extends Component<
             />
 
             <Information>
-              Re-enter the required words from the seed phrase that was provided
-              on the previous step. As a reminder, if you lose both your vault
-              file and password or seed phrase then your funds are lost forever
-              with no possibility of being recovered. Store them in a safe and
-              secure location.
+              Re-enter the required words from the seed phrase that was provided on the previous step. As a reminder, if
+              you lose both your wallet file and password or seed phrase then your funds are lost forever with no
+              possibility of being recovered. Store them in a safe and secure location.
             </Information>
           </>
         );

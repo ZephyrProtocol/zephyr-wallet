@@ -31,8 +31,8 @@ export const Auth = styled(Link)`
 `;
 
 export const Logout = styled.div`
-  background: ${(props) => props.theme.button.primary};
-  border: none;
+  background: none;
+  border: 1px solid ${(props) => props.theme.body.border};
   margin-right: 16px;
   color: #fff;
   font-size: 14px;

@@ -32,8 +32,8 @@ class LoginOnboarding extends React.Component<any, any> {
 
     return (
       <Modal
-        title="Welcome to Haven"
-        description="Lets take a moment to learn about your vault"
+        title="Welcome to Zephyr"
+        description="Lets take a moment to learn about your wallet"
         leftButton={"Back"}
         rightButton={count === 1 ? "Finish" : "Next"}
         disabledRight={false}
@@ -52,6 +52,4 @@ class LoginOnboarding extends React.Component<any, any> {
   }
 }
 
-export const LoginOnboardingModal = connect(null, { hideModal })(
-  LoginOnboarding
-);
+export const LoginOnboardingModal = connect(null, { hideModal })(LoginOnboarding);

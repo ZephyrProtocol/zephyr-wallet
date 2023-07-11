@@ -12,13 +12,13 @@ import Theme from "../../../components/_inputs/theme";
 import DoubleFooter from "../../../components/_inputs/double_footer";
 import { Container } from "./styles";
 import { storeKeyFileToDisk } from "platforms/web/actions/storage";
-import { HavenAppState } from "platforms/desktop/reducers";
+import { ZephyrAppState } from "platforms/desktop/reducers";
 import { IKeys } from "typings";
 import { isTemporaryWallet as selectIsTemporaryWallet } from "shared/reducers/walletSession";
 import { selectSyncState } from "shared/reducers/chain";
 import { SyncState } from "shared/types/types";
 
-import {downloadTransfers} from "shared/actions/transferHistory";
+import { downloadTransfers } from "shared/actions/transferHistory";
 
 // Address parts
 import { AddressEntry } from "shared/reducers/address";
@@ -46,8 +46,8 @@ interface SettingsProps extends IKeys {
   tempWallet: boolean;
   selected: AddressEntry | undefined;
   addresses: AddressEntry[];
-  showModal:(modalType: MODAL_TYPE) => void;
-  setSelectedAddress:(index :number) => void;
+  showModal: (modalType: MODAL_TYPE) => void;
+  setSelectedAddress: (index: number) => void;
 }
 
 interface SettingsState {
@@ -151,10 +151,7 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
 
     const { selected, addresses } = this.props;
 
-    const handleLabel =
-      selected!.label === undefined
-        ? `Address ${selected!.index}`
-        : selected!.label;
+    const handleLabel = selected!.label === undefined ? `Address ${selected!.index}` : selected!.label;
 
     const first = selected!.address.substring(0, 4);
     const last = selected!.address.substring(selected!.address.length - 4);
@@ -162,10 +159,7 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
 
     return (
       <Body>
-        <Header
-          title="Theme "
-          description="Choose between light and dark themes"
-        />
+        <Header title="Theme " description="Choose between light and dark themes" />
         <Form>
           <Theme
             label="Select Theme"
@@ -226,12 +220,9 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
           </Container>
         </>
 
-        <Header
-          title="Transaction History"
-          description="Download your transaction history"
-        />
+        <Header title="Transaction History" description="Download your transaction history" />
         <>
-        <Container>
+          <Container>
             <DoubleFooter
               // Left Section
               leftLabel={"Download JSON"}
@@ -248,20 +239,11 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
           </Container>
         </>
 
-        <Header
-          title="Private Keys"
-          description="Manage your vault's private keys"
-        />
+        <Header title="Private Keys" description="Manage your wallet's private keys" />
         <Form>
           <>
             {reveal ? (
-              <RevealSeed
-                label="Seed Phrase"
-                name="Seed Phrase"
-                error=""
-                value={this.props.mnemonic}
-                readOnly
-              />
+              <RevealSeed label="Seed Phrase" name="Seed Phrase" error="" value={this.props.mnemonic} readOnly />
             ) : (
               <Input
                 name="Seed Phrase"
@@ -314,7 +296,7 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
         <Container>
           <DoubleFooter
             // Left section
-            leftLabel={"Download Vault File"}
+            leftLabel={"Download Wallet File"}
             leftDisabled={isSyncing || this.props.tempWallet}
             leftLoading={false}
             leftOnClick={this.downloadKeystore}
@@ -331,7 +313,7 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
   }
 }
 
-const mapStateToProps = (state: HavenAppState) => ({
+const mapStateToProps = (state: ZephyrAppState) => ({
   selected: selectSelectedAddress(state),
   addresses: state.address.entrys,
   theme: state.theme,
@@ -345,5 +327,5 @@ export const Settings = connect(mapStateToProps, {
   showModal,
   setSelectedAddress,
   storeKeyFileToDisk,
-  downloadTransfers
+  downloadTransfers,
 })(SettingsPage);

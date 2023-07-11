@@ -29,8 +29,8 @@ fi
 
 echo "you choose $NET_TYPE_ID"
 
-export HAVEN_DESKTOP_DEVELOPMENT=false
+export ZEPHYR_DESKTOP_DEVELOPMENT=false
 export NET_TYPE_ID
 export NODE_INSTALLER=npm
 
-npm run package --prefix haven-desktop-app
+npm run package --prefix zephyr-desktop-app

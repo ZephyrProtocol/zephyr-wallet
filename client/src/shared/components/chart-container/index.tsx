@@ -16,14 +16,14 @@ import { Ticker } from "shared/reducers/types";
 class ChartWrapper extends Component<any, any> {
   state = { selectedRangeInDays: PRICE_RANGE_MONTH };
 
-  componentDidMount() {
-    this.selectPriceHistory(PRICE_RANGE_MONTH);
-  }
+  // componentDidMount() {
+  //   this.selectPriceHistory(PRICE_RANGE_MONTH);
+  // }
 
-  selectPriceHistory(rangeInDays: number | string) {
-    this.props.getPriceHistory(rangeInDays);
-    this.setState({ selectedRangeInDays: rangeInDays });
-  }
+  // selectPriceHistory(rangeInDays: number | string) {
+  //   this.props.getPriceHistory(rangeInDays);
+  //   this.setState({ selectedRangeInDays: rangeInDays });
+  // }
 
   render() {
     const { assetId, amount, price, value } = this.props;
@@ -31,42 +31,37 @@ class ChartWrapper extends Component<any, any> {
     let prices;
     let labels;
 
-    if (assetId === Ticker.XHV) {
+    if (assetId === Ticker.ZEPH) {
       const priceRangeEntry = this.props.priceHistory.prices.find(
-        (priceRangeEntry: PriceRangeHistory) =>
-          priceRangeEntry.rangeInDays === this.state.selectedRangeInDays
+        (priceRangeEntry: PriceRangeHistory) => priceRangeEntry.rangeInDays === this.state.selectedRangeInDays,
       );
 
       prices = getPriceValues(priceRangeEntry.prices);
       labels = getPriceDates(priceRangeEntry.prices);
-    } else if (assetId === Ticker.xUSD) {
+    } else if (assetId === Ticker.ZEPHUSD) {
       prices = [1.0, 1.0];
-      labels = [
-        new Date(1792, 3, 2).toLocaleDateString(),
-        new Date().toLocaleDateString(),
-      ];
+      labels = [new Date(1792, 3, 2).toLocaleDateString(), new Date().toLocaleDateString()];
     }
+
+    const prefix = assetId === Ticker.ZEPHRSV ? "" : "$";
+    const suffix = assetId === Ticker.ZEPHRSV ? " ZEPH" : "";
 
     return (
       <>
-        <Header
-          back
-          title={`${assetId} Overview`}
-          description="Pricing history and asset values"
-        />
+        <Header back title={`${assetId} Overview`} description="Pricing history and asset values" />
 
-        {this.props.assetId === Ticker.XHV || this.props.assetId === Ticker.xUSD ? ( <Chart
-          prices={prices}
-          labels={labels}
-          ticker={assetId}
-          price={price.toFixed(2)}
-          onChangePriceRange={(args: number | string) =>
-            this.selectPriceHistory(args)
-          }
-        />): null}
+        {/* {this.props.assetId === Ticker.ZEPH || this.props.assetId === Ticker.ZEPHUSD ? (
+          <Chart
+            prices={prices}
+            labels={labels}
+            ticker={assetId}
+            price={price.toFixed(2)}
+            onChangePriceRange={(args: number | string) => this.selectPriceHistory(args)}
+          />
+        ) : null} */}
         <Row>
           <Statistic label="Amount" value={iNum(amount)} />
-          <Statistic label="Price" value={`$` + iNum(price)} />
+          <Statistic label="Price" value={prefix + iNum(price) + suffix} />
           <Statistic
             label="Value"
             value={value.toLocaleString("en-US", {
@@ -84,6 +79,4 @@ const mapStateToProps = (state: any) => ({
   priceHistory: state.priceHistory,
 });
 
-export const ChartContainer =
-  connect(mapStateToProps, { getPriceHistory })(ChartWrapper)
-
+export const ChartContainer = connect(mapStateToProps, { getPriceHistory })(ChartWrapper);

@@ -38,11 +38,7 @@ interface NodeSettingProps {
   nodeOptions: NodeOption[];
   defaultNode: NodeOption;
   disconnectNode: () => void;
-  changeNodeForWallet: (
-    selectedNodeOption: NodeOption,
-    address: string,
-    port: string
-  ) => void;
+  changeNodeForWallet: (selectedNodeOption: NodeOption, address: string, port: string) => void;
 }
 
 interface NodeSettingState {
@@ -53,19 +49,15 @@ interface NodeSettingState {
   locked: boolean;
 }
 
-class NodeSettingComponent extends React.Component<
-  NodeSettingProps,
-  NodeSettingState
-> {
+class NodeSettingComponent extends React.Component<NodeSettingProps, NodeSettingState> {
   state = {
     address: this.props.node.address!,
     isConnecting: this.props.node.isConnecting,
     locked: this.props.isConnected,
-    selectedNodeOption: this.props.node.location === NodeLocation.None ? this.props.defaultNode
-    :  
-    this.props.nodeOptions.find(
-      (nodeOption) => nodeOption.address === this.props.node.address
-    )!,
+    selectedNodeOption:
+      this.props.node.location === NodeLocation.None
+        ? this.props.defaultNode
+        : this.props.nodeOptions.find((nodeOption) => nodeOption.address === this.props.node.address)!,
     port: this.props.node.port!,
   };
 
@@ -84,14 +76,11 @@ class NodeSettingComponent extends React.Component<
 
     if (selectedNodeOption.selectionType === NodeSelectionType.custom) {
       this.props.changeNodeForWallet(selectedNodeOption, address, port);
-    }
-    else {
+    } else {
       this.props.changeNodeForWallet(selectedNodeOption, selectedNodeOption.address, selectedNodeOption.port);
     }
 
-
-    this.setState({locked: true});
-
+    this.setState({ locked: true });
   };
 
   selectLocation = (option: NodeOption) => {
@@ -112,42 +101,39 @@ class NodeSettingComponent extends React.Component<
   };
 
   onDisconnect = () => {
-
     this.props.disconnectNode();
     this.setState({
       locked: false,
     });
   };
 
-   static getDerivedStateFromProps(
-    nextProps: Readonly<NodeSettingProps>,
-    prevState: Readonly<NodeSettingState>
-  ) {
-    
-    let newState:Partial<NodeSettingState> = {};
+  static getDerivedStateFromProps(nextProps: Readonly<NodeSettingProps>, prevState: Readonly<NodeSettingState>) {
+    let newState: Partial<NodeSettingState> = {};
 
     //track previous isConnecting state
     if (prevState.isConnecting !== nextProps.node.isConnecting) {
-      newState = {isConnecting: nextProps.node.isConnecting}
+      newState = { isConnecting: nextProps.node.isConnecting };
     }
 
-
     //when we attempt to connect to another node, but failed, lets unlock again
-    if (prevState.isConnecting && !nextProps.node.isConnecting && !nextProps.node.isWalletConectedToDaemon && prevState.locked)
-    {
-        newState = {...newState, locked: false};
+    if (
+      prevState.isConnecting &&
+      !nextProps.node.isConnecting &&
+      !nextProps.node.isWalletConectedToDaemon &&
+      prevState.locked
+    ) {
+      newState = { ...newState, locked: false };
     }
 
     return newState;
   }
-
 
   buttonLogic = () => {
     const { locked } = this.state;
     const { isConnected } = this.props;
     const { isConnecting } = this.props.node;
 
-    if (isConnecting ) {
+    if (isConnecting) {
       // Don't change this label as it's equality checked on child
       return "Loading";
     } else if (locked && isConnected === true) {
@@ -165,10 +151,7 @@ class NodeSettingComponent extends React.Component<
 
     return (
       <>
-        <Header
-          title="Nodes"
-          description="Choose between running a local or remote node"
-        />
+        <Header title="Nodes" description="Choose between running a local or remote node" />
         <Form onSubmit={this.onConnect}>
           <Nodes
             label={"Select Node"}
@@ -204,13 +187,13 @@ class NodeSettingComponent extends React.Component<
             <Intstructions>
               <Information>
                 {this.props.isConnected
-                  ? "Vault is connected to "
+                  ? "Wallet is connected to "
                   : this.props.node.location !== NodeLocation.None && this.props.node.isConnecting
-                  ? "Vault is trying to connect to "
-                  : "Vault is not connected to "}
-                <strong>{this.state.selectedNodeOption.name}</strong>. Change
-                nodes by clicking <strong>Disconnect</strong>, then select a new
-                node from the dropdown, then click <strong>Connect</strong>.
+                  ? "Wallet is trying to connect to "
+                  : "Wallet is not connected to "}
+                <strong>{this.state.selectedNodeOption.name}</strong>. Change nodes by clicking{" "}
+                <strong>Disconnect</strong>, then select a new node from the dropdown, then click{" "}
+                <strong>Connect</strong>.
               </Information>
             </Intstructions>
             <DoubleFooter
@@ -238,9 +221,10 @@ const mapStateToProps = (state: DesktopAppState) => ({
   isConnected: state.connectedNode.isWalletConectedToDaemon,
   localNode: selectisLocalNode(state.connectedNode),
   nodeOptions: createNodeOptions(state.connectedNode, state.nodeList),
-  defaultNode: getDefaultNode(state.nodeList)
+  defaultNode: getDefaultNode(state.nodeList),
 });
 
-export const HavenNodeSetting = connect(mapStateToProps, {
-  changeNodeForWallet, disconnectNode
+export const ZephyrNodeSetting = connect(mapStateToProps, {
+  changeNodeForWallet,
+  disconnectNode,
 })(NodeSettingComponent);

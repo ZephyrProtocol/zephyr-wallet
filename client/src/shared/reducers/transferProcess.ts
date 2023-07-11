@@ -8,10 +8,9 @@ import {
   TRANSFER_SUCCEED,
 } from "shared/actions/types";
 import { AnyAction } from "redux";
-import { HavenAppState } from "../../platforms/desktop/reducers/index";
+import { ZephyrAppState } from "../../platforms/desktop/reducers/index";
 import { Ticker } from "shared/reducers/types";
 
-//TOKENOMICS below - priority needs updating
 export interface TxProcessInfo {
   address: string;
   fromAmount: number | null | bigInt.BigInteger;
@@ -41,10 +40,7 @@ const INITIAL_STATE: TxProcessInfo = {
   fromTicker: null,
 };
 
-export const transferProcess = (
-  state = INITIAL_STATE,
-  action: AnyAction
-): TxProcessInfo => {
+export const transferProcess = (state = INITIAL_STATE, action: AnyAction): TxProcessInfo => {
   switch (action.type) {
     case TRANSFER_CREATION_FETCHING:
       return { ...state, ...action.payload, isFetching: true };
@@ -76,6 +72,6 @@ export const transferProcess = (
   }
 };
 
-export const transferSucceed = (state: HavenAppState) => {
+export const transferSucceed = (state: ZephyrAppState) => {
   return state.transferProcess.succeed;
 };

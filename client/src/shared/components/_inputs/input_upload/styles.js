@@ -66,9 +66,7 @@ export const Field = styled.div`
   font-family: Inter-Regular;
   font-size: 16px;
   color: ${(props) =>
-    props.value === "Select vault file"
-      ? props.theme.input.input_placeholder
-      : props.theme.input.input_value};
+    props.value === "Select wallet file" ? props.theme.input.input_placeholder : props.theme.input.input_value};
   line-height: 26px;
   outline: none;
   transition: 500ms;

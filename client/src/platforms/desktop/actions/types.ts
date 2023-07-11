@@ -15,8 +15,8 @@ export const MINING_STATUS_RESPONSE = "mining_status_response";
 export const MINING_STATUS_RESPONSE_FAILED = "mining_status_response";
 
 //local node state
-export const GET_HAVEND_STATE_SUCCEED = "GET_LOCAL_HAVEN_NODE_STATE_SUCCEED";
-export const GET_HAVEND_STATE_FAILED = "GET_LOCAL_HAVEN_NODE_FAILED";
+export const GET_ZEPHYRD_STATE_SUCCEED = "GET_LOCAL_ZEPHYR_NODE_STATE_SUCCEED";
+export const GET_ZEPHYRD_STATE_FAILED = "GET_LOCAL_ZEPHYR_NODE_FAILED";
 
 // local stored wallets
 export const UPDATE_SAVED_WALLETS = "update_saved_wallets";

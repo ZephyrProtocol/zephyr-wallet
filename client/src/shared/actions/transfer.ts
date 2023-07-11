@@ -1,19 +1,13 @@
 import bigInt from "big-integer";
 import { walletProxy } from "shared/core/proxy";
-import {
-  addErrorNotification,
-  addNotificationByKey,
-} from "shared/actions/notification";
+import { addErrorNotification, addNotificationByKey } from "shared/actions/notification";
 import { TRANSFER_SUCCEED_MESSAGE } from "constants/notificationList";
 import { Ticker } from "shared/reducers/types";
 import { hideModal, showModal } from "shared/actions/modal";
 import { MODAL_TYPE } from "shared/reducers/modal";
 import { TxProcessInfo } from "shared/reducers/transferProcess";
 import { ITxConfig } from "typings";
-import {
-  MoneroDestination,
-  MoneroTxPriority,
-} from "haven-wallet-core";
+import { MoneroDestination, MoneroTxPriority } from "zephyr-javascript";
 import {
   TRANSFER_FETCHING,
   TRANSFER_FAILED,
@@ -23,23 +17,11 @@ import {
   TRANSFER_CREATION_FAILED,
   TRANSFER_RESET,
 } from "./types";
-import MoneroTxWallet from "haven-wallet-core/src/main/js/wallet/model/MoneroTxWallet";
+import MoneroTxWallet from "zephyr-javascript/src/main/js/wallet/model/MoneroTxWallet";
 import { convertMoneyToBalance } from "utility/utility";
 
-export const createTransfer = (
-  address: string,
-  amount: number,
-  fromTicker: Ticker,
-  sweepAll: boolean
-) => {
-
-
-
-
+export const createTransfer = (address: string, amount: number, fromTicker: Ticker, sweepAll: boolean) => {
   return async (dispatch: any) => {
-
-  
-
     const priority = MoneroTxPriority.NORMAL;
 
     dispatch(
@@ -47,7 +29,7 @@ export const createTransfer = (
         address,
         fromTicker,
         priority,
-      })
+      }),
     );
 
     const txConfig: Partial<ITxConfig> = {
@@ -56,32 +38,30 @@ export const createTransfer = (
       relay: false,
       priority,
       sourceCurrency: fromTicker,
-      destinationCurrency: fromTicker
+      destinationCurrency: fromTicker,
     } as Partial<ITxConfig>;
-
 
     if (sweepAll) {
       txConfig.address = address;
     } else {
       const amountInt = convertMoneyToBalance(amount);
-      const destinations = [new MoneroDestination(address, amountInt.toString()).toJson(),]
+      const destinations = [new MoneroDestination(address, amountInt.toString()).toJson()];
       txConfig.destinations = destinations;
     }
-  
 
     try {
-      const txList: MoneroTxWallet[] = sweepAll? await walletProxy.sweep(txConfig) :  await walletProxy.transfer(txConfig);
+      const txList: MoneroTxWallet[] = sweepAll
+        ? await walletProxy.sweep(txConfig)
+        : await walletProxy.transfer(txConfig);
 
       const reduxParams = {
         fee: txList.reduce(
-          (acc: bigInt.BigInteger, tx: MoneroTxWallet) =>
-            acc.add(bigInt(tx.getFee().toString())),
-          bigInt(0)
+          (acc: bigInt.BigInteger, tx: MoneroTxWallet) => acc.add(bigInt(tx.getFee().toString())),
+          bigInt(0),
         ),
         fromAmount: txList.reduce(
-          (acc: bigInt.BigInteger, tx: MoneroTxWallet) =>
-            acc.add(bigInt(tx.getOutgoingAmount().toString())),
-          bigInt(0)
+          (acc: bigInt.BigInteger, tx: MoneroTxWallet) => acc.add(bigInt(tx.getOutgoingAmount().toString())),
+          bigInt(0),
         ),
         metaList: txList.map((tx: MoneroTxWallet) => tx.getMetadata()),
       } as Partial<TxProcessInfo>;

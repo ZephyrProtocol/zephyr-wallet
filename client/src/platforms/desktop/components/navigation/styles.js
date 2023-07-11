@@ -1,7 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { ReactComponent as ArrowUp } from "../../../../assets/icons/arrow-up.svg";
-import { ReactComponent as HavenIcon } from "../../../../assets/icons/haven.svg";
 import { ReactComponent as OptionIcon } from "../../../../assets/icons/options.svg";
 
 const appear = keyframes`
@@ -38,18 +37,14 @@ export const Scan = styled.div`
   }
 `;
 
-export const Haven = styled.div`
+export const Zephyr = styled.div`
   color: ${(props) => props.theme.type.primary};
   font-size: 20px;
   font-family: "Inter-Bold";
   margin-left: 8px;
 `;
 
-export const Legal = styled.a`
-  text-decoration: none;
-`;
-
-export const Icon = styled(HavenIcon)`
+export const Icon = styled.img`
   height: 24px;
   width: 24px;
 

@@ -1,24 +1,31 @@
 {
   "testnet": [
     {
-      "address": "https://vault-testnet.havenprotocol.org",
-      "provider": "Testnet - Vault",
-      "port": "443",
-      "trusted": true,
-      "default": true
-    }
-  ],
-  "stagenet": [
-    {
-      "address": "http://seed01-stagenet.havenprotocol.org",
-      "provider": "Stagenet - Seed 01",
-      "port": "37750",
+      "address": "127.0.0.1",
+      "provider": "Local Zephyr Testnet Node",
+      "port": "27767",
       "trusted": true,
       "default": true
     },
     {
-      "address": "http://seed02-stagenet.havenprotocol.org",
-      "provider": "Stagenet - Seed 02",
+      "address": "https://node-testnet.zephyrprotocol.com",
+      "provider": "Testnet - node",
+      "port": "443",
+      "trusted": true,
+      "default": false
+    }
+  ],
+  "stagenet": [
+    {
+      "address": "127.0.0.1",
+      "provider": "Local Zephyr Stagenet Node",
+      "port": "37767",
+      "trusted": true,
+      "default": true
+    },
+    {
+      "address": "http://node-stagenet.zephyrprotocol.com",
+      "provider": "Stagenet - node",
       "port": "37750",
       "trusted": true,
       "default": false
@@ -26,23 +33,18 @@
   ],
   "mainnet": [
     {
-      "address": "http://remote.haven.miner.rocks",
-      "provider": "Haven Miner Rocks",
-      "port": "17750",
-      "trusted": true
-    },
-    {
-      "address": "http://nodes.hashvault.pro",
-      "provider": "Hash Vault",
-      "port": "17750",
-      "trusted": true
-    },
-    {
-      "address": "https://nodes.havenprotocol.org",
-      "provider": "Haven European Node",
-      "port": "443",
+      "address": "127.0.0.1",
+      "provider": "Zephyr Remote Node",
+      "port": "17767",
       "trusted": true,
       "default": true
+    },
+    {
+      "address": "127.0.0.1",
+      "provider": "Local Zephyr Node",
+      "port": "17767",
+      "trusted": true,
+      "default": false
     }
   ]
 }

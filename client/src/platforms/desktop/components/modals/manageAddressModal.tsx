@@ -3,16 +3,12 @@ import * as React from "react";
 import { Modal } from "shared/components/modal";
 import ManageAddresses from "shared/components/modal_children/manage_addresses";
 import Input from "shared/components/_inputs/input";
-import { HavenAppState } from "platforms/desktop/reducers/index.js";
+import { ZephyrAppState } from "platforms/desktop/reducers/index.js";
 import { connect } from "react-redux";
 import { createAddress } from "shared/actions/address";
 import { Information } from "../../../../assets/styles/type.js";
 
-import {
-  AddressEntry,
-  selectAddressByIndex,
-  selectAddressCount,
-} from "shared/reducers/address";
+import { AddressEntry, selectAddressByIndex, selectAddressCount } from "shared/reducers/address";
 
 interface ManageAdressState {
   checked: boolean;
@@ -29,10 +25,7 @@ interface ManageAdressProps {
   addresses: AddressEntry[];
 }
 
-export class ManageAddress extends React.Component<
-  ManageAdressProps,
-  ManageAdressState
-> {
+export class ManageAddress extends React.Component<ManageAdressProps, ManageAdressState> {
   state: ManageAdressState = {
     manageName: "",
     disabled: false,
@@ -51,10 +44,7 @@ export class ManageAddress extends React.Component<
   handleCheck: any;
 
   render() {
-    const createdAddressEntry = selectAddressByIndex(
-      this.props.addresses,
-      this.state.expectedIndexOfCreatedAddress
-    );
+    const createdAddressEntry = selectAddressByIndex(this.props.addresses, this.state.expectedIndexOfCreatedAddress);
 
     return (
       <>
@@ -76,19 +66,14 @@ export class ManageAddress extends React.Component<
               placeholder="Name of address"
               type="text"
               name="manageName"
-              value={
-                createdAddressEntry
-                  ? createdAddressEntry.label
-                  : this.state.manageName
-              }
+              value={createdAddressEntry ? createdAddressEntry.label : this.state.manageName}
               onChange={this.handleChange}
             />
           </ManageAddresses>
           <Information>
-            You can create unlimited amounts of addresses. This lets you receive
-            assets to multiple addresses within one account, without having to
-            create a new vault. This preserves your privacy more than receiving
-            all assets to a single address.
+            You can create unlimited amounts of addresses. This lets you receive assets to multiple addresses within one
+            account, without having to create a new wallet. This preserves your privacy more than receiving all assets
+            to a single address.
           </Information>
         </Modal>
       </>
@@ -115,7 +100,7 @@ export class ManageAddress extends React.Component<
   }
 }
 
-const mapStateToProps = (state: HavenAppState) => ({
+const mapStateToProps = (state: ZephyrAppState) => ({
   countOfAddresses: selectAddressCount(state),
   addresses: state.address.entrys,
 });

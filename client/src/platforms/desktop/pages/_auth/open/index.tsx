@@ -1,16 +1,10 @@
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import {
-  Buttons,
-  Submit,
-} from "platforms/desktop/pages/_auth/multi_login/styles";
+import { Buttons, Submit } from "platforms/desktop/pages/_auth/multi_login/styles";
 import { Spinner } from "../../../../../shared/components/spinner";
 import { Body } from "./styles";
 import { Information } from "assets/styles/type";
-import {
-  selectErrorMessageForLogin,
-  selectIsRequestingLogin,
-} from "../../../../../shared/reducers/walletSession";
+import { selectErrorMessageForLogin, selectIsRequestingLogin } from "../../../../../shared/reducers/walletSession";
 import { WalletSelection } from "shared/components/_inputs/wallet-selection";
 import Dropdown from "../../../../../shared/components/_inputs/dropdown";
 import InputButton from "shared/components/_inputs/input_button";
@@ -33,10 +27,7 @@ interface OpenWalletProps {
   errorMessage: string;
 }
 
-class OpenWalletDesktopContainer extends Component<
-  OpenWalletProps,
-  OpenWalletState
-> {
+class OpenWalletDesktopContainer extends Component<OpenWalletProps, OpenWalletState> {
   state: OpenWalletState = {
     selectedWallet: null,
     password: "",
@@ -48,10 +39,7 @@ class OpenWalletDesktopContainer extends Component<
 
   onOpenWallet = () => {
     if (this.state.selectedWallet !== null) {
-      this.props.openWalletByFile(
-        this.state.selectedWallet,
-        this.state.password
-      );
+      this.props.openWalletByFile(this.state.selectedWallet, this.state.password);
     }
   };
 
@@ -91,7 +79,7 @@ class OpenWalletDesktopContainer extends Component<
 
     const noWallets = [
       {
-        name: "No vaults found",
+        name: "No wallets found",
       },
     ];
 
@@ -100,17 +88,17 @@ class OpenWalletDesktopContainer extends Component<
         <Dropdown
           onClick={this.handleNoWallet}
           options={noWallets}
-          placeholder="Select a vault"
-          label={"Select Vault"}
+          placeholder="Select a wallet file"
+          label={"Select Wallet"}
           error={""}
-          value={"Select a vault"}
+          value={"Select a wallet file"}
         >
           {noWallets}
         </Dropdown>
         {/* @ts-ignore */}
         <InputButton
-          label="Vault Password"
-          placeholder="Enter vault password"
+          label="Wallet Password"
+          placeholder="Enter wallet password"
           name="password"
           value={password}
           onChange={this.onChangeHandler}
@@ -120,11 +108,7 @@ class OpenWalletDesktopContainer extends Component<
           button={this.state.showPassword === true ? "hide" : "show"}
           width
         />
-        <Information>
-          Select your vault file and enter your password. If you are new to
-          Haven and want to start storing, sending and converting assets in
-          complete privacy, then click the "Create" button to get started.
-        </Information>
+        <Information></Information>
         <Buttons buttons="single">
           {this.props.loading ? (
             <Submit>
@@ -132,7 +116,7 @@ class OpenWalletDesktopContainer extends Component<
             </Submit>
           ) : (
             <Submit disabled={!disabled} onClick={() => this.onOpenWallet()}>
-              Login
+              Open
             </Submit>
           )}
         </Buttons>
@@ -142,14 +126,14 @@ class OpenWalletDesktopContainer extends Component<
         <WalletSelection
           onClick={(wallet) => this.onSelectWallet(wallet)}
           options={this.props.wallets}
-          placeholder={"Select vault"}
-          label={"Select Vault"}
+          placeholder={"Select wallet"}
+          label={"Select Wallet"}
           error={error}
           value={selectedWallet}
         />
         <InputButton
-          label="Vault Password"
-          placeholder="Enter vault password"
+          label="Wallet Password"
+          placeholder="Enter wallet password"
           name="password"
           value={password}
           onChange={this.onChangeHandler}
@@ -158,11 +142,10 @@ class OpenWalletDesktopContainer extends Component<
           type={this.state.showPassword === true ? "text" : "password"}
           button={this.state.showPassword === true ? "hide" : "show"}
         />
-        <Information>
-          Select your vault file and enter your password. If you are new to
-          Haven and want to start storing, sending and converting assets in
-          complete privacy, then click the "Create" button to get started.
-        </Information>
+        {/* <Information>
+          Select your wallet file and enter your password. If you are new to Zephyr and want to start storing, sending and
+          converting assets in complete privacy, then click the "Create" button to get started.
+        </Information> */}
         <Buttons buttons="single">
           {this.props.loading ? (
             <Submit>
@@ -170,7 +153,7 @@ class OpenWalletDesktopContainer extends Component<
             </Submit>
           ) : (
             <Submit disabled={!disabled} onClick={() => this.onOpenWallet()}>
-              Login
+              Open
             </Submit>
           )}
         </Buttons>
@@ -184,6 +167,4 @@ const mapStateToProps = (state: DesktopAppState) => ({
   errorMessage: selectErrorMessageForLogin(state),
 });
 
-export const OpenWalletDesktop = connect(mapStateToProps, { openWalletByFile })(
-  OpenWalletDesktopContainer
-);
+export const OpenWalletDesktop = connect(mapStateToProps, { openWalletByFile })(OpenWalletDesktopContainer);

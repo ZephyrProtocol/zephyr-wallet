@@ -2,10 +2,10 @@ import { walletProxy } from "shared/core/proxy";
 import { addNotificationByMessage } from "shared/actions/notification";
 import { NotificationType } from "constants/notificationList";
 import { saveAs } from "vendor/FileSaver";
-import { HavenAppState } from "platforms/desktop/reducers";
+import { ZephyrAppState } from "platforms/desktop/reducers";
 
-const HAVEN_DB = "haven";
-const WALLET_STORE = "xvault3";
+const ZEPHYR_DB = "zephyr";
+const WALLET_STORE = "wallets";
 const DB_VERSION = 4;
 
 export const storeKeyFileToDisk = (name: string) => {
@@ -15,18 +15,12 @@ export const storeKeyFileToDisk = (name: string) => {
     const blob = new Blob([keysData.buffer]);
     saveAs(blob, name + ".keys");
 
-    dispatch(
-      addNotificationByMessage(
-        NotificationType.SUCCESS,
-        "Vault file download was successful"
-      )
-    );
+    dispatch(addNotificationByMessage(NotificationType.SUCCESS, "Wallet file download was successful"));
   };
 };
 
-
 export const storeWalletInDB = (): any => {
-  return async (dispatch: any, getState: () => HavenAppState) => {
+  return async (dispatch: any, getState: () => ZephyrAppState) => {
     const walletName = getState().walletSession.activeWallet;
     const currentHeight = getState().chain.walletHeight;
     // if its a temporary wallet ( just login via seed ) we don't store the wallet in any way
@@ -43,24 +37,18 @@ export const storeWalletInDB = (): any => {
   };
 };
 
-
 export const deleteWalletInDB = async (walletName: string): Promise<boolean> => {
-
-    if (walletName !== undefined) {
-      try {
-        await deleteWalletInIndexedDb(walletName);
-      } catch (e) {
-        return false;
-      }
+  if (walletName !== undefined) {
+    try {
+      await deleteWalletInIndexedDb(walletName);
+    } catch (e) {
+      return false;
     }
-    return true;
-  };
+  }
+  return true;
+};
 
-
-
-export const getWalletCacheByName = async (
-  name: string
-): Promise<ArrayBuffer> => {
+export const getWalletCacheByName = async (name: string): Promise<ArrayBuffer> => {
   try {
     const walletCache: ArrayBuffer = await fetchValueByKey(name);
     return walletCache;
@@ -72,7 +60,7 @@ export const getWalletCacheByName = async (
 
 const fetchValueByKey = (name: string): Promise<ArrayBuffer> => {
   return new Promise((resolutionFunc, rejectionFunc) => {
-    const openRequest: IDBOpenDBRequest = indexedDB.open(HAVEN_DB, DB_VERSION);
+    const openRequest: IDBOpenDBRequest = indexedDB.open(ZEPHYR_DB, DB_VERSION);
     openRequest.onupgradeneeded = function (this: IDBRequest<IDBDatabase>) {
       const db = this.result;
       db.createObjectStore(WALLET_STORE);
@@ -106,7 +94,7 @@ const fetchValueByKey = (name: string): Promise<ArrayBuffer> => {
 
 const fetchKeysFromDB = () => {
   let keys: string[] = [];
-  const openRequest: IDBOpenDBRequest = indexedDB.open("haven", DB_VERSION);
+  const openRequest: IDBOpenDBRequest = indexedDB.open("zephyr", DB_VERSION);
   openRequest.onsuccess = function (this: IDBRequest<IDBDatabase>) {
     const db = this.result;
     const transaction = db.transaction("wallet", "readonly");
@@ -121,7 +109,7 @@ const storeWalletDataInIndexedDB = async (name: string): Promise<void> => {
   return new Promise(async (resolutionFunc, rejectionFunc) => {
     const walletData = await walletProxy.getWalletData();
     const wallet = walletData[1];
-    const openRequest: IDBOpenDBRequest = indexedDB.open(HAVEN_DB, DB_VERSION);
+    const openRequest: IDBOpenDBRequest = indexedDB.open(ZEPHYR_DB, DB_VERSION);
 
     openRequest.onupgradeneeded = function (this: IDBRequest<IDBDatabase>) {
       const db = this.result;
@@ -136,9 +124,7 @@ const storeWalletDataInIndexedDB = async (name: string): Promise<void> => {
       const db = this.result;
 
       const transaction = db.transaction(WALLET_STORE, "readwrite");
-      const putRequest: IDBRequest<IDBValidKey> = transaction
-        .objectStore(WALLET_STORE)
-        .put(wallet.buffer, name);
+      const putRequest: IDBRequest<IDBValidKey> = transaction.objectStore(WALLET_STORE).put(wallet.buffer, name);
 
       putRequest.onsuccess = function (this: IDBRequest<IDBValidKey>) {
         resolutionFunc();
@@ -146,45 +132,35 @@ const storeWalletDataInIndexedDB = async (name: string): Promise<void> => {
       putRequest.onerror = function (this: IDBRequest<IDBValidKey>) {
         rejectionFunc();
       };
-    
     };
   });
 };
 
-
 export const deleteWalletInIndexedDb = async (name: string): Promise<void> => {
-
   return new Promise(async (resolutionFunc, rejectionFunc) => {
-  const openRequest: IDBOpenDBRequest = indexedDB.open(HAVEN_DB, DB_VERSION);
+    const openRequest: IDBOpenDBRequest = indexedDB.open(ZEPHYR_DB, DB_VERSION);
 
-
-  openRequest.onupgradeneeded = function (this: IDBRequest<IDBDatabase>) {
-    const db = this.result;
-    db.createObjectStore(WALLET_STORE);
-  };
-
-  openRequest.onerror = function (error: any) {
-    rejectionFunc();
-  };
-
-  openRequest.onsuccess = function (this: IDBRequest<IDBDatabase>) {
-    const db = this.result;
-
-    const transaction = db.transaction(WALLET_STORE, "readwrite");
-    const delRequest: IDBRequest<undefined> = transaction
-      .objectStore(WALLET_STORE)
-      .delete(name);
-
-    delRequest.onsuccess = function (this: IDBRequest<undefined>) {
-      resolutionFunc();
+    openRequest.onupgradeneeded = function (this: IDBRequest<IDBDatabase>) {
+      const db = this.result;
+      db.createObjectStore(WALLET_STORE);
     };
-    delRequest.onerror = function (this: IDBRequest<undefined>) {
+
+    openRequest.onerror = function (error: any) {
       rejectionFunc();
     };
-  
-  };
-});
 
+    openRequest.onsuccess = function (this: IDBRequest<IDBDatabase>) {
+      const db = this.result;
 
+      const transaction = db.transaction(WALLET_STORE, "readwrite");
+      const delRequest: IDBRequest<undefined> = transaction.objectStore(WALLET_STORE).delete(name);
 
-}
+      delRequest.onsuccess = function (this: IDBRequest<undefined>) {
+        resolutionFunc();
+      };
+      delRequest.onerror = function (this: IDBRequest<undefined>) {
+        rejectionFunc();
+      };
+    };
+  });
+};

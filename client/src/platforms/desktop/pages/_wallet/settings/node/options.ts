@@ -1,17 +1,7 @@
-import {
-  NodeLocation,
-  SelectedNode,
-  RemoteNode,
-} from "platforms/desktop/types";
-import {
-  NodeOption,
-  NodeSelectionType,
-} from "platforms/desktop/pages/_wallet/settings/node/nodeSetting";
+import { NodeLocation, SelectedNode, RemoteNode } from "platforms/desktop/types";
+import { NodeOption, NodeSelectionType } from "platforms/desktop/pages/_wallet/settings/node/nodeSetting";
 
-export const createNodeOptions = (
-  havendState: SelectedNode,
-  remoteList: RemoteNode[]
-): NodeOption[] => {
+export const createNodeOptions = (zephyrdState: SelectedNode, remoteList: RemoteNode[]): NodeOption[] => {
   const remoteNodes: NodeOption[] = remoteList.map((node) => {
     return {
       location: NodeLocation.Remote,
@@ -33,12 +23,12 @@ export const createNodeOptions = (
   //   selectionType: NodeSelectionType.local,
   // };
 
-  const customNode: NodeOption = isCustomNode(havendState, remoteList)
+  const customNode: NodeOption = isCustomNode(zephyrdState, remoteList)
     ? {
         location: NodeLocation.Remote,
-        address: havendState.address!,
-        port: havendState.port!,
-        name: createCustomNodeName(havendState),
+        address: zephyrdState.address!,
+        port: zephyrdState.port!,
+        name: createCustomNodeName(zephyrdState),
         selectionType: NodeSelectionType.custom,
         trusted: false,
       }
@@ -52,7 +42,7 @@ export const createNodeOptions = (
       };
 
   //quick check to omit local node option for macOS for first
-  if (window.havenProcess.platform === "darwin") {
+  if (window.zephyrProcess.platform === "darwin") {
     return [...remoteNodes, customNode];
   }
 
@@ -60,21 +50,18 @@ export const createNodeOptions = (
   return [...remoteNodes, customNode];
 };
 
-const createCustomNodeName = (havendState: SelectedNode) => {
+const createCustomNodeName = (zephyrdState: SelectedNode) => {
   try {
-    return `Custom Node ( ${new URL(havendState.address!).host} )`;
+    return `Custom Node ( ${new URL(zephyrdState.address!).host} )`;
   } catch (e) {
     return "Custom Node";
   }
 };
 
-const isCustomNode = (
-  havendState: SelectedNode,
-  remoteList: RemoteNode[]
-): boolean => {
+const isCustomNode = (zephyrdState: SelectedNode, remoteList: RemoteNode[]): boolean => {
   return (
-    havendState.location === NodeLocation.Remote &&
-    !remoteList.some((remoteNode) => remoteNode.address === havendState.address)
+    zephyrdState.location === NodeLocation.Remote &&
+    !remoteList.some((remoteNode) => remoteNode.address === zephyrdState.address)
   );
 };
 

@@ -16,11 +16,10 @@ import { exchangeProcess } from "../../../shared/reducers/exchangeProcess";
 import { nodeList, connectedNode } from "./selectedNode";
 import { localNode } from "./localNode";
 import { mining } from "./localMining";
-import { havenFeature } from "shared/reducers/havenFeature";
 import modal from "shared/reducers/modal";
 import { WebAppState } from "platforms/web/reducers";
 import { storedWallets } from "./storedWallets";
-import { circulatingSupply } from "shared/reducers/circulatingSupply";
+import { reserveInfo } from "shared/reducers/reserveInfo";
 
 const appReducer = combineReducers({
   theme,
@@ -29,7 +28,6 @@ const appReducer = combineReducers({
   storedWallets,
   transferProcess,
   xTransferList,
-  havenFeature,
   blockHeaderExchangeRate,
   walletCreation,
   exchangeProcess,
@@ -42,12 +40,12 @@ const appReducer = combineReducers({
   modal,
   connectedNode,
   nodeList,
-  circulatingSupply
+  reserveInfo,
 });
 
 const rootReducer = (state: any, action: AnyAction) => {
   if (action.type === STOP_WALLET_SESSION) {
-    const { notification, havenNode, walletRPC } = state;
+    const { notification } = state;
     state = { notification };
   }
 
@@ -58,4 +56,4 @@ export default rootReducer;
 
 export type DesktopAppState = ReturnType<typeof rootReducer>;
 
-export type HavenAppState = DesktopAppState | WebAppState;
+export type ZephyrAppState = DesktopAppState | WebAppState;

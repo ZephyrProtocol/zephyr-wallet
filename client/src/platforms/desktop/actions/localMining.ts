@@ -6,7 +6,7 @@ import {
   REQUEST_MINING_STOP,
 } from "./types";
 
-import {havendProxy} from "shared/core/proxy";
+import { zephyrdProxy } from "shared/core/proxy";
 
 export const startMining = () => {
   const threads_count = 1;
@@ -17,7 +17,7 @@ export const startMining = () => {
   return (dispatch: any) => {
     dispatch({ type: REQUEST_MINING_START });
 
-    havendProxy
+    zephyrdProxy
       .startMining(params)
       .then((res: any) => setTimeout(() => dispatch(miningStatus()), 2000))
       .catch((err: any) => setTimeout(() => dispatch(miningStatus()), 2000));
@@ -28,7 +28,7 @@ export const stopMining = () => {
   return (dispatch: any) => {
     dispatch({ type: REQUEST_MINING_STOP });
 
-    havendProxy
+    zephyrdProxy
       .stopMining()
       .then((res: any) => setTimeout(() => dispatch(miningStatus()), 2000))
       .catch((err: any) => setTimeout(() => dispatch(miningStatus()), 2000));
@@ -39,7 +39,7 @@ export const miningStatus = () => {
   return (dispatch: any) => {
     dispatch({ type: REQUEST_MINING_STATUS });
 
-    havendProxy
+    zephyrdProxy
       .getMiningStatus()
       .then((res: any) => dispatch(getMiningStatusSucceed(res)))
       .catch((err: any) => dispatch(getMiningStatusFailed(err)));

@@ -1,5 +1,5 @@
-import MoneroTxPriority from "haven-wallet-core/src/main/js/wallet/model/MoneroTxPriority";
-import MoneroDestination from "haven-wallet-core/src/main/js/wallet/model/MoneroDestination";
+import MoneroTxPriority from "zephyr-javascript/src/main/js/wallet/model/MoneroTxPriority";
+import MoneroDestination from "zephyr-javascript/src/main/js/wallet/model/MoneroDestination";
 
 export enum NetworkType {
   mainnet,
@@ -86,7 +86,7 @@ export interface ITxConfig {
   //txType: number;
   /** source Currency */
   sourceCurrency: string;
-   /** destination Currency */
+  /** destination Currency */
   destinationCurrency: string;
 }
 

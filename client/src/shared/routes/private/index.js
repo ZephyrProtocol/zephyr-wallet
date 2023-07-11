@@ -1,21 +1,19 @@
 // Library Imports
 import React, { Component } from "react";
-import { Navigate, Route,Routes, Outlet } from "react-router-dom";
+import { Navigate, Route, Routes, Outlet } from "react-router-dom";
 
 // Relative Imports
 
-import { AssetsDesktop } from "../../../platforms/desktop/pages/_wallet/assets";
-import { HavenDetails } from "../../../platforms/desktop/pages/_wallet/details";
-import { ExchangePage } from "../../pages/_wallet/exchange";
-import { HavenTransfer } from "../../../platforms/desktop/pages/_wallet/transfer";
-import { SettingsDesktop } from "../../../platforms/desktop/pages/_wallet/settings";
+// import { AssetsDesktop } from "../../../platforms/desktop/pages/_wallet/assets";
+// import { ExchangePage } from "../../pages/_wallet/exchange";
+// import { SettingsDesktop } from "../../../platforms/desktop/pages/_wallet/settings";
 import { connect } from "react-redux";
 import { selectIsLoggedIn } from "../../reducers/walletSession";
 import Page from "../../components/_layout/page";
 import Menu from "../../components/_layout/menu/icons";
 
 import { isDesktop, isWeb } from "constants/env";
-import { SettingsWeb } from "platforms/web/pages/_wallet/settings";
+// import { SettingsWeb } from "platforms/web/pages/_wallet/settings";
 import { refresh } from "shared/actions/refresh";
 import { isWalletSynced } from "shared/reducers/chain";
 
@@ -45,7 +43,6 @@ class PrivateRoutesContainer extends Component {
   }
 
   render() {
-
     if (!this.props.isLoggedIn) {
       return <Navigate to="/" />;
     }

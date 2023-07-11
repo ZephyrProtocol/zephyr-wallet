@@ -11,17 +11,10 @@ import Theme from "shared/components/_inputs/theme";
 // For the miner
 import { selectisLocalNode } from "platforms/desktop/reducers/selectedNode";
 import { DesktopAppState } from "platforms/desktop/reducers";
-import {
-  MiningRequestTypes,
-  MiningStatus,
-} from "platforms/desktop/reducers/localMining";
-import {downloadTransfers} from "shared/actions/transferHistory";
-import {
-  miningStatus,
-  startMining,
-  stopMining,
-} from "platforms/desktop/actions/localMining";
-import { HavenNodeSetting } from "platforms/desktop/pages/_wallet/settings/node/nodeSetting";
+import { MiningRequestTypes, MiningStatus } from "platforms/desktop/reducers/localMining";
+import { downloadTransfers } from "shared/actions/transferHistory";
+import { miningStatus, startMining, stopMining } from "platforms/desktop/actions/localMining";
+import { ZephyrNodeSetting } from "platforms/desktop/pages/_wallet/settings/node/nodeSetting";
 import { Container } from "./styles";
 import DoubleFooter from "shared/components/_inputs/double_footer";
 
@@ -74,10 +67,7 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
     });
   }
 
-  componentWillReceiveProps(
-    nextProps: Readonly<SettingsProps>,
-    nextContext: any
-  ): void {
+  componentWillReceiveProps(nextProps: Readonly<SettingsProps>, nextContext: any): void {
     if (!this.props.mining.active && nextProps.mining.active) {
       this.addMiningStatusRefresh();
       return;
@@ -93,10 +83,7 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
   }
 
   addMiningStatusRefresh() {
-    this.refreshTimer = window.setInterval(
-      () => this.props.miningStatus(),
-      2000
-    );
+    this.refreshTimer = window.setInterval(() => this.props.miningStatus(), 2000);
   }
 
   removeMiningStatusRefresh() {
@@ -151,10 +138,7 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
 
     return (
       <Body>
-        <Header
-          title="Theme "
-          description="Choose between light and dark themes"
-        />
+        <Header title="Theme " description="Choose between light and dark themes" />
         <Form onSubmit={() => {}}>
           <Theme
             label="Select Theme"
@@ -165,26 +149,23 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
             onClick={this.handleClick}
           />
         </Form>
-        <HavenNodeSetting />
-        <Header
-          title="Transaction History"
-          description="Download your transaction history"
-        />
+        <ZephyrNodeSetting />
+        <Header title="Transaction History" description="Download your transaction history" />
         <Container>
-            <DoubleFooter
-              // Left Section
-              leftLabel={"Download JSON"}
-              leftDisabled={false}
-              leftLoading={false}
-              leftOnClick={this.downloadTxJson}
-              leftVisible={true}
-              // Right Section
-              rightLabel={"Download CSV"}
-              rightDisabled={false}
-              rightLoading={false}
-              rightOnClick={this.downloadTxCsv}
-            />
-          </Container>
+          <DoubleFooter
+            // Left Section
+            leftLabel={"Download JSON"}
+            leftDisabled={false}
+            leftLoading={false}
+            leftOnClick={this.downloadTxJson}
+            leftVisible={true}
+            // Right Section
+            rightLabel={"Download CSV"}
+            rightDisabled={false}
+            rightLoading={false}
+            rightOnClick={this.downloadTxCsv}
+          />
+        </Container>
       </Body>
     );
   }
@@ -201,5 +182,5 @@ export const SettingsDesktop = connect(mapStateToProps, {
   startMining,
   stopMining,
   miningStatus,
-  downloadTransfers
+  downloadTransfers,
 })(SettingsDesktopPage);

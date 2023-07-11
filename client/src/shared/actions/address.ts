@@ -2,7 +2,7 @@ import { walletProxy } from "shared/core/proxy";
 import { GET_ADDRESS_FAILED, GET_ADDRESS_SUCCEED, SET_SELECTED_ADDRESS } from "./types";
 import { AddressEntry } from "shared/reducers/address";
 import { addErrorNotification } from "./notification";
-import MoneroSubaddress from "haven-wallet-core/src/main/js/wallet/model/MoneroSubaddress";
+import MoneroSubaddress from "zephyr-javascript/src/main/js/wallet/model/MoneroSubaddress";
 import { saveWallet } from "./walletSession";
 
 export const getAddresses = () => {
@@ -16,7 +16,6 @@ export const getAddresses = () => {
       .catch((e) => {
         addErrorNotification(e);
         dispatch(getAddressFailed());
-      
       });
   };
 };
@@ -26,10 +25,9 @@ export const createAddress = (label: string) => {
     walletProxy
       .createSubAddress(label)
       .then((moneroAddress: MoneroSubaddress) => {
-        dispatch(getAddressSucceed([parseAddress(moneroAddress)]))
-        dispatch(saveWallet())
-      }
-      )
+        dispatch(getAddressSucceed([parseAddress(moneroAddress)]));
+        dispatch(saveWallet());
+      })
       .catch((e: any) => addErrorNotification(e));
   };
 };
@@ -40,7 +38,7 @@ export const getAddressSucceed = (payload: AddressEntry[]) => ({
 });
 
 export const getAddressFailed = () => ({
-  type: GET_ADDRESS_FAILED
+  type: GET_ADDRESS_FAILED,
 });
 
 const parseAddress = (moneroAddress: MoneroSubaddress): AddressEntry => ({

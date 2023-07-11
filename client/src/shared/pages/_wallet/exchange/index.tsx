@@ -17,7 +17,7 @@ import {
   priceDelta,
   selectXRate,
   BlockHeaderRate,
-  selectLastExchangeRates
+  selectLastExchangeRates,
 } from "shared/reducers/blockHeaderExchangeRates";
 import { DesktopAppState } from "platforms/desktop/reducers";
 import { selectNodeHeight } from "shared/reducers/chain";
@@ -29,7 +29,7 @@ import {
   selectIsProcessingExchange,
   selectToTicker,
 } from "shared/reducers/exchangeProcess";
-import { setFromTicker, setToTicker, setRequiredCollateral } from "shared/actions/exchange";
+import { setFromTicker, setToTicker } from "shared/actions/exchange";
 import { XBalances } from "shared/reducers/xBalance";
 import { convertBalanceToMoney, iNum } from "utility/utility";
 import { showModal } from "shared/actions/modal";
@@ -46,7 +46,7 @@ enum ExchangeTab {
   Advanced,
 }
 
-interface ExchangeProps  {
+interface ExchangeProps {
   nodeHeight: number;
   showModal: (modalTyoe: MODAL_TYPE) => void;
   createExchange: typeof createExchange;
@@ -57,18 +57,20 @@ interface ExchangeProps  {
   lastExchangeRates: BlockHeaderRate | null;
   setFromTicker: (ticker: Ticker | null) => void;
   setToTicker: (ticker: Ticker | null) => void;
-  setRequiredCollateral: (fromTicker: Ticker, toTicker: Ticker, fromAmount: number) => void;
   xRate: number;
-  requiredCollateral:bigInt.BigInteger | null;
   fromTicker: Ticker | null;
   toTicker: Ticker | null;
   balances: XBalances;
-  addresses:AddressEntry [];
+  addresses: AddressEntry[];
   navigate: (path: string) => void;
 }
 
 enum TxType {
-  Shore, Xasset, None
+  MintStable,
+  RedeemStable,
+  MintReserve,
+  RedeemReserve,
+  None,
 }
 
 type ExchangeState = {
@@ -81,8 +83,7 @@ type ExchangeState = {
   fromOptions: AssetOption[];
   toOptions: AssetOption[];
   txType: TxType;
-  requiredCollateral: string;
-  selectedAddress:AddressEntry;
+  selectedAddress: AddressEntry;
 };
 
 interface AssetOption {
@@ -96,22 +97,11 @@ export interface ExchangePrioOption {
   prio: number;
 }
 
+const rsvOption = { name: "Reserve coin", ticker: Ticker.ZEPHRSV };
+const stableOption = { name: "Stable coin", ticker: Ticker.ZEPHUSD };
+const zephOption = { name: "Zephyr", ticker: Ticker.ZEPH };
 
-const xassetOptions: AssetOption[] = [
-  { name: "Yuan", ticker: Ticker.xCNY },
-  { name: "Euro", ticker: Ticker.xEUR },
-  { name: "Gold", ticker: Ticker.XAU },
-  { name: "Silver", ticker: Ticker.XAG },
-  { name: "Bitcoin", ticker: Ticker.xBTC },
-  { name: "Swiss Franc", ticker: Ticker.xCHF },
-  { name: "Australian Dollar", ticker: Ticker.xAUD },
-  { name: "British Pound", ticker: Ticker.xGBP },
-];
-
-const xusdOption = { name: "U.S. Dollar", ticker: Ticker.xUSD };
-const xhvOption = { name: "Haven", ticker: Ticker.XHV };
-
-const assetOptions: AssetOption[] = [xhvOption, xusdOption, ...xassetOptions];
+const assetOptions: AssetOption[] = [zephOption, stableOption, rsvOption];
 
 const exchangePrioOptions: ExchangePrioOption[] = [
   { name: "Default", ticker: "Unlocks ~21d", prio: 0 },
@@ -120,8 +110,7 @@ const exchangePrioOptions: ExchangePrioOption[] = [
   { name: "High", ticker: "Unlocks ~21d", prio: 3 },
 ];
 
-
-const ALL_ADDRESSES: AddressEntry = {index:-1, label:"All Addresses", address:"", used: false};
+const ALL_ADDRESSES: AddressEntry = { index: -1, label: "All Addresses", address: "", used: false };
 
 const INITIAL_STATE: ExchangeState = {
   fromAmount: undefined,
@@ -131,41 +120,30 @@ const INITIAL_STATE: ExchangeState = {
   selectedPrio: exchangePrioOptions[0],
   hasEnough: false,
   fromOptions: [...assetOptions],
-  toOptions: [xusdOption],
-  txType: TxType.Shore,
+  toOptions: [...assetOptions],
+  txType: TxType.MintStable,
   selectedAddress: ALL_ADDRESSES,
-  requiredCollateral: ""
 };
 
 class Exchange extends Component<ExchangeProps, ExchangeState> {
-  private sendTicker: Ticker = Ticker.XHV;
+  private sendTicker: Ticker = Ticker.ZEPH;
 
   state: ExchangeState = INITIAL_STATE;
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.props.setFromTicker(Ticker.XHV);
-    this.props.setToTicker(Ticker.xUSD);
+    this.props.setFromTicker(Ticker.ZEPH);
+    this.props.setToTicker(Ticker.ZEPHUSD);
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<ExchangeProps>,
-    nextContext: any
-  ): void {
+  componentDidUpdate(prevProps: Readonly<ExchangeProps>, nextContext: any): void {
     if (!this.props.exchangeSucceed && prevProps.exchangeSucceed) {
       this.setState({
         fromAmount: undefined,
         toAmount: undefined,
         externAddress: "",
       });
-     this.props.navigate("/wallet/assets/" + this.sendTicker);
-    }
-
-    if(this.props.requiredCollateral !== prevProps.requiredCollateral) {
-      if (this.props.requiredCollateral !== null) {
-        const collateral = convertBalanceToMoney(this.props.requiredCollateral);
-        this.setState({requiredCollateral:collateral.toString()})
-      } 
+      this.props.navigate("/wallet/assets/" + this.sendTicker);
     }
 
     if (this.props.toTicker !== prevProps.toTicker) {
@@ -178,51 +156,32 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
   }
 
   setMaxAmount = async () => {
-
-    if(this.state.txType === TxType.None) {
+    if (this.state.txType === TxType.None) {
       return;
     }
 
-    let amount = await (walletProxy.getMaxDestinationAmount(this.props.fromTicker!, this.props.toTicker!));
+    let amount = await walletProxy.getMaxDestinationAmount(this.props.fromTicker!, this.props.toTicker!);
     amount = convertBalanceToMoney(amount);
 
-    const {txType} = this.state;
-    const {fromTicker} = this.props;
+    const { txType } = this.state;
+    const { fromTicker } = this.props;
     let stateUpdate;
-    let setToAmount: boolean; 
+    let setToAmount: boolean;
 
     switch (txType) {
-
-      case TxType.Shore:
-        stateUpdate = fromTicker === Ticker.XHV ? {fromAmount: amount} : {toAmount: amount};
-        setToAmount = fromTicker === Ticker.XHV ? true : false;
+      case TxType.MintStable:
+        stateUpdate = fromTicker === Ticker.ZEPH ? { fromAmount: amount } : { toAmount: amount };
+        setToAmount = fromTicker === Ticker.ZEPH ? true : false;
         break;
-      case TxType.Xasset:
-        stateUpdate = fromTicker === Ticker.xUSD ? {fromAmount: amount} : {toAmount: amount};
-        setToAmount = fromTicker === Ticker.xUSD ? true : false;
+      case TxType.RedeemStable:
+        stateUpdate = fromTicker === Ticker.ZEPHUSD ? { fromAmount: amount } : { toAmount: amount };
+        setToAmount = fromTicker === Ticker.ZEPHUSD ? true : false;
         break;
     }
-        this.setState({...stateUpdate}, () => {
-          this.calcConversion(setToAmount);
-        });
-    
-  }
-
-  requestRequiredCollateral = () => {
-
-    if (this.state.txType !== TxType.Shore) {
-      return;
-    }
-
-    if (!this.state.fromAmount) {
-      this.setState({requiredCollateral:''})
-      return;
-    }
-
-    
-    this.props.setRequiredCollateral(this.props.fromTicker!, this.props.toTicker!, this.state.fromAmount)
-
-  }
+    this.setState({ ...stateUpdate }, () => {
+      this.calcConversion(setToAmount);
+    });
+  };
 
   onEnterFromAmount = (event: any) => {
     const name = event.target.name;
@@ -246,7 +205,6 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 
     this.setState({ ...this.state, [name]: value }, () => {
       this.calcConversion(false);
-
     });
   };
 
@@ -255,25 +213,24 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       return;
     }
 
-    if (fromTicker === Ticker.XHV) {
-      this.setState({ toOptions: [xusdOption] });
+    if (fromTicker === Ticker.ZEPH) {
+      this.setState({ toOptions: [stableOption, rsvOption] });
       return;
     }
 
-    if (fromTicker === Ticker.xUSD) {
-      this.setState({ toOptions: [xhvOption, ...xassetOptions] });
+    if (fromTicker === Ticker.ZEPHUSD || fromTicker === Ticker.ZEPHRSV) {
+      this.setState({ toOptions: [zephOption] });
       return;
     }
-
-    // here we can safely assume that a xasset option was selected
-    this.setState({ toOptions: [xusdOption] });
   }
 
   setFromAsset = (option: AssetOption) => {
     // Call back function from Dropdown
     this.props.setFromTicker(option.ticker);
     //on mismatch, just reset the other ticker
-    if (this.isTickerMismatch(option.ticker, this.props.toTicker)) {
+    if (option.ticker === Ticker.ZEPHUSD || option.ticker === Ticker.ZEPHRSV) {
+      this.props.setToTicker(Ticker.ZEPH);
+    } else if (this.isTickerMismatch(option.ticker, this.props.toTicker)) {
       this.props.setToTicker(null);
     }
   };
@@ -282,20 +239,14 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     // Call back function from Dropdown
     this.props.setToTicker(option.ticker);
     //on mismatch, just reset the other ticker
-    if (this.isTickerMismatch(this.props.fromTicker, option.ticker)) {
+    if (option.ticker === Ticker.ZEPHUSD || option.ticker === Ticker.ZEPHRSV) {
+      this.props.setFromTicker(Ticker.ZEPH);
+    } else if (this.isTickerMismatch(this.props.fromTicker, option.ticker)) {
       this.props.setFromTicker(null);
     }
   };
 
-  isXassets = (ticker: Ticker | null) => {
-    return ticker !== null && ticker !== Ticker.xUSD && ticker !== Ticker.XHV;
-  };
-
-  // we need to check a few conversion combinations which are not allowed like XHV -> XEUR ...
-  isTickerMismatch(
-    toTicker: Ticker | null,
-    fromticker: Ticker | null
-  ): boolean {
+  isTickerMismatch(toTicker: Ticker | null, fromticker: Ticker | null): boolean {
     if (toTicker === null || fromticker === null) {
       return false;
     }
@@ -305,76 +256,72 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       return true;
     }
 
-    // conversions from and to XHV only via XUSD
-    if (fromticker === Ticker.XHV && toTicker !== Ticker.xUSD) {
+    // Not allowed between Stable and Reserve
+    if (fromticker !== Ticker.ZEPH && toTicker !== Ticker.ZEPH) {
       return true;
     }
 
-    if (toTicker === Ticker.XHV && fromticker !== Ticker.xUSD) {
-      return true;
-    }
-
-    // conversions between xassets not allowed
-    if (this.isXassets(fromticker) && this.isXassets(toTicker)) {
-      return true;
-    }
     return false;
   }
 
   setConversionType(fromTicker: Ticker | null, toTicker: Ticker | null) {
-
     let txType: TxType;
-    if(fromTicker === null || toTicker === null) {
+    if (fromTicker === null || toTicker === null) {
       txType = TxType.None;
-      this.setState({fromAmount: 0, toAmount:0})
+      this.setState({ fromAmount: 0, toAmount: 0 });
       return;
-    }
-    else if(fromTicker === Ticker.XHV || toTicker === Ticker.XHV) {
-      txType = TxType.Shore;
-    }
-    else {
-      txType = TxType.Xasset;
+    } else if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
+      txType = TxType.MintStable;
+    } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPH) {
+      txType = TxType.RedeemStable;
+    } else if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHRSV) {
+      txType = TxType.MintReserve;
+    } else if (fromTicker === Ticker.ZEPHRSV && toTicker === Ticker.ZEPH) {
+      txType = TxType.RedeemReserve;
+    } else {
+      txType = TxType.None;
     }
 
-    this.setState({
-      txType
-    }, () => this.calcConversion());
+    this.setState(
+      {
+        txType,
+      },
+      () => this.calcConversion(),
+    );
   }
 
   calcConversion(setToAmount: boolean = true) {
-    const { toAmount, fromAmount } = this.state;
+    const { toAmount, fromAmount, txType } = this.state;
     const { xRate } = this.props;
 
     if (xRate === 0) {
       return;
     }
 
-    if (fromAmount !== undefined && setToAmount) {
-      const toAmount = parseFloat(iNum(fromAmount * xRate));
+    let rate = xRate;
+    if (txType === TxType.MintStable || txType === TxType.MintReserve) {
+      rate = 1 / xRate;
+    }
 
-      this.setState({ toAmount }
-        , () => this.requestRequiredCollateral());
+    const feerate = txType === TxType.MintReserve ? 1 : 0.98;
+
+    if (fromAmount !== undefined && setToAmount) {
+      const toAmount = parseFloat(iNum(fromAmount * rate * feerate));
+
+      this.setState({ toAmount });
       return;
     }
 
     if (toAmount !== undefined && !setToAmount) {
-      const fromAmount = parseFloat(iNum(toAmount * (1 / xRate)));
-      this.setState({
-        fromAmount,
-      }, () => this.requestRequiredCollateral());
+      const fromAmount = parseFloat(iNum(toAmount / rate / feerate));
+      this.setState({ fromAmount });
     }
   }
 
   handleSubmit = () => {
     const { fromTicker, toTicker } = this.props;
 
-    if (
-      !this.state.fromAmount ||
-      !fromTicker ||
-      !toTicker ||
-      !this.state.toAmount
-    )
-      return;
+    if (!this.state.fromAmount || !fromTicker || !toTicker || !this.state.toAmount) return;
 
     const { fromAmount, toAmount } = this.state;
 
@@ -389,7 +336,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       toAmount,
       this.state.selectedPrio.prio,
       this.state.externAddress,
-      selectedAddressIndex
+      selectedAddressIndex,
     );
   };
 
@@ -402,10 +349,9 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     const fromAmountValid = fromAmount !== undefined;
     const toAmountValid = toAmount !== undefined;
     const { hasLatestXRate } = this.props;
-    const hasEnoughFunds =
-      fromAmount !== undefined ? fromAmount < availableBalance : false;
+    const hasEnoughFunds = fromAmount !== undefined ? fromAmount < availableBalance : false;
 
-    if (fromAmountValid && toAmountValid && hasLatestXRate && hasEnoughFunds && this.hasEnoughForCollateral()) {
+    if (fromAmountValid && toAmountValid && hasLatestXRate && hasEnoughFunds) {
       // If valid then make this 'false' so the footer is enabled
       return false;
     } else {
@@ -436,38 +382,6 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     }
   };
 
-  hasEnoughForCollateral = () => {
-
-    const {fromTicker, toTicker, requiredCollateral} = this.props;
-    const {txType, fromAmount} = this.state;
-    if (txType === TxType.Shore && requiredCollateral !== null) {
-
-      const collateral = convertBalanceToMoney(requiredCollateral);
-      const availBalance = convertBalanceToMoney(
-          this.props.balances[Ticker.XHV].unlockedBalance);
-
-      if (fromTicker === Ticker.XHV && fromAmount !== undefined) {
-        if(availBalance < (fromAmount + collateral)) {
-          return false;
-        }
-      }
-      else if(toTicker === Ticker.XHV) {
-        if(availBalance < collateral) {
-          return false;
-      }
-    }
-  }
-    return true
-  }
-
-  getCollateralError = () => {
-
-    if(this.hasEnoughForCollateral())
-    return "";
-    return "not enough funds for collateral";
-
-  }
-
   recipientIsValid = () => {
     const { externAddress } = this.state;
     if (externAddress.length > 97) {
@@ -497,11 +411,10 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
   };
 
   selectAddress = (selected: AddressEntry) => {
-    this.setState({selectedAddress: selected});
+    this.setState({ selectedAddress: selected });
   };
 
   render() {
-
     const {
       fromAmount,
       toAmount,
@@ -511,7 +424,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       fromOptions,
       toOptions,
       txType,
-      selectedAddress
+      selectedAddress,
     } = this.state;
 
     const { addresses, fromTicker, toTicker, lastExchangeRates } = this.props;
@@ -519,68 +432,51 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 
     let usingSpot = true;
 
-    if(lastExchangeRates !== null && lastExchangeRates !== undefined && lastExchangeRates.hasOwnProperty("UNUSED1") && (fromTicker === Ticker.XHV || toTicker === Ticker.XHV) ){
- 
-      let last_ma_rate = 0.0;
-      if (fromTicker === Ticker.XHV ) {
-        //to is xUSD
-        last_ma_rate = lastExchangeRates["UNUSED1"].toJSNumber() / Math.pow(10, 12);
-   
+    if (
+      lastExchangeRates !== null &&
+      lastExchangeRates !== undefined &&
+      lastExchangeRates.hasOwnProperty("stable_ma") &&
+      (fromTicker === Ticker.ZEPH || toTicker === Ticker.ZEPH)
+    ) {
+      if (fromTicker === Ticker.ZEPHUSD || toTicker === Ticker.ZEPHUSD) {
+        // let stable_rate = latestBlockerHeader["stable"].toJSNumber() / Math.pow(10, 12);
+        let stable_ma_rate = lastExchangeRates["stable_ma"].toJSNumber() / Math.pow(10, 12);
+        if (this.props.xRate === stable_ma_rate) usingSpot = false;
       } else {
-        //from is xUSD
-        last_ma_rate = Math.pow(10, 12) / lastExchangeRates["UNUSED1"].toJSNumber();
-
-      }
-      if( this.props.xRate === last_ma_rate ){
-        usingSpot = false;
+        // let reserve_rate = latestBlockerHeader["reserve"].toJSNumber() / Math.pow(10, 12);
+        let reserve_ma_rate = lastExchangeRates["reserve_ma"].toJSNumber() / Math.pow(10, 12);
+        if (this.props.xRate === reserve_ma_rate) usingSpot = false;
       }
     }
 
-    const availBalance = fromTicker
-      ? convertBalanceToMoney(
-          this.props.balances[fromTicker].unlockedBalance,
-          6
-        )
-      : 0;
+    const availBalance = fromTicker ? convertBalanceToMoney(this.props.balances[fromTicker].unlockedBalance, 6) : 0;
 
-    const fromAsset = assetOptions.find(
-      (option) => option.ticker === fromTicker
-    );
+    const fromAsset = assetOptions.find((option) => option.ticker === fromTicker);
 
     const toAsset = assetOptions.find((option) => option.ticker === toTicker);
 
-    const toBalance = toTicker
-      ? convertBalanceToMoney(this.props.balances[toTicker].unlockedBalance, 6)
-      : 0;
+    const toBalance = toTicker ? convertBalanceToMoney(this.props.balances[toTicker].unlockedBalance, 6) : 0;
 
     const displayedFromAmount = fromAmount !== undefined ? fromAmount : "";
-    const displayedToAmount = toAmount !== undefined ? toAmount : "";
+
+    let displayedToAmount = toAmount !== undefined ? toAmount : "";
 
     const handleLabel =
-      selectedAddress!.label === undefined
-        ? `Address ${selectedAddress!.index}`
-        : selectedAddress!.label;
+      selectedAddress!.label === undefined ? `Address ${selectedAddress!.index}` : selectedAddress!.label;
 
     let truncated: string;
-    if (selectedAddress.index === -1 ) {
-
+    if (selectedAddress.index === -1) {
       truncated = "(Default)";
-
     } else {
-
       const first = selectedAddress!.address.substring(0, 4);
       const last = selectedAddress!.address.substring(selectedAddress!.address.length - 4);
       truncated = first + "...." + last;
-
     }
     return (
       <Fragment>
         <Body>
-          <Header
-            title="Convert "
-            description="Swap between all available Haven assets"
-          />
-         
+          <Header title="Exchange " description="Mint and Redeem Stable or Reserve coins" />
+
           <Fragment>
             <Form onSubmit={this.handleSubmit}>
               <Dropdown
@@ -592,12 +488,9 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
                 options={fromOptions}
                 onClick={this.setFromAsset}
               />
-              <InputButton
+              <Input
                 // @ts-ignore
-                label={
-                  "From Amount " +
-                  (availBalance !== 0 ? `(Avail: ${iNum(availBalance)})` : "")
-                }
+                label={"From Amount " + (availBalance !== 0 ? `(Avail: ${iNum(availBalance)})` : "")}
                 placeholder="Enter amount"
                 type="number"
                 name="fromAmount"
@@ -606,9 +499,8 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
                 onChange={this.onEnterFromAmount}
                 error={this.fromAmountIsValid(availBalance)}
                 readOnly={fromTicker === null}
-                button={"max"}
-                onClick={this.setMaxAmount}
-                
+                // button={"max"}
+                // onClick={this.setMaxAmount}
               />
               <Dropdown
                 label={"To Asset"}
@@ -621,10 +513,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
               />
               <Input
                 // @ts-ignore
-                label={
-                  "To Amount " +
-                  (toBalance !== 0 ? `(Avail: ${iNum(toBalance)})` : "")
-                }
+                label={"To Amount " + (toBalance !== 0 ? `(Avail: ${iNum(toBalance)})` : "")}
                 placeholder="Enter amount"
                 name="toAmount"
                 type="number"
@@ -632,28 +521,12 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
                 onChange={this.onEnterToAmount}
                 error={toTicker === null ? "Please select an asset first" : ""}
                 readOnly={toTicker === null}
-                
               />
             </Form>
-
 
             {selectedTab === ExchangeTab.Advanced && (
               <>
                 <WideContainer>
-
-                { txType === TxType.Shore  && (
-                  <Input
-                  label='Required Collateral in XHV'
-                  placeholder="auto calculated collateral"
-                  width={true}
-                  type={"text"}
-                  name="collateral"
-                  error={this.getCollateralError()}
-                  value={this.state.requiredCollateral}
-                  readOnly={true}
-                />
-                  )}
-                  
                   <AddressDropdown
                     label="From Address (Optional)"
                     placeholder="Select from address"
@@ -664,7 +537,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
                     onClick={this.selectAddress}
                     hideCreateAddress
                   />
-      
+
                   <Description
                     label="Recipient Address (Optional)"
                     placeholder="Exchange to another address"
@@ -705,11 +578,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 }
 
 const mapStateToProps = (state: DesktopAppState) => ({
-  xRate: selectXRate(
-    state.blockHeaderExchangeRate,
-    state.exchangeProcess.fromTicker,
-    state.exchangeProcess.toTicker
-  ),
+  xRate: selectXRate(state.blockHeaderExchangeRate, state.exchangeProcess.fromTicker, state.exchangeProcess.toTicker),
   nodeHeight: selectNodeHeight(state),
   isProcessingExchange: selectIsProcessingExchange(state.exchangeProcess),
   hasLatestXRate: hasLatestXRate(state),
@@ -719,23 +588,18 @@ const mapStateToProps = (state: DesktopAppState) => ({
   fromTicker: selectFromTicker(state.exchangeProcess),
   toTicker: selectToTicker(state.exchangeProcess),
   balances: state.xBalance,
-  requiredCollateral: state.exchangeProcess.requiredCollateral,
   addresses: [ALL_ADDRESSES, ...state.address.entrys],
 });
 
 //@ts-ignore
-const ConnectedExchangePage  = (
-  connect(mapStateToProps, {
-    createExchange,
-    setToTicker,
-    setFromTicker,
-    setRequiredCollateral,
-    showModal,
-  })(Exchange)
-);
-
+const ConnectedExchangePage = connect(mapStateToProps, {
+  createExchange,
+  setToTicker,
+  setFromTicker,
+  showModal,
+})(Exchange);
 
 export const ExchangePage = () => {
   const navigate = useNavigate();
-  return <ConnectedExchangePage navigate={navigate} />
-}
+  return <ConnectedExchangePage navigate={navigate} />;
+};

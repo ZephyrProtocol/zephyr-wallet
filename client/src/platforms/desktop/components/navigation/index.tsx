@@ -7,7 +7,7 @@ import {
   Arrow,
   Brand,
   Container,
-  Haven,
+  Zephyr,
   Icon,
   Menu,
   Options,
@@ -25,7 +25,7 @@ import { SelectedNode } from "platforms/desktop/types";
 import { selectisLocalNode } from "platforms/desktop/reducers/selectedNode";
 import { selectBlockHeight } from "shared/reducers/chain";
 import { SyncState } from "shared/types/types.js";
-import Search from "../../../../shared/components/search/index.js";
+import logo from "../../../../assets/icons/zephyr.png";
 
 // Local files
 import Buttons from "./buttons";
@@ -35,7 +35,7 @@ import Tab from "./tab";
 
 import { showModal } from "shared/actions/modal";
 import { MODAL_TYPE } from "shared/reducers/modal";
-import { isConnected } from "shared/core/havend";
+import { isConnected } from "shared/core/zephyrd";
 
 interface NavigationProps {
   node: SelectedNode;
@@ -147,24 +147,19 @@ class Navigation extends Component<NavigationProps, any> {
     const { connected } = this.props;
 
     // @ts-ignore
-    const { chainHeight, walletHeight } = this.props.chain;
+    const { chainHeight, walletHeight, nodeHeight } = this.props.chain;
     const syncStarted = chainHeight !== 0;
 
-    const version = window.havenProcess.appVersion;
+    const version = window.zephyrProcess.appVersion;
 
     return (
       <Container>
         <Brand>
-          <Icon />
-          <Haven>HAVEN</Haven>
+          <Icon src={logo} />
+          <Zephyr>ZEPHYR</Zephyr>
         </Brand>
         <Menu>
-          {auth && <Search />}
-          <Buttons
-            isLoading={this.props.isClosingSession}
-            auth={auth}
-            onClick={this.handleLogout}
-          />
+          <Buttons isLoading={this.props.isClosingSession} auth={auth} onClick={this.handleLogout} />
           <Options onClick={this.showDropdownMenu}>
             <OptionsIcon>
               <OptionsSVG />
@@ -173,29 +168,13 @@ class Navigation extends Component<NavigationProps, any> {
         </Menu>
         {this.state.showOptions && (
           <>
-            <OptionsList
-              onMouseEnter={this.handleMouseEnter}
-              onMouseLeave={this.handleMouseLeave}
-            >
+            <OptionsList onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
               <Arrow>
                 <Arr />
               </Arrow>
               {!auth && (
                 <>
-                  <Cell
-                    body="Network"
-                    label={`${current_network} v${version}`}
-                  />
-                  <Link
-                    body="Help"
-                    label="Knowledge Base"
-                    url={`https://havenprotocol.org/knowledge`}
-                  />
-                  <Link
-                    body="Legal"
-                    label="Terms"
-                    url={`https://havenprotocol.org/legal`}
-                  />
+                  <Cell body="Network" label={`${current_network} v${version}`} />
                 </>
               )}
               {auth && (
@@ -209,51 +188,28 @@ class Navigation extends Component<NavigationProps, any> {
 
                   {this.state.basicActive ? (
                     <>
-                      <Cell
-                        body="Network"
-                        label={`${current_network} v${version}`}
-                      />
-                      { !connected? (  
+                      <Cell body="Network" label={`${current_network} v${version}`} />
+                      {!connected ? (
                         <>
-                          <Cell body="Vault Status" label="Not Connected" />
+                          <Cell body="Wallet Status" label="Not Connected" />
                         </>
-                        ) : !syncStarted? (
+                      ) : !syncStarted ? (
                         <>
-                          <Cell body="Vault Status" label="Synced" />
+                          <Cell body="Wallet Status" label="Synced" />
                         </>
                       ) : (
                         <Cell
                           body="Sync Status"
-                          label={
-                            walletHeight === chainHeight
-                              ? "Synced"
-                              : walletHeight + "/" + chainHeight
-                          }
+                          label={walletHeight === chainHeight ? "Synced" : walletHeight + "/" + chainHeight}
                         />
                       )}
-                      <Link
-                        body="Help"
-                        label="Knowledge Base"
-                        url={`https://havenprotocol.org/knowledge`}
-                      />
-                      <Link
-                        body="Legal"
-                        label="Terms"
-                        url={`https://havenprotocol.org/legal`}
-                      />
                     </>
                   ) : (
                     <>
-                      <Cell
-                        body="Vault Connected"
-                        label={connected ? "Yes" : "No"}
-                      />
+                      <Cell body="Wallet Connected" label={connected ? "Yes" : "No"} />
                       <Cell body="Block Height" label={chainHeight} />
-                      <Cell
-                        body="Refresh Height"
-                        label={this.props.restoreHeight}
-                      />
-                      <Scan onClick={this.refreshVault}>Refresh Vault</Scan>
+                      <Cell body="Refresh Height" label={this.props.restoreHeight} />
+                      <Scan onClick={this.refreshVault}>Rescan Wallet</Scan>
                     </>
                   )}
                 </>

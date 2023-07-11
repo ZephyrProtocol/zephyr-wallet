@@ -6,14 +6,7 @@ import { Container, Row, Key, Value, Tag, Url } from "./styles";
 import Confirm from "../../confirm/index.js";
 import { Information } from "../exchange/styles";
 
-export const Transaction = ({
-  checked,
-  onChange,
-  recipientAddress,
-  ticker,
-  transferAmount,
-  fee,
-}) => {
+export const Transaction = ({ checked, onChange, recipientAddress, ticker, transferAmount, fee }) => {
   const first = recipientAddress.substring(0, 4);
   const last = recipientAddress.substring(recipientAddress.length - 4);
   const truncated = first + "...." + last;
@@ -52,22 +45,11 @@ export const Transaction = ({
         />
       </Container>
       <Information>
-        <strong style={{ textDecoration: 'underline'}}>ALERT</strong>: I have reviewed my transfer details and accept all
-        responsibility for this transaction.{" "}
+        <strong style={{ textDecoration: "underline" }}>ALERT</strong>: I have reviewed my transfer details and accept
+        all responsibility for this transaction.{" "}
         <strong>
-          I understand that a portion of my balance may be locked and unusable
-          for the entirety of the ~20m unlock priority time. However, this
-          amount will be unlocked and usable once the transaction is complete.{" "}
-        </strong>
-        To understand why this happens and how it might impact your experience,
-        please{" "}
-        <strong>
-          <Url
-            target="_blank"
-            href="https://havenprotocol.org/knowledge/haven-transactions/"
-          >
-            click here.
-          </Url>
+          I understand that a portion of my balance may be locked and unusable for the entirety of the ~20m unlock
+          priority time. However, this amount will be unlocked and usable once the transaction is complete.{" "}
         </strong>
       </Information>
     </Fragment>

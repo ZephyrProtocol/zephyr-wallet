@@ -4,25 +4,9 @@ import { Spinner } from "../spinner/index.js";
 import { withTheme } from "styled-components";
 
 // Relative Imports
-import {
-  Container,
-  Placeholder,
-  Message,
-  Header,
-  Button,
-  Buttons,
-  Title,
-  PriceHistory,
-  Value,
-  Label,
-} from "./styles";
-import {
-  PRICE_RANGE_DAY,
-  PRICE_RANGE_MAX,
-  PRICE_RANGE_MONTH,
-  PRICE_RANGE_YEAR,
-} from "../../reducers/priceHistory";
-import { HavenLineChart } from "../haven_line_chart";
+import { Container, Placeholder, Message, Header, Button, Buttons, Title, PriceHistory, Value, Label } from "./styles";
+import { PRICE_RANGE_DAY, PRICE_RANGE_MAX, PRICE_RANGE_MONTH, PRICE_RANGE_YEAR } from "../../reducers/priceHistory";
+import { ZephyrLineChart } from "../zephyr_line_chart";
 import { Ticker } from "shared/reducers/types";
 
 class Chart extends Component {
@@ -140,7 +124,7 @@ class Chart extends Component {
           <Label>{this.state.hoveredLabel}</Label>
         </PriceHistory>
         <Container onMouseLeave={this.onMouseLeave}>
-       {/*    <Line
+          {/*    <Line
             ref={(ref) => (this.chartJs = ref)}
             options={{
               hover: {
@@ -198,10 +182,12 @@ class Chart extends Component {
               ],
             }}
           /> */}
-          <HavenLineChart prices={this.props.prices} ticker={this.props.ticker} lineColor={this.props.theme.charts.border}/>
+          <ZephyrLineChart
+            prices={this.props.prices}
+            ticker={this.props.ticker}
+            lineColor={this.props.theme.charts.border}
+          />
         </Container>
-
-
       </>
     );
   }

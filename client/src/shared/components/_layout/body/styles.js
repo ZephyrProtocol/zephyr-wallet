@@ -9,7 +9,7 @@ export const Container = styled.div`
   grid-gap: 20px;
   margin-top: 60px;
   padding: 20px;
-  height: calc(100vh - 58px);
+  height: calc(100vh - 80px);
   grid-template-columns: 1fr 1fr;
   align-content: flex-start;
 

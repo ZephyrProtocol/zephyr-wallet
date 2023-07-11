@@ -10,7 +10,7 @@ import {
 } from "shared/actions/types";
 import { AnyAction } from "redux";
 import { RPCError } from "shared/reducers/walletSession";
-import { HavenAppState } from "platforms/desktop/reducers/index";
+import { ZephyrAppState } from "platforms/desktop/reducers/index";
 import { getMessageOfError } from "utility/utility";
 
 export interface WalletCreation {
@@ -31,10 +31,7 @@ const INITIAL_STATE: WalletCreation = {
   name: "",
 };
 
-export const walletCreation = (
-  state = INITIAL_STATE,
-  action: AnyAction
-): WalletCreation => {
+export const walletCreation = (state = INITIAL_STATE, action: AnyAction): WalletCreation => {
   switch (action.type) {
     case START_WALLET_SESSION:
       return INITIAL_STATE;
@@ -59,15 +56,15 @@ export const walletCreation = (
   }
 };
 
-export const selectisRequestingWalletCreation = (state: HavenAppState) => {
+export const selectisRequestingWalletCreation = (state: ZephyrAppState) => {
   return state.walletCreation.isFetching;
 };
 
-export const selectIsWalletCreated = (state: HavenAppState) => {
+export const selectIsWalletCreated = (state: ZephyrAppState) => {
   return state.walletCreation.isCreated;
 };
 
-export const selectErrorMessageForWalletCreation = (state: HavenAppState) => {
+export const selectErrorMessageForWalletCreation = (state: ZephyrAppState) => {
   const error = state.walletCreation.error;
 
   if (error) {

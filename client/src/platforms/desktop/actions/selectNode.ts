@@ -1,26 +1,15 @@
-import {
-  SET_NODE_FOR_WALLET_FAILED,
-  RESET_NODE_FOR_WALLET,
-  SET_NODE_FOR_WALLET_SUCCESS,
-} from "./types";
+import { SET_NODE_FOR_WALLET_FAILED, RESET_NODE_FOR_WALLET, SET_NODE_FOR_WALLET_SUCCESS } from "./types";
 import { NodeLocation } from "platforms/desktop/types";
 import { DesktopAppState } from "platforms/desktop/reducers";
 import { addErrorNotification } from "shared/actions/notification";
 import { NodeOption } from "../pages/_wallet/settings/node/nodeSetting";
-import { walletProxy, havendProxy } from "shared/core/proxy";
+import { walletProxy, zephyrdProxy } from "shared/core/proxy";
 import { IMonerRPCConnection } from "typings";
 import { logM } from "utility/utility";
-import {
-  SET_APP_TO_DAEMON_CONNECTION_STATE,
-  SET_WALLET_CONNECTION_STATE,
-} from "shared/actions/types";
+import { SET_APP_TO_DAEMON_CONNECTION_STATE, SET_WALLET_CONNECTION_STATE } from "shared/actions/types";
 import { updateDesktopConfig } from "./config";
 
-export const changeNodeForWallet = (
-  selectedNodeOption: NodeOption,
-  nodeAddress: string,
-  nodePort: string
-) => {
+export const changeNodeForWallet = (selectedNodeOption: NodeOption, nodeAddress: string, nodePort: string) => {
   return async (dispatch: any, getState: () => DesktopAppState) => {
     let address: string = createFullAddress(nodeAddress, nodePort);
 
@@ -47,20 +36,13 @@ export const changeNodeForWallet = (
 
     try {
       await walletProxy.setDaemonConnection(connection);
-      await havendProxy.createDaemonConnection(connection);
+      await zephyrdProxy.createDaemonConnection(connection);
 
+      dispatch(setNodeForWalletSucceed(nodeAddress, nodePort, selectedNodeOption.location));
 
-
-      dispatch(
-        setNodeForWalletSucceed(
-          nodeAddress,
-          nodePort,
-          selectedNodeOption.location
-        )
-      );
-
-
-      updateDesktopConfig({selectedNode: {location: selectedNodeOption.location, address: nodeAddress, port: nodePort}})
+      updateDesktopConfig({
+        selectedNode: { location: selectedNodeOption.location, address: nodeAddress, port: nodePort },
+      });
     } catch (error) {
       dispatch(setNodeForWalletFailed(error));
     }
@@ -77,13 +59,13 @@ export const disconnectNode = () => {
   return async (dispatch: any, getState: () => DesktopAppState) => {
     try {
       await walletProxy.setDaemonConnection(connection);
-      await havendProxy.createDaemonConnection(connection);
+      await zephyrdProxy.createDaemonConnection(connection);
 
       dispatch({ type: SET_APP_TO_DAEMON_CONNECTION_STATE, payload: false });
       dispatch({ type: SET_WALLET_CONNECTION_STATE, payload: false });
 
       dispatch(resetNodeForWallet());
-      updateDesktopConfig({selectedNode: {location: NodeLocation.None, address: "", port: ""}});
+      updateDesktopConfig({ selectedNode: { location: NodeLocation.None, address: "", port: "" } });
     } catch (error) {
       logM("set empty node failed");
     }
@@ -110,11 +92,7 @@ const resetNodeForWallet = () => {
   };
 };
 
-export const setNodeForWalletSucceed = (
-  address: string,
-  port: string,
-  location: NodeLocation
-) => {
+export const setNodeForWalletSucceed = (address: string, port: string, location: NodeLocation) => {
   return (dispatch: any) => {
     dispatch({
       type: SET_NODE_FOR_WALLET_SUCCESS,
@@ -125,8 +103,6 @@ export const setNodeForWalletSucceed = (
 const setNodeForWalletFailed = (error: any) => {
   return (dispatch: any) => {
     dispatch({ type: SET_NODE_FOR_WALLET_FAILED });
-    dispatch(
-      addErrorNotification("Changing node is not possible in the moment")
-    );
+    dispatch(addErrorNotification("Changing node is not possible in the moment"));
   };
 };

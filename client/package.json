@@ -1,10 +1,10 @@
 {
-  "name": "haven_web_wallet",
-  "version": "3.0.8",
+  "name": "zephyr_web_wallet",
+  "version": "1.0.0-pre",
   "private": true,
   "dependencies": {
     "big-integer": "^1.6.51",
-    "haven-wallet-core": "^3.0.6",
+    "zephyr-javascript": "file:../../zephyr-javascript",
     "history": "^5.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -25,8 +25,8 @@
     "build:desktop": "bash -ac '. ./env/.env.net; . ./env/.env.desktop; . ./env/.env.desktop.build;  react-scripts build'",
     "build:web:ci": "bash -ac \". ./env/.env.web; react-scripts build\"",
     "build:desktop:ci": "bash -ac \". ./env/.env.desktop; . ./env/.env.desktop.build;  react-scripts build\"",
-    "copy-build": "rm -rf ../haven-desktop-app/client && rm -rf ./build/{HavenWebWorker*,haven_offshore*} && cp -rf ./build ../haven-desktop-app/client",
-    "copy-haven-core": "bash -ac 'cp ./node_modules/haven-wallet-core/dist/{HavenWebWorker*,haven_offshore*} ./public'",
+    "copy-build": "rm -rf ../zephyr-desktop-app/client && rm -rf ./build/{ZephyrWebWorker*,zephyr*} && cp -rf ./build ../zephyr-desktop-app/client",
+    "copy-zephyr-core": "bash -ac 'cp ./node_modules/zephyr-javascript/dist/{ZephyrWebWorker*,zephyr*} ./public'",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

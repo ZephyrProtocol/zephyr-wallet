@@ -85,10 +85,9 @@ const Rescan = ({ isLoading }) => {
       </Image>
       <Instructions>
         <Information>
-          Refreshing your vault will force it to rescan the blockchain. This
-          process detects and clears stuck transactions but also prevents you
-          from using the vault until it is complete. To begin the process click
-          the 'Refresh' button.
+          Refreshing your wallet will force it to rescan the blockchain. This process detects and clears stuck
+          transactions but also prevents you from using the wallet until it is complete. To begin the process click the
+          'Refresh' button.
         </Information>
       </Instructions>
     </Container>

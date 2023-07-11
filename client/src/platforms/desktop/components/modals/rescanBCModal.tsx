@@ -1,13 +1,10 @@
 import * as React from "react";
 import { Modal } from "shared/components/modal";
-import { HavenAppState } from "platforms/desktop/reducers/index.js";
+import { ZephyrAppState } from "platforms/desktop/reducers/index.js";
 import { connect } from "react-redux";
 import { hideModal } from "shared/actions/modal";
 import Rescan from "../../../../shared/components/rescan";
-import {
-  syncFromFirstIncomingTx,
-  rescanSpent,
-} from "../../../../shared/actions/refresh";
+import { syncFromFirstIncomingTx, rescanSpent } from "../../../../shared/actions/refresh";
 
 class RescanBCM extends React.Component<any, any> {
   state = {
@@ -27,7 +24,7 @@ class RescanBCM extends React.Component<any, any> {
     const { isLoading } = this.state;
     return (
       <Modal
-        title="Refresh Vault"
+        title="Rescan Wallet"
         description="Detect and clear stuck transactions"
         leftButton={"Cancel"}
         rightButton="Refresh"
@@ -47,7 +44,7 @@ class RescanBCM extends React.Component<any, any> {
   }
 }
 
-const mapStateToProps = (state: HavenAppState) => ({
+const mapStateToProps = (state: ZephyrAppState) => ({
   restoreHeight: state.walletSession.restoreHeight,
 });
 

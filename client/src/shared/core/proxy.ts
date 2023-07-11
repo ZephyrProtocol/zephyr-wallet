@@ -1,108 +1,79 @@
 import { isDesktop } from "constants/env";
 import { callWalletBackend } from "platforms/desktop/ipc/wallet";
 import * as walletCore from "./wallet";
-import * as havendCore from "./havend";
-import MoneroTxWallet from "haven-wallet-core/src/main/js/wallet/model/MoneroTxWallet";
+import * as zephyrdCore from "./zephyrd";
+import MoneroTxWallet from "zephyr-javascript/src/main/js/wallet/model/MoneroTxWallet";
 import { CommunicationChannel } from "platforms/desktop/ipc/ipc-types";
-import MoneroBlockHeader from "haven-wallet-core/src/main/js/daemon/model/MoneroBlockHeader";
-import MoneroSubaddress from "haven-wallet-core/src/main/js/wallet/model/MoneroSubaddress";
+import MoneroBlockHeader from "zephyr-javascript/src/main/js/daemon/model/MoneroBlockHeader";
+import MoneroSubaddress from "zephyr-javascript/src/main/js/wallet/model/MoneroSubaddress";
 import { logM } from "utility/utility";
-import MoneroBlock from "haven-wallet-core/src/main/js/daemon/model/MoneroBlock";
-import HavenBalance from "haven-wallet-core/src/main/js/wallet/model/HavenBalance";
-import HavenCiculatingSupply from "haven-wallet-core/src/main/js/wallet/model/HavenCirculatingSupply";
+import MoneroBlock from "zephyr-javascript/src/main/js/daemon/model/MoneroBlock";
+import ZephyrBalance from "zephyr-javascript/src/main/js/wallet/model/ZephyrBalance";
+import ZephyrReserveInfo from "zephyr-javascript/src/main/js/wallet/model/ZephyrReserveInfo";
 
 const walletHandler: ProxyHandler<typeof walletCore> = {
-  get: (
-    target: typeof walletCore,
-    name: keyof typeof walletCore,
-    receiver: any
-  ) => {
+  get: (target: typeof walletCore, name: keyof typeof walletCore, receiver: any) => {
     if (isDesktop()) {
       return async function (...args: any[]) {
         // we need to handle serialization of data as ipcrenderer cannot transport classes, only raw objects
 
-
         try {
+          const response = await callWalletBackend(name, args, CommunicationChannel.WALLET);
 
+          logM(response);
 
-        const response = await callWalletBackend(
-          name,
-          args,
-          CommunicationChannel.WALLET
-        );
-
-
-        logM(response);
-
-        if (response && response.status && response.status === "error") {
-          throw new Error(response.message);
-        }
-
-
-        if (name === "transfer" || name === "sweep") {
-          const txs: MoneroTxWallet[] = response.map(
-            (jsonTx: any) => new MoneroTxWallet(jsonTx)
-          );
-
-          return txs;
-        }
-
-        if (name === "getTxs") {
-
-
-        const transfers: MoneroTxWallet[] = response.map((state: any) => {
-          //workaround to pull in block info into the core lib architecture
-          const txWallet = new MoneroTxWallet(state);
-          if (state.block) {
-            //@ts-ignore
-            const block = new MoneroBlock(state.block);
-            txWallet.setBlock(block);
+          if (response && response.status && response.status === "error") {
+            throw new Error(response.message);
           }
 
-          return txWallet;
-        });
-          
-          return transfers
+          if (name === "transfer" || name === "sweep") {
+            const txs: MoneroTxWallet[] = response.map((jsonTx: any) => new MoneroTxWallet(jsonTx));
 
+            return txs;
+          }
 
-        }
+          if (name === "getTxs") {
+            const transfers: MoneroTxWallet[] = response.map((state: any) => {
+              //workaround to pull in block info into the core lib architecture
+              const txWallet = new MoneroTxWallet(state);
+              if (state.block) {
+                //@ts-ignore
+                const block = new MoneroBlock(state.block);
+                txWallet.setBlock(block);
+              }
 
-        if (name === "getCirculatingSupply") {
-           //@ts-ignore
-          const circulatingSupply: HavenCiculatingSupply = new HavenCiculatingSupply(response);
-          return circulatingSupply;
-        }
+              return txWallet;
+            });
 
-        if (name === "getSubAddresses") {
+            return transfers;
+          }
 
-            const addresses: MoneroSubaddress[] = response.map(
-            (jsonAddress: any) => new MoneroSubaddress(jsonAddress)
-          );
+          if (name === "getReserveInfo") {
+            //@ts-ignore
+            const reserveInfo: ZephyrReserveInfo = new ZephyrReserveInfo(response);
+            return reserveInfo;
+          }
 
-          return addresses;
-        }
+          if (name === "getSubAddresses") {
+            const addresses: MoneroSubaddress[] = response.map((jsonAddress: any) => new MoneroSubaddress(jsonAddress));
 
+            return addresses;
+          }
 
-        if (name === "createSubAddress") {
+          if (name === "createSubAddress") {
+            const address: MoneroSubaddress = new MoneroSubaddress(response);
+            return address;
+          }
 
-          const address: MoneroSubaddress = new MoneroSubaddress(response)
-          return address;
-      }
+          if (name === "getBalance" || name === "getUnlockedBalance") {
+            //@ts-ignore
+            const balance: ZephyrBalance = new ZephyrBalance(response);
+            return balance;
+          }
 
-      if (name === "getBalance" || name === "getUnlockedBalance") {
-
-        //@ts-ignore
-        const balance: HavenBalance = new HavenBalance(response)
-        return balance;
-      }
-
-        return response;
-
-      }
-      catch(e:any) {
-        
-        throw (e.message);
-
+          return response;
+        } catch (e: any) {
+          throw e.message;
         }
       };
     }
@@ -110,31 +81,26 @@ const walletHandler: ProxyHandler<typeof walletCore> = {
   },
 };
 
-const havendHandler: ProxyHandler<typeof havendCore> = {
-  get: (target: typeof havendCore, name: keyof typeof havendCore, receiver: any) => {
+const zephyrdHandler: ProxyHandler<typeof zephyrdCore> = {
+  get: (target: typeof zephyrdCore, name: keyof typeof zephyrdCore, receiver: any) => {
     if (isDesktop()) {
       return async function (...args: any[]) {
         try {
-        const response = await callWalletBackend(
-          name,
-          args,
-          CommunicationChannel.DAEMON
-        );
+          const response = await callWalletBackend(name, args, CommunicationChannel.DAEMON);
 
-        if (name==="getLastBlockHeader") {
-          const headerResponse: MoneroBlockHeader = new MoneroBlockHeader(response);
-          return headerResponse;
+          if (name === "getLastBlockHeader") {
+            const headerResponse: MoneroBlockHeader = new MoneroBlockHeader(response);
+            return headerResponse;
+          }
+          return response;
+        } catch (e) {
+          throw e;
         }
-        return response;
-      }
-      catch(e) {
-        throw e;
-      }
       };
     }
     return Reflect.get(target, name, receiver);
   },
 };
 
-export const havendProxy = new Proxy(havendCore, havendHandler);
+export const zephyrdProxy = new Proxy(zephyrdCore, zephyrdHandler);
 export const walletProxy = new Proxy(walletCore, walletHandler);

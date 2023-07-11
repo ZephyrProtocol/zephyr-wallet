@@ -5,7 +5,7 @@ export const APP_VERSION = process.env.REACT_APP_VERSION;
 export const NET_TYPE_NAME = ["Mainnet", "Testnet", "Stagenet"][NET_TYPE_ID];
 export const MODE = process.env.NODE_ENV;
 
-console.log ("fin env")
+console.log("fin env");
 export const DEV_MODE = "development";
 export const PRODUCTION_MODE = "production";
 
@@ -31,13 +31,13 @@ export const isDesktop = () => {
 
 export const getPort = () => {
   if (isDevMode()) {
-    return isMainnet() ? 17750 : isTestnet() ? 27750 : 37750;
+    return isMainnet() ? 17767 : isTestnet() ? 27767 : 37767;
   }
-  if (window.location.port == "" && window.location.protocol === "http:"){
-    return 80
+  if (window.location.port == "" && window.location.protocol === "http:") {
+    return 80;
   }
-  if (window.location.port == "" && window.location.protocol === "https:"){
-    return 443
+  if (window.location.port == "" && window.location.protocol === "https:") {
+    return 443;
   }
   return window.location.port;
 };
@@ -45,9 +45,7 @@ export const getPort = () => {
 let apiUrl;
 
 if (isWeb()) {
-  apiUrl = isDevMode()
-    ? process.env.REACT_APP_API_URL_DEVELOP
-    : process.env.REACT_APP_API_URL;
+  apiUrl = isDevMode() ? process.env.REACT_APP_API_URL_DEVELOP : process.env.REACT_APP_API_URL;
 }
 
 export const getNetworkByName = (): string => {

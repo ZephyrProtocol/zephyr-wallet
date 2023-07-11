@@ -1,6 +1,5 @@
-import { havendProxy, walletProxy } from "shared/core/proxy";
+import { zephyrdProxy, walletProxy } from "shared/core/proxy";
 import { SET_APP_TO_DAEMON_CONNECTION_STATE, SET_WALLET_CONNECTION_STATE } from "./types";
-
 
 export const getWalletConnectionState = () => {
   return async (dispatch: any) => {
@@ -10,17 +9,18 @@ export const getWalletConnectionState = () => {
 };
 
 export const getAppConnectionState = () => {
-    return async (dispatch: any) => {
-        const isAppConnected: boolean = await havendProxy.isConnected() as boolean;
-        dispatch(setApptoDaemonConnectionState(isAppConnected));
-    }
-}
+  return async (dispatch: any) => {
+    console.log(zephyrdProxy);
 
- const setWalletConnectionState = (isConnected: boolean) => {
+    const isAppConnected: boolean = (await zephyrdProxy.isConnected()) as boolean;
+    dispatch(setApptoDaemonConnectionState(isAppConnected));
+  };
+};
+
+const setWalletConnectionState = (isConnected: boolean) => {
   return { type: SET_WALLET_CONNECTION_STATE, payload: isConnected };
 };
 
-
 const setApptoDaemonConnectionState = (isConnected: boolean) => {
-    return { type: SET_APP_TO_DAEMON_CONNECTION_STATE, payload: isConnected };
- }
+  return { type: SET_APP_TO_DAEMON_CONNECTION_STATE, payload: isConnected };
+};

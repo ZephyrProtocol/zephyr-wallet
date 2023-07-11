@@ -1,32 +1,22 @@
-import * as core from "haven-wallet-core";
-import MoneroWalletWasm from "haven-wallet-core/src/main/js/wallet/MoneroWalletWasm";
-import BigInteger from "haven-wallet-core/src/main/js/common/biginteger";
-import {
-  ICreateWallet,
-  IOpenWallet,
-  ITxConfig,
-  IKeys,
-  IMonerRPCConnection,
-} from "../../typings";
-import MoneroTxWallet from "haven-wallet-core/src/main/js/wallet/model/MoneroTxWallet";
-import HavenBalance from "haven-wallet-core/src/main/js/wallet/model/HavenBalance";
-import MoneroAddressBookEntry from "haven-wallet-core/src/main/js/wallet/model/MoneroAddressBookEntry";
+import * as core from "zephyr-javascript";
+import MoneroWalletFull from "zephyr-javascript/src/main/js/wallet/MoneroWalletFull";
+import BigInteger from "zephyr-javascript/src/main/js/common/biginteger";
+import { ICreateWallet, IOpenWallet, ITxConfig, IKeys, IMonerRPCConnection } from "../../typings";
+import MoneroTxWallet from "zephyr-javascript/src/main/js/wallet/model/MoneroTxWallet";
+import ZephyrBalance from "zephyr-javascript/src/main/js/wallet/model/ZephyrBalance";
+import MoneroAddressBookEntry from "zephyr-javascript/src/main/js/wallet/model/MoneroAddressBookEntry";
 import { Ticker } from "shared/reducers/types";
 
-let wallet: MoneroWalletWasm;
+let wallet: MoneroWalletFull;
 
 export const createWallet = async (walletData: ICreateWallet) => {
- 
-    wallet = await core.createWalletWasm(walletData);
-    return true;
-
+  wallet = await core.createWalletFull(walletData);
+  return true;
 };
 
 export const openWallet = async (walletData: IOpenWallet) => {
-
-    wallet = await core.openWalletWasm(walletData);
-    return true;
- 
+  wallet = await core.openWalletFull(walletData);
+  return true;
 };
 
 export const closeWallet = async (save: boolean) => {
@@ -34,58 +24,42 @@ export const closeWallet = async (save: boolean) => {
   return wallet.close(save);
 };
 
-export const getBlockCap = async() => {
-   //@ts-ignore
-  return wallet.getBlockCap();
-}
-
-export const getCollateralRequirements = async(sourceAssetType: Ticker, destinationAssetType: Ticker, amount: string) => {
-
+export const getReserveInfo = async () => {
   //@ts-ignore
-  const requiredCollateral = await wallet.getCollateralRequirements(sourceAssetType, destinationAssetType, amount)
-
-  return requiredCollateral;
-
+  return wallet.getReserveInfo();
 };
 
-export const getCirculatingSupply = async() => {
-
+export const getMaxDestinationAmount = async (sourceAssetType: Ticker, destinationAssetType: Ticker) => {
   //@ts-ignore
-  return wallet.getCirculatingSupply()
-};
-
-export const getMaxDestinationAmount = async(sourceAssetType: Ticker, destinationAssetType: Ticker) => {
-
-  //@ts-ignore
-  return wallet.getMaxDestinationAmount(sourceAssetType, destinationAssetType)
+  return wallet.getMaxDestinationAmount(sourceAssetType, destinationAssetType);
 };
 
 export const getBalance = async (
   accountIdx: number | undefined = undefined,
   subaddressIdx: number | undefined = undefined,
-  assetType: string | undefined = undefined
+  assetType: string | undefined = "ZEPH",
 ) => {
   if (!wallet) {
     throw Error("no wallet exist");
   }
-  //@ts-ignore
-  const balance: HavenBalance = await wallet.getBalance(
-  );
+  const balance: ZephyrBalance = await wallet.getBalance(accountIdx, subaddressIdx, assetType);
   return balance;
 };
 
 export const getUnlockedBalance = async (
   accountIdx: number | undefined = undefined,
   subaddressIdx: number | undefined = undefined,
-  assetType: string | undefined = undefined
+  assetType: string | undefined = undefined,
 ) => {
   if (!wallet) {
     throw Error("no wallet exist");
   }
 
-  const balance: HavenBalance = await wallet.getUnlockedBalance(
-      //@ts-ignore
-    accountIdx, subaddressIdx, assetType
+  const balance: ZephyrBalance = await wallet.getUnlockedBalance(
+    //@ts-ignore
+    accountIdx,
+    subaddressIdx,
+    assetType,
   );
   return balance;
 };
@@ -128,19 +102,14 @@ export const syncAtOnce = (startHeight: number) => {
   return wallet.sync(startHeight);
 };
 
-export const transfer = async (
-  txConfig: Partial<ITxConfig>
-): Promise<MoneroTxWallet[]> => {
+export const transfer = async (txConfig: Partial<ITxConfig>): Promise<MoneroTxWallet[]> => {
   //@ts-ignore
   return wallet.createTxs(txConfig);
 };
 
-export const sweep = async (
-  txConfig: Partial<ITxConfig>
-  ): Promise<MoneroTxWallet[]> => {
-
-    return wallet.sweepUnlocked(txConfig);
-}
+export const sweep = async (txConfig: Partial<ITxConfig>): Promise<MoneroTxWallet[]> => {
+  return wallet.sweepUnlocked(txConfig);
+};
 
 export const getTransfers = async () => {
   //@ts-ignore
@@ -157,7 +126,7 @@ export const isWalletSynced = async (): Promise<boolean> => {
 };
 
 export const isWalletConnected = async (): Promise<boolean> => {
-  return wallet.isConnected();
+  return wallet.isConnectedToDaemon();
 };
 
 export const relayTxs = async (metaDataList: string[]) => {
@@ -166,7 +135,7 @@ export const relayTxs = async (metaDataList: string[]) => {
 
 export const getTxKey = async (txHash: string) => {
   return wallet.getTxKey(txHash);
-}
+};
 
 export const setDaemonConnection = async (connection: IMonerRPCConnection) => {
   //@ts-ignore
@@ -212,40 +181,45 @@ export const rescanBlockchain = async () => {
   return wallet.rescanBlockchain();
 };
 
-export const getIntegratedAddress = async(paymentId?: string) => {
+export const getIntegratedAddress = async (paymentId?: string) => {
   //@ts-ignore
-  return wallet.getIntegratedAddress(paymentId)
-}
+  return wallet.getIntegratedAddress(paymentId);
+};
 
-export const setSyncHeight = (syncHeight: number) => {
-  return wallet.setSyncHeight(syncHeight);
-}
+export const setRestoreHeight = (syncHeight: number) => {
+  return wallet.setRestoreHeight(syncHeight);
+};
 
-export const getSyncHeight = () => {
-  return wallet.getSyncHeight();
-}
+export const getRestoreHeight = () => {
+  return wallet.getRestoreHeight();
+};
 
 export const rescanSpent = () => {
   return wallet.rescanSpent();
-}
+};
 
 export const saveWallet = () => {
   return wallet.save();
-}
+};
 
 export const getAddressBookEntries = async (entryIndices: any[] = []): Promise<MoneroAddressBookEntry[]> => {
   return wallet.getAddressBookEntries(entryIndices);
-}
+};
 
 export const addAddressBookEntry = async (address: string, description: string): Promise<number> => {
   return wallet.addAddressBookEntry(address, description);
 };
 
-export const editAddressBookEntry = async(index: number, setAddress: boolean, address: string, setDescription: boolean, description: string): Promise<void> => {
+export const editAddressBookEntry = async (
+  index: number,
+  setAddress: boolean,
+  address: string,
+  setDescription: boolean,
+  description: string,
+): Promise<void> => {
   return wallet.editAddressBookEntry(index, setAddress, address, setDescription, description);
-}
+};
 
 export const deleteAddressBookEntry = async (entryIdx: any): Promise<void> => {
   return wallet.deleteAddressBookEntry(entryIdx);
-} 
-
+};

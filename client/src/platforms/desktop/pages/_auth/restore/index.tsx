@@ -1,11 +1,5 @@
-import {
-  selectErrorMessageForLogin,
-  selectIsLoggedIn,
-} from "shared/reducers/walletSession";
-import {
-  selectisRequestingWalletCreation,
-  selectIsWalletCreated,
-} from "shared/reducers/walletCreation";
+import { selectErrorMessageForLogin, selectIsLoggedIn } from "shared/reducers/walletSession";
+import { selectisRequestingWalletCreation, selectIsWalletCreated } from "shared/reducers/walletCreation";
 import { connect } from "react-redux";
 import { restoreWalletByMnemomic } from "shared/actions/walletCreation";
 import { Navigate } from "react-router";
@@ -27,7 +21,7 @@ interface RestoreProps {
     seed: string,
     pw: string,
     walletName: string | undefined,
-    restoreHeight?: number
+    restoreHeight?: number,
   ) => void;
   isLoggedIn: boolean;
   isRequestingLogin: boolean;
@@ -62,11 +56,7 @@ class RestoreDesktopContainer extends Component<RestoreProps, RestoreState> {
     showPassword: false,
   };
 
-  componentDidUpdate(
-    prevProps: Readonly<RestoreProps>,
-    prevState: Readonly<RestoreState>,
-    snapshot?: any
-  ): void {
+  componentDidUpdate(prevProps: Readonly<RestoreProps>, prevState: Readonly<RestoreState>, snapshot?: any): void {
     if (prevProps.errorMessage === "" && this.props.errorMessage) {
       this.setState({ error: this.props.errorMessage });
       setTimeout(() => this.setState({ error: "" }), 2000);
@@ -144,16 +134,12 @@ class RestoreDesktopContainer extends Component<RestoreProps, RestoreState> {
                 onChange={this.onChangeHandler}
               />
               <Information>
-                Restore your vault by entering your 25 word seed phrase. This
-                process will generate an encrypted vault file that enables you
-                to store, send and convert assets in complete privacy.
+                Restore your wallet by entering your 25 word seed phrase. This process will generate an encrypted wallet
+                file that enables you to store, send and convert assets in complete privacy.
               </Information>
             </Body>
             <Buttons buttons="single">
-              <Submit
-                onClick={() => this.onContinue()}
-                disabled={seed.length > 0 ? false : true}
-              >
+              <Submit onClick={() => this.onContinue()} disabled={seed.length > 0 ? false : true}>
                 Restore
               </Submit>
             </Buttons>
@@ -165,8 +151,8 @@ class RestoreDesktopContainer extends Component<RestoreProps, RestoreState> {
             <Body>
               <Form>
                 <Input
-                  label="Vault Name"
-                  placeholder="Create a vault name"
+                  label="Wallet Name"
+                  placeholder="Create a wallet name"
                   name="name"
                   type={"text"}
                   value={name}
@@ -184,8 +170,8 @@ class RestoreDesktopContainer extends Component<RestoreProps, RestoreState> {
               </Form>
               <InputButton
                 // @ts-ignore
-                label="Vault Password"
-                placeholder="Enter vault password"
+                label="Wallet Password"
+                placeholder="Enter wallet password"
                 name="pw"
                 type={this.state.showPassword === true ? "text" : "password"}
                 button={this.state.showPassword === true ? "hide" : "show"}
@@ -194,26 +180,14 @@ class RestoreDesktopContainer extends Component<RestoreProps, RestoreState> {
                 onClick={this.togglePassword}
               />
               <Information>
-                Create a unique name and strong password for your vault file. If
-                you lose your vault file you can always restore it with the 25
-                word seed phrase you entered on the previous step. Store your
-                password in a safe location such as a password manager. Lastly,
-                you can save sync time by entering your restore height above, if
-                you'd like to learn more you can click{" "}
-                <Url
-                  target="_blank"
-                  href="https://havenprotocol.org/knowledge/vault-restore-height/"
-                >
-                  here
-                </Url>
-                .
+                Create a unique name and strong password for your wallet file. If you lose your wallet file you can
+                always restore it with the 25 word seed phrase you entered on the previous step. Store your password in
+                a safe location such as a password manager. Lastly, you can save sync time by entering your restore
+                height above.
               </Information>
             </Body>
             <Buttons buttons="single">
-              <Submit
-                disabled={!(name.length > 0 && pw.length > 0)}
-                onClick={() => this.onRestoreWallet()}
-              >
+              <Submit disabled={!(name.length > 0 && pw.length > 0)} onClick={() => this.onRestoreWallet()}>
                 {this.props.isRequestingLogin ? <Spinner /> : "Finish"}
               </Submit>
             </Buttons>

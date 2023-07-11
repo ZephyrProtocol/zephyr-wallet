@@ -1,22 +1,11 @@
 import { NetworkType } from "typings";
 
 const GOVERNANCE_WALLET_ADDRESS = [
-  [
-    "hvxy7YfeE8SdTrCmSqLB59WoQn3ZQun1aLX36X3eb1R7Fb26VuNpc235q4fguGUxfGKerywFPnweu15S8RB8DzTJ8Q4hGJCgvv",
-    "hvxy3f2PhAhimkeLf617BsbVn6UTbofVcMzofXGsSNLoMFr2SrSxRJ9f52Am1QLVddKetXPKHoTLbBaLNT1kMU6Q3kYRc3t6pF",
-  ],
-  [
-    "hvtaG41PNGsT5mWQGeqXFvScaNxHQj6YeJK7Vuq2uRF8fa58D6KawrcXS1EVt6g4PiBnSvYMqVRxoAMZaM7AVCqo4LknAJJBR9",
-    "hvtaKW6432sck8vBR2AbkR5ZV5vU9gzfW2AyexzU2dF9Yhvm2rAEGMaS5RskxfC3JSL5xW2xCczAFKBg6Et7dubtAUhMPRX75D",
-  ],
-  [
-    "hvsaeLCg4ZkjLRQf8ciYSjHFX8y2CmrnibNBRDZiyyANTFtXQbxHy5PFD79MvmB9mtHeX8XLa36BJ33QoEDh8PH8hULLZnpdNx7",
-    "hvsaeLCg4ZkjLRQf8ciYSjHFX8y2CmrnibNBRDZiyyANTFtXQbxHy5PFD79MvmB9mtHeX8XLa36BJ33QoEDh8PH8hULLZnpdNx7",
-  ],
+  "ZEPHYR2jZrZXenfKejCcCmEkRzUYwXjgWfJF4yzdCznKQ8yQ3g3PsWUbZjzfzHbeTPMgXVmEuDKQUB9rPkgtVwyWRh9knU4EpfJ57", // mainnet
+  "ZPHTjbspy3MQWHUVsnRVWUhcWEKnaEiK3FBpsuwPzcCN1zDAuWGjFskcHC9jo6e8fF4UDzFbe5LGnU4ychM48E8D8ukYphLM6qu", // testnet
+  "ZPHSjoq9e8pB41HgzKLJ94HPWN9eKhZhqYdFrvf51KUjcevE8SUhh8CYw65g5KYDBqaUsZZLu1NhnL3CvGikQGFEjdGV1hNzVL5", // stagenet
 ];
 
-export const getGovernanceWalletAddressByNetwork = (
-  network: NetworkType
-): string[] => {
+export const getGovernanceWalletAddressByNetwork = (network: NetworkType): string => {
   return GOVERNANCE_WALLET_ADDRESS[network];
 };

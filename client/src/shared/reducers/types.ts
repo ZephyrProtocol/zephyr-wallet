@@ -11,16 +11,9 @@ export enum BalanceTypes {
 }
 
 export enum Ticker {
-  XHV = "XHV",
-  xUSD = "XUSD",
-  xBTC = "XBTC",
-  XAU="XAU",
-  XAG="XAG",
-  xEUR="XEUR",
-  xCNY="XCNY",
-  xGBP="XGBP",
-  xAUD="XAUD",
-  xCHF="XCHF"
+  ZEPH = "ZEPH",
+  ZEPHUSD = "ZEPHUSD",
+  ZEPHRSV = "ZEPHRSV",
 }
 
 export type XFetchingItem = Partial<{ [key in Ticker]?: XFetchingStats }>;
@@ -32,6 +25,6 @@ const INITAL_FETCH_STATS: XFetchingStats = {
 };
 
 export const INITAL_FETCHING_STATE: { [key in Ticker]?: XFetchingStats } = {
-  [Ticker.xUSD]: INITAL_FETCH_STATS,
-  [Ticker.XHV]: INITAL_FETCH_STATS,
+  [Ticker.ZEPHUSD]: INITAL_FETCH_STATS,
+  [Ticker.ZEPH]: INITAL_FETCH_STATS,
 };

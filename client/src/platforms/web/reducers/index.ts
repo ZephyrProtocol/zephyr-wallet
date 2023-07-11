@@ -11,19 +11,17 @@ import { transferProcess } from "shared/reducers/transferProcess";
 import { exchangeProcess } from "shared/reducers/exchangeProcess";
 import { xBalance } from "shared/reducers/xBalance";
 import { blockHeaderExchangeRate } from "shared/reducers/blockHeaderExchangeRates";
-import { havenFeature } from "shared/reducers/havenFeature";
 import { walletSession } from "shared/reducers/walletSession";
 import { walletCreation } from "shared/reducers/walletCreation";
 import modal from "shared/reducers/modal";
 import { STOP_WALLET_SESSION } from "shared/actions/types";
-import { connectedNode } from "platforms/desktop/reducers/selectedNode"
-import { circulatingSupply } from "shared/reducers/circulatingSupply";
+import { connectedNode } from "platforms/desktop/reducers/selectedNode";
+import { reserveInfo } from "shared/reducers/reserveInfo";
 
 const appReducer = combineReducers({
   theme,
   address,
   xBalance,
-  havenFeature,
   chain,
   xTransferList,
   priceHistory,
@@ -35,7 +33,7 @@ const appReducer = combineReducers({
   walletCreation,
   modal,
   connectedNode,
-  circulatingSupply
+  reserveInfo,
 });
 
 const rootReducer = (state: any, action: AnyAction) => {

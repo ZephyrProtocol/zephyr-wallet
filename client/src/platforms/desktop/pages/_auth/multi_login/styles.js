@@ -5,6 +5,7 @@ export const Container = styled.div`
   height: auto;
   min-height: auto;
   max-width: 624px;
+  min-width: 420px;
   flex-direction: column;
   margin: 20px;
   border: 1px solid ${(props) => props.theme.body.border};
@@ -56,8 +57,7 @@ export const Buttons = styled.div`
   display: flex;
   align-items: center;
   margin-top: 40px;
-  justify-content: ${(props) =>
-    props.buttons === "single" ? "flex-end" : "space-between"};
+  justify-content: ${(props) => (props.buttons === "single" ? "flex-end" : "space-between")};
 `;
 
 export const Submit = styled.button`

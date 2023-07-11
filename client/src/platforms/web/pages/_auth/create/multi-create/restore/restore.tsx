@@ -9,16 +9,13 @@ import { Information } from "assets/styles/type.js";
 import VerifySeed from "shared/components/_create/verify_seed";
 import InputButton from "shared/components/_inputs/input_button";
 import { connect } from "react-redux";
-import {
-  selectisRequestingWalletCreation,
-  selectErrorMessageForWalletCreation,
-} from "shared/reducers/walletCreation";
+import { selectisRequestingWalletCreation, selectErrorMessageForWalletCreation } from "shared/reducers/walletCreation";
 import { WebAppState } from "platforms/web/reducers";
 import { storeKeyFileToDisk } from "platforms/web/actions/storage";
 import { restoreWalletByMnemomic } from "shared/actions/walletCreation";
 import { startWalletSession } from "shared/actions/walletSession";
 import { selectIsLoggedIn } from "shared/reducers/walletSession";
-import { MoneroUtils } from "haven-wallet-core";
+import { MoneroUtils } from "zephyr-javascript";
 import Checkbox from "../../../../../../../shared/components/checkbox";
 import { Navigate } from "react-router";
 import Form from "../../../../../../../shared/components/_inputs/form";
@@ -36,7 +33,7 @@ interface RestoreProps {
     mnemomic: string,
     password: string,
     walletName: string | undefined,
-    restoreHeight: number | undefined
+    restoreHeight: number | undefined,
   ) => void;
 }
 
@@ -106,7 +103,7 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
         this.state.mnemomic,
         this.state.create_vault_password,
         this.state.create_vault_name,
-        this.state.restore_height
+        this.state.restore_height,
       );
       return;
     }
@@ -120,8 +117,7 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
     else if (step === 4) {
       const { check_vault_password, create_vault_password } = this.state;
 
-      const validationSucceed =
-        check_vault_password.trim() === create_vault_password.trim();
+      const validationSucceed = check_vault_password.trim() === create_vault_password.trim();
 
       if (validationSucceed) {
         this.props.startWalletSession(this.props.walletName);
@@ -189,12 +185,10 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
               onChange={this.handleChange}
             />
             <Information>
-              Enter your 25 word seed phrase to generate a new vault file. This
-              is an encrypted file, with a unique name and password. A restore
-              requires a full chain sync and can take ~2.5hrs. An alternative
-              approach is to create a new vault to use within the web wallet,
-              which is much quicker, and then transferring your funds into that
-              new vault.
+              Enter your 25 word seed phrase to generate a new wallet file. This is an encrypted file, with a unique
+              name and password. A restore requires a full chain sync and can take ~2.5hrs. An alternative approach is
+              to create a new wallet to use within the web wallet, which is much quicker, and then transferring your
+              funds into that new wallet.
             </Information>
           </>
         );
@@ -203,9 +197,9 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
           <>
             <Form>
               <Input
-                label="Vault Name"
+                label="Wallet Name"
                 type="text"
-                placeholder="Create a Vault name"
+                placeholder="Create a wallet name"
                 name="create_vault_name"
                 value={this.state.create_vault_name}
                 onChange={this.handleChange}
@@ -222,8 +216,8 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
             </Form>
 
             <Toggle
-              label="Vault Password"
-              placeholder="Create a Vault password"
+              label="Wallet Password"
+              placeholder="Create a wallet password"
               name="create_vault_password"
               type={this.state.reveal === true ? "text" : "password"}
               reveal={this.state.reveal}
@@ -231,16 +225,15 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
               onChange={this.handleChange}
               onClick={this.showPassword}
               readOnly={false}
-              onKeyUp={()=>{}}
+              onKeyUp={() => {}}
               error={error}
               width
             />
 
             <Information>
-              Create a unique name and strong password for your vault file. You
-              will be asked to confirm this password on the final step. If you
-              lose your vault file you can always restore it with the 25 word
-              seed phrase you entered on the previous step.
+              Create a unique name and strong password for your wallet file. You will be asked to confirm this password
+              on the final step. If you lose your wallet file you can always restore it with the 25 word seed phrase you
+              entered on the previous step.
             </Information>
           </>
         );
@@ -248,8 +241,8 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
         return (
           <>
             <InputButton
-              label="Vault File"
-              name="Vault File"
+              label="Wallet File"
+              name="Wallet File"
               placeholder="Error"
               value={this.props.walletName}
               button={"Save"}
@@ -258,15 +251,13 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
               onClick={this.onDownLoad}
             />
             <Checkbox
-              label="I have saved my vault file to my device"
+              label="I have saved my wallet file to my device"
               checked={this.state.checked}
               onChange={this.downloadedFile}
             />
             <Information>
-              A vault file uses military grade encryption to secure your assets.
-              Store this file in a safe location. To avoid permanent loss of
-              assets, never share your seed phrase, vault file or password with
-              anyone.
+              A wallet file uses military grade encryption to secure your assets. Store this file in a safe location. To
+              avoid permanent loss of assets, never share your seed phrase, wallet file or password with anyone.
             </Information>
           </>
         );
@@ -274,8 +265,8 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
         return (
           <>
             <Toggle
-              label="Vault Password"
-              placeholder="Re-enter your vault password"
+              label="Wallet Password"
+              placeholder="Re-enter your wallet password"
               name="check_vault_password"
               type={this.state.reveal === true ? "text" : "password"}
               reveal={this.state.reveal}
@@ -283,14 +274,13 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
               onChange={this.handleChange}
               onClick={this.showPassword}
               error={error}
-              onKeyUp={()=>{}}
+              onKeyUp={() => {}}
               readOnly={false}
               width
             />
             <Information>
-              Re-enter the password you used to create this vault file. If you
-              have forgotten it, please start again. A vault requires both the
-              vault file and valid password to access.
+              Re-enter the password you used to create this wallet file. If you have forgotten it, please start again. A
+              wallet requires both the wallet file and valid password to access.
             </Information>
           </>
         );
@@ -306,10 +296,10 @@ class RestoreWeb extends Component<RestoreProps, RestoreState> {
     const { step } = this.state;
     return (
       <MultiRestore
-        title="Create a Vault"
+        title="Create a Wallet"
         link="/login"
         route="Login"
-        label="Have a Vault?"
+        label="Have a Wallet?"
         step={step}
         nextStep={this.nextRestoreStep}
         prevStep={this.prevRestoreStep}

@@ -1,26 +1,24 @@
-import MoneroWalletListener from "haven-wallet-core/src/main/js/wallet/model/MoneroWalletListener";
+import MoneroWalletListener from "zephyr-javascript/src/main/js/wallet/model/MoneroWalletListener";
 import { bigIntegerToBigInt, logM } from "utility/utility";
-import BigInteger from "haven-wallet-core/src/main/js/common/biginteger";
+import BigInteger from "zephyr-javascript/src/main/js/common/biginteger";
 import { Balance } from "shared/reducers/xBalance";
 import { getBalancesSucceed } from "./balance";
 import { Chain, selectSyncState } from "shared/reducers/chain";
 import { onWalletSyncUpdateSucceed } from "shared/actions/walletCreation";
 import { getLastBlockHeader } from "./blockHeaderExchangeRate";
-import { updateHavenFeatures } from "./havenFeature";
-import { HavenAppState } from "platforms/desktop/reducers";
+import { ZephyrAppState } from "platforms/desktop/reducers";
 import { Ticker } from "shared/reducers/types";
-import { getCirculatingSupply } from "./circulatingSupply";
-import { getBlockCap } from "./blockCap";
+import { getReserveInfo } from "./reserveInfo";
 
-export class HavenWalletListener extends MoneroWalletListener {
+export class ZephyrWalletListener extends MoneroWalletListener {
   // we keep a dispatch and getStore instance in the walletlistener
   // - not sure if its a good praxis
 
   [key: string]: any;
 
-  private getStore: () => HavenAppState;
+  private getStore: () => ZephyrAppState;
   private dispatch: any;
-  constructor(dispatch: any, getStore: () => HavenAppState) {
+  constructor(dispatch: any, getStore: () => ZephyrAppState) {
     super();
     this.dispatch = dispatch;
     this.getStore = getStore;
@@ -35,24 +33,18 @@ export class HavenWalletListener extends MoneroWalletListener {
    * @param {number} percentDone - sync progress as a percentage
    * @param {string} message - human-readable description of the current progress
    */
-  onSyncProgress(
-    height: number,
-    startHeight: number,
-    endHeight: number,
-    percentDone: number,
-    message: string
-  ): void {
-
+  onSyncProgress(height: number, startHeight: number, endHeight: number, percentDone: number, message: string): void {
     const syncDistance = endHeight - height;
 
     let updateInterval = Math.pow(10, Math.floor(Math.log10(syncDistance)));
     updateInterval = Math.min(1000, updateInterval);
     updateInterval = Math.max(updateInterval, 1);
-  
-    if (syncDistance % updateInterval === 0 || height === startHeight)  {
+
+    if (syncDistance % updateInterval === 0 || height === startHeight) {
       const chain: Partial<Chain> = {
         walletHeight: height,
-        nodeHeight:endHeight
+        chainHeight: endHeight,
+        nodeHeight: endHeight,
       };
       logM(height);
 
@@ -65,18 +57,14 @@ export class HavenWalletListener extends MoneroWalletListener {
    * @param {int} height - the height of the block added to the chain
    */
   onNewBlock(height: any): void {
-    const store: HavenAppState = this.getStore();
+    const store: ZephyrAppState = this.getStore();
     const syncState = selectSyncState(store);
 
     if (!syncState.isSyncing) {
       this.dispatch(getLastBlockHeader());
-      this.dispatch(updateHavenFeatures(height));
-      this.dispatch(getCirculatingSupply());
-      this.dispatch(getBlockCap());
+      this.dispatch(getReserveInfo());
       if (store.chain.chainHeight < height) {
-        this.dispatch(
-          onWalletSyncUpdateSucceed({ nodeHeight: height, chainHeight: height })
-        );
+        this.dispatch(onWalletSyncUpdateSucceed({ nodeHeight: height, chainHeight: height }));
       } else {
         this.dispatch(onWalletSyncUpdateSucceed({ nodeHeight: height }));
       }
@@ -89,20 +77,21 @@ export class HavenWalletListener extends MoneroWalletListener {
    * @param {BigInteger} newUnlockedBalance - new unlocked wallet balance
    */
   // @ts-ignore
-  onBalancesChanged(
-    newBalance: BigInteger,
-    newUnlockedBalance: BigInteger, assetType: string 
-  ): void {
-    const balance = bigIntegerToBigInt(newBalance);
-    const unlockedBalance = bigIntegerToBigInt(newUnlockedBalance);
-    const xhvBalance: Balance = {
-      unlockedBalance,
-      balance,
-      lockedBalance: balance.subtract(unlockedBalance),
-    };
+  onBalancesChanged(newBalance: BigInteger, newUnlockedBalance: BigInteger, assetType: string): void {
+    try {
+      const balance = bigIntegerToBigInt(newBalance);
+      const unlockedBalance = bigIntegerToBigInt(newUnlockedBalance);
+      const zephBalance: Balance = {
+        unlockedBalance,
+        balance,
+        lockedBalance: balance.subtract(unlockedBalance),
+      };
 
-    logM(assetType);
-    this.dispatch(getBalancesSucceed({ [assetType as Ticker] : xhvBalance }));
+      logM(assetType);
+      this.dispatch(getBalancesSucceed({ [assetType as Ticker]: zephBalance }));
+    } catch (e) {
+      console.error("onBalancesChanged:", e);
+    }
     // this.dispatch(getAllTransfers());
   }
   /**

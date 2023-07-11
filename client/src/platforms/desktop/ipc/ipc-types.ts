@@ -5,7 +5,7 @@ export enum CommunicationChannel {
   LOCALNODE = "localNode",
   WALLET = "wallet",
   DAEMON = "daemon",
-  STORED_WALLETS="stored_wallets",
+  STORED_WALLETS = "stored_wallets",
   CONFIG = "config",
 }
 
@@ -19,7 +19,7 @@ export interface AVAILABLE_WALLETS {
   wallets: { name: string; address: string }[];
 }
 
-export interface HavendState extends ProcessState {
+export interface ZephyrdState extends ProcessState {
   isReachable: boolean;
   location: NodeLocation;
   address: string;

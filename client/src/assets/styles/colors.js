@@ -10,5 +10,5 @@ module.exports = {
   secondary: "#8A8D90",
   link: "#34D8AC",
   link_hover: "#2aad8a",
-  button: "#7289DA"
+  button: "#7289DA",
 };

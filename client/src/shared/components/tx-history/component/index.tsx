@@ -2,18 +2,7 @@
 import React from "react";
 
 // Relative Imports
-import {
-  Container,
-  State,
-  Status,
-  Label,
-  Value,
-  Column,
-  Row,
-  Data,
-  ShortRow,
-  Strapline
-} from "./styles";
+import { Container, State, Status, Label, Value, Column, Row, Data, ShortRow, Strapline } from "./styles";
 import { getNetworkByName, isMainnet } from "constants/env";
 import { Conversion } from "shared/components/tx-history/container";
 import Dots from "../../_animations/dots";
@@ -43,32 +32,27 @@ export const Transaction = ({
   mempool,
   timeTillUnlocked,
   fee,
-  failed
+  failed,
 }: TransactionProps) => {
   const first = hash.substring(0, 4);
   const last = hash.substring(hash.length - 4);
   const truncated = first + "...." + last;
 
-  const inUsd = isNaN(parseFloat(currentValueInUSD))
-    ? 0
-    : parseFloat(currentValueInUSD);
+  const inUsd = isNaN(parseFloat(currentValueInUSD)) ? 0 : parseFloat(currentValueInUSD);
 
   let statusDetails = "Completed";
   let statusLabel = "Status";
 
   if (failed) {
     statusDetails = "Failed";
-  }
-  else if (mempool) {
+  } else if (mempool) {
     statusDetails = "Pending";
   } else if (timeTillUnlocked) {
     statusDetails = "~ " + timeTillUnlocked;
     statusLabel = "Unlocks in";
   }
 
-  const txExplorerLink = `https://explorer${
-    isMainnet() ? "" : "-" + getNetworkByName()
-  }.havenprotocol.org/tx/${hash}`;
+  const txExplorerLink = `https://explorer${isMainnet() ? "" : "-" + getNetworkByName()}.zephyrprotocol.com/tx/${hash}`;
 
   /* -- this changes the type and shows the exchange style
   if(conversion.isConversion){
@@ -84,8 +68,14 @@ export const Transaction = ({
       <Column>
         <Row>
           <Data>
-            <Value alignment="left">{amount} 
-            {conversion.isConversion && conversion.amountStr && <Strapline> {conversion.prefixStr} {conversion.amountStr} {conversion.assetId} </Strapline>}
+            <Value alignment="left">
+              {amount}
+              {conversion.isConversion && conversion.amountStr && (
+                <Strapline>
+                  {" "}
+                  {conversion.prefixStr} {conversion.amountStr} {conversion.assetId}{" "}
+                </Strapline>
+              )}
             </Value>
             <Label alignment="left">Amount</Label>
           </Data>
@@ -117,9 +107,7 @@ export const Transaction = ({
             </Data>
           ) : (
             <Data>
-              <Value alignment="left">
-                {block === undefined ? "N/A" : block}
-              </Value>
+              <Value alignment="left">{block === undefined ? "N/A" : block}</Value>
               <Label alignment="left">Block</Label>
             </Data>
           )}

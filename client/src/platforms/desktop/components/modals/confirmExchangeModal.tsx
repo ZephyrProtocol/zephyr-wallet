@@ -7,7 +7,7 @@ import { hideModal } from "shared/actions/modal";
 import Transaction from "shared/components/_transactions/exchange";
 import { convertBalanceToMoney, iNum } from "utility/utility";
 import { selectPrimaryAddress } from "shared/reducers/address";
-import { HavenAppState } from "platforms/desktop/reducers";
+import { ZephyrAppState } from "platforms/desktop/reducers";
 
 interface ConfirmExchangeModalProps {
   exchange: ExchangeProcessInfo;
@@ -16,11 +16,8 @@ interface ConfirmExchangeModalProps {
   hideModal: () => void;
   isOwnAddress: boolean;
 }
-//TOKENOMICS this may need updating
-class ConfirmExchangeModal extends React.Component<
-  ConfirmExchangeModalProps,
-  any
-> {
+
+class ConfirmExchangeModal extends React.Component<ConfirmExchangeModalProps, any> {
   state = {
     checked: false,
     loading: false,
@@ -33,25 +30,13 @@ class ConfirmExchangeModal extends React.Component<
   };
 
   render() {
-    const {
-      address,
-      fromAmount,
-      change,
-      toAmount,
-      fromTicker,
-      toTicker,
-      fee,
-      priority,
-      xassetConversion,
-      requiredCollateral
-    } = this.props.exchange;
+    const { address, fromAmount, change, toAmount, fromTicker, toTicker, fee, priority } = this.props.exchange;
 
     const isOwnAddress = this.props.isOwnAddress;
     const readableToAmout = convertBalanceToMoney(toAmount!, 6);
     const readAbleFromAmount = convertBalanceToMoney(fromAmount!, 6);
     const readAbleFeeAmount = convertBalanceToMoney(fee!, 6);
     const readableChangeAmount = iNum(convertBalanceToMoney(change!, 6));
-    const readableCollateralAmount = convertBalanceToMoney(requiredCollateral!, 6)
 
     return (
       <Modal
@@ -77,9 +62,7 @@ class ConfirmExchangeModal extends React.Component<
           fee={iNum(readAbleFeeAmount)}
           externAddress={address}
           isOwnAddress={isOwnAddress}
-          xasset_conversion={xassetConversion}
           change={readableChangeAmount}
-          collateral={readableCollateralAmount}
         />
       </Modal>
     );
@@ -107,11 +90,9 @@ class ConfirmExchangeModal extends React.Component<
   }
 }
 
-const mapStateToProps = (state: HavenAppState) => ({
+const mapStateToProps = (state: ZephyrAppState) => ({
   exchange: state.exchangeProcess,
-  isOwnAddress:
-    selectPrimaryAddress(state.address.entrys) ===
-    state.exchangeProcess.address,
+  isOwnAddress: selectPrimaryAddress(state.address.entrys) === state.exchangeProcess.address,
 });
 
 export const ConfirmExchangeModalDesktop = connect(mapStateToProps, {

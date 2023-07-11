@@ -85,7 +85,7 @@ export class CreateWebComponent extends Component {
           this.setState({
             action: "Paste Seed",
           });
-        }, 1000)
+        }, 1000),
       )
       .catch((error) => {
         this.setState({
@@ -102,13 +102,7 @@ export class CreateWebComponent extends Component {
       case 1:
         return <Placeholder platform={"web"} />;
       case 2:
-        return (
-          <CreateSeed
-            value={this.state.mnemonicString}
-            rows={windowWidth < 600 ? "6" : "4"}
-            readOnly={true}
-          />
-        );
+        return <CreateSeed value={this.state.mnemonicString} rows={windowWidth < 600 ? "6" : "4"} readOnly={true} />;
       case 3:
         return (
           <VerifySeed
@@ -154,10 +148,10 @@ export class CreateWebComponent extends Component {
     return (
       <Container>
         <Auth
-          title="Create a Vault"
+          title="Create a Wallet"
           link="/"
           route="Login"
-          label="Have a Vault?"
+          label="Have a Wallet?"
           submit="Generate"
           step={step}
           nextStep={this.nextStep}

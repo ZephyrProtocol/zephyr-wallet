@@ -4,10 +4,10 @@ export const dark = {
   value: "Dark Theme",
   name: "dark",
   body: {
-    navigation: "#26282C",
-    background: "#36393F",
-    foreground: "#2B2E32",
-    border: "#3A4048",
+    navigation: "#0a0915",
+    background: "#080811",
+    foreground: "#0f0e1c",
+    border: "#3A4048", // 292554
     active_menu: "#8ea1e1",
   },
   button: {
@@ -24,7 +24,7 @@ export const dark = {
     input_border: "#4a4d52",
     input_border_focus: "#5c5f63",
     input_placeholder: "#8a8d90",
-    input_background: "#2b2e32",
+    input_background: "#0c0e19",
     input_value: "#ffffff",
     input_select: "#ffffff",
     input_foreground: "#27292d",

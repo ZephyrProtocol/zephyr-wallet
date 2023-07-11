@@ -21,6 +21,7 @@ import {
   ShortRow,
 } from "./styles";
 import Dots from "../_animations/dots";
+import { Ticker } from "shared/reducers/types";
 
 const Cell = ({
   tokenName,
@@ -31,14 +32,14 @@ const Cell = ({
   totalBalance,
   lockedBalance,
   unlockedBalance,
-  showPrivateDetails
+  showPrivateDetails,
 }) => {
   const [open, openBalance] = useState(false);
   const balance = totalBalance * price;
   const hiddenBalance = "-/-";
 
   const displayBalance = (balance) => {
-      return showPrivateDetails ? balance : hiddenBalance;
+    return showPrivateDetails ? balance : hiddenBalance;
   };
 
   return (
@@ -57,7 +58,7 @@ const Cell = ({
                       $ <Dots />
                     </ShortRow>
                   ) : (
-                    `${"$" + displayBalance(balance.toFixed(2))}`
+                    `${"$" + displayBalance(value.unlockedBalance.toFixed(2))}`
                   )}
                 </Balance>
               </Row>
@@ -70,6 +71,8 @@ const Cell = ({
                     <Row>
                       $ <Dots />
                     </Row>
+                  ) : ticker === Ticker.ZEPHRSV ? (
+                    `${displayBalance(price.toFixed(2)) + " ZEPH"}`
                   ) : (
                     `${"$" + displayBalance(price.toFixed(2))}`
                   )}
@@ -122,9 +125,7 @@ const Cell = ({
           )}
           <Balances onClick={() => openBalance(!open)}>
             <Row>
-              <Subtitle>
-                {open ? "Hide Pending Balances" : "Show Pending Balances"}
-              </Subtitle>
+              <Subtitle>{open ? "Hide Pending Balances" : "Show Pending Balances"}</Subtitle>
             </Row>
           </Balances>
         </Container>

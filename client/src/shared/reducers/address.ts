@@ -1,9 +1,6 @@
-import { HavenAppState } from "platforms/desktop/reducers";
+import { ZephyrAppState } from "platforms/desktop/reducers";
 import { combineReducers } from "redux";
-import {
-  GET_ADDRESS_SUCCEED,
-  SET_SELECTED_ADDRESS,
-} from "shared/actions/types";
+import { GET_ADDRESS_SUCCEED, SET_SELECTED_ADDRESS } from "shared/actions/types";
 
 export type AddressEntry = {
   label: string;
@@ -35,28 +32,20 @@ const selected = (state = 0, action: any): number => {
 export const address = combineReducers({ selected, entrys });
 
 export const selectPrimaryAddress = (adresses: AddressEntry[]): string => {
-  const primaryAddress = adresses.find(
-    (addressEntry) => addressEntry.index === 0
-  );
+  const primaryAddress = adresses.find((addressEntry) => addressEntry.index === 0);
 
   return primaryAddress!.address;
 };
 
-export const selectAddressCount = (state: HavenAppState) =>
-  state.address.entrys.length;
+export const selectAddressCount = (state: ZephyrAppState) => state.address.entrys.length;
 
-export const selectAddressByIndex = (
-  address: AddressEntry[],
-  addIndex: number
-) => {
-  const addressEntry = address.find(
-    (entry: AddressEntry) => entry.index === addIndex
-  );
+export const selectAddressByIndex = (address: AddressEntry[], addIndex: number) => {
+  const addressEntry = address.find((entry: AddressEntry) => entry.index === addIndex);
 
   return addressEntry;
 };
 
-export const selectSelectedAddress = (state: HavenAppState) => {
+export const selectSelectedAddress = (state: ZephyrAppState) => {
   const selectedAddressIndex = state.address.selected;
   return selectAddressByIndex(state.address.entrys, selectedAddressIndex);
 };

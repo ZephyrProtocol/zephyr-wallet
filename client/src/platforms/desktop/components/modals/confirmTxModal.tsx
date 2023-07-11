@@ -14,7 +14,7 @@ interface ConfirmTxModalProps {
   resetTransferProcess: () => void;
   hideModal: () => void;
 }
-//TOKENOMICS this may need updating
+
 class ConfirmTxModal extends React.Component<ConfirmTxModalProps, any> {
   state = {
     checked: false,
@@ -31,10 +31,10 @@ class ConfirmTxModal extends React.Component<ConfirmTxModalProps, any> {
     const { fromTicker, fromAmount, address, fee } = this.props.transfer;
 
     const readableFee = convertBalanceToMoney(fee!, 6);
-    const readableAmount = convertBalanceToMoney(fromAmount!,6);
+    const readableAmount = convertBalanceToMoney(fromAmount!, 6);
 
     return (
-      <Modal 
+      <Modal
         title="Transfer Confirmation"
         description="Please review and confirm your transaction"
         leftButton="Cancel"

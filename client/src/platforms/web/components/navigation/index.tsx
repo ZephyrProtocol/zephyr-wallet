@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 // Relative Imports
 import {
   Container,
-  Haven,
+  Zephyr,
   Auth,
   NoAuth,
   Icon,
@@ -18,13 +18,14 @@ import {
   Scan,
   Arrow,
 } from "./styles.js";
+import logo from "../../../../assets/icons/zephyr.png";
 import Buttons from "./buttons/index.js";
 import { selectIsLoggedIn } from "shared/reducers/walletSession";
 import { APP_VERSION, NET_TYPE_NAME } from "constants/env";
 import { WebAppState } from "platforms/web/reducers/index.js";
 import { selectSyncState } from "shared/reducers/chain";
 import { SyncState } from "shared/types/types.js";
-import { HavenAppState } from "platforms/desktop/reducers/index.js";
+import { ZephyrAppState } from "platforms/desktop/reducers/index.js";
 import Cell from "./cell";
 import Link from "./link";
 import Tab from "./tab";
@@ -32,7 +33,6 @@ import { showModal } from "shared/actions/modal";
 import { MODAL_TYPE } from "shared/reducers/modal";
 import { closeWallet } from "shared/actions/walletSession";
 import { XBalances } from "shared/reducers/xBalance";
-import Search from "../../../../shared/components/search/index.js";
 
 interface NavigationProps {
   isLoggedIn: boolean;
@@ -60,13 +60,11 @@ class Navigation extends Component<NavigationProps, {}> {
     basicActive: true,
     advancedActive: false,
     startedResync: false,
-    xasset_lookup: "",
   };
 
   handleLogout = () => {
     this.props.logout(true);
   };
-
 
   showDropdownMenu = (event: any) => {
     event.stopPropagation();
@@ -135,29 +133,18 @@ class Navigation extends Component<NavigationProps, {}> {
       <Container>
         {auth ? (
           <Auth to={"/wallet/assets"}>
-            <Icon />
-            <Haven>HAVEN</Haven>
+            <Icon src={logo} />
+            <Zephyr>ZEPHYR</Zephyr>
           </Auth>
         ) : (
-          <NoAuth href="https://havenprotocol.org" target="_blank">
-            <Icon />
-            <Haven>HAVEN</Haven>
+          <NoAuth href="https://zephyrprotocol.com" target="_blank">
+            <Icon src={logo} />
+            <Zephyr>ZEPHYR</Zephyr>
           </NoAuth>
         )}
         <Menu>
-          {auth && <Search />}
-          <Buttons
-            isLoading={this.props.isClosingSession}
-            auth={this.props.isLoggedIn}
-            onClick={this.handleLogout}
-          />
-          <Options
-            onClick={
-              this.state.showOptions
-                ? this.hideDropdownMenu
-                : this.showDropdownMenu
-            }
-          >
+          <Buttons isLoading={this.props.isClosingSession} auth={this.props.isLoggedIn} onClick={this.handleLogout} />
+          <Options onClick={this.state.showOptions ? this.hideDropdownMenu : this.showDropdownMenu}>
             <OptionsIcon>
               <OptionsSVG />
             </OptionsIcon>
@@ -165,26 +152,13 @@ class Navigation extends Component<NavigationProps, {}> {
         </Menu>
         {this.state.showOptions && (
           <>
-            <OptionsList
-              onMouseEnter={this.handleMouseEnter}
-              onMouseLeave={this.handleMouseLeave}
-            >
+            <OptionsList onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
               <Arrow>
                 <Arr />
               </Arrow>
               {!auth && (
                 <>
                   <Cell body="Network" label={networkLabel} />
-                  <Link
-                    body="Help"
-                    label="Knowledge Base"
-                    url={`https://havenprotocol.org/knowledge`}
-                  />
-                  <Link
-                    body="Legal"
-                    label="Terms"
-                    url={`https://havenprotocol.org/legal`}
-                  />
                 </>
               )}
               {auth && (
@@ -202,37 +176,18 @@ class Navigation extends Component<NavigationProps, {}> {
                       <Cell body="Key File" label={this.props.activeWallet} />
                       {!isSyncing ? (
                         <>
-                          <Cell body="Vault Status" label="Synced" />
+                          <Cell body="Wallet Status" label="Synced" />
                         </>
                       ) : (
-                        <Cell
-                          body="Sync Status"
-                          label={scannedHeight + "/" + blockHeight}
-                        />
+                        <Cell body="Sync Status" label={scannedHeight + "/" + blockHeight} />
                       )}
-                      <Link
-                        body="Help"
-                        label="Knowledge Base"
-                        url={`https://havenprotocol.org/knowledge`}
-                      />
-                      <Link
-                        body="Legal"
-                        label="Terms"
-                        url={`https://havenprotocol.org/legal`}
-                      />
                     </>
                   ) : (
                     <>
-                      <Cell
-                        body="Vault Connected"
-                        label={connected ? "Yes" : "No"}
-                      />
+                      <Cell body="Wallet Connected" label={connected ? "Yes" : "No"} />
                       <Cell body="Block Height" label={blockHeight} />
-                      <Cell
-                        body="Refresh Height"
-                        label={this.props.restoreHeight}
-                      />
-                      <Scan onClick={this.refreshVault}>Refresh Vault</Scan>
+                      <Cell body="Refresh Height" label={this.props.restoreHeight} />
+                      <Scan onClick={this.refreshVault}>Rescan Wallet</Scan>
                     </>
                   )}
                 </>
@@ -247,7 +202,7 @@ class Navigation extends Component<NavigationProps, {}> {
 
 const mapStateToProps = (state: WebAppState) => ({
   isLoggedIn: selectIsLoggedIn(state),
-  syncState: selectSyncState(state as HavenAppState),
+  syncState: selectSyncState(state as ZephyrAppState),
   connected: state.connectedNode.isWalletConectedToDaemon,
   isClosingSession: state.walletSession.isClosingSession,
   restoreHeight: state.walletSession.restoreHeight,

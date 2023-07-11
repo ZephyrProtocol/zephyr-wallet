@@ -1,20 +1,17 @@
-import HavenBalance from "haven-wallet-core/src/main/js/wallet/model/HavenBalance";
+import ZephyrBalance from "zephyr-javascript/src/main/js/wallet/model/ZephyrBalance";
 import { walletProxy } from "shared/core/proxy";
 import { XBalance } from "shared/reducers/xBalance";
 import { bigIntegerToBigInt } from "utility/utility";
-import {
-  GET_BALANCES_SUCCEED,
-  GET_BALANCES_FETCHING,
-  GET_BALANCES_FAILED,
-} from "./types";
-import BigInteger from "haven-wallet-core/src/main/js/common/biginteger";
+import { GET_BALANCES_SUCCEED, GET_BALANCES_FETCHING, GET_BALANCES_FAILED } from "./types";
+import BigInteger from "zephyr-javascript/src/main/js/common/biginteger";
 
-export const getXHVBalance = () => {
+export const getZephyrBalance = () => {
   return async (dispatch: any) => {
     dispatch(getBalancesFetching());
     try {
-      const balance: HavenBalance = await walletProxy.getBalance();
-      const unlockedBalance: HavenBalance = await walletProxy.getUnlockedBalance();
+      const balance: ZephyrBalance = await walletProxy.getBalance();
+
+      const unlockedBalance: ZephyrBalance = await walletProxy.getUnlockedBalance();
       const xBalances: XBalance = convertBalance(balance, unlockedBalance);
       dispatch(getBalancesSucceed(xBalances));
     } catch (e) {
@@ -36,10 +33,7 @@ const getBalancesFailed = (error: any) => ({
   payload: error,
 });
 
-const convertBalance = (
-  balances: HavenBalance,
-  unlockedBalances: HavenBalance
-): XBalance => {
+const convertBalance = (balances: ZephyrBalance, unlockedBalances: ZephyrBalance): XBalance => {
   const unlockedDict: { [key: string]: BigInteger } = unlockedBalances.toDict();
   const balanceDict: { [key: string]: BigInteger } = balances.toDict();
   const assetArr = Object.keys(balanceDict);

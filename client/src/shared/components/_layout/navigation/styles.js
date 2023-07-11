@@ -27,7 +27,7 @@ export const Tag = styled.div`
   color: #26282c;
 `;
 
-export const Haven = styled.div`
+export const Zephyr = styled.div`
   color: white;
   font-size: 20px;
   font-family: "Inter-Bold";

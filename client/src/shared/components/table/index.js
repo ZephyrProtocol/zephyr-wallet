@@ -9,12 +9,12 @@ import data from "../../../constants/assets.ts";
 
 class Table extends Component {
   state = {
-    tokens: data
+    tokens: data,
   };
 
   renderCells = () => {
     const { tokens } = this.state;
-    return tokens.map(data => {
+    return tokens.map((data) => {
       const { ticker, token, price, change } = data;
       return (
         <Cell>
@@ -36,7 +36,7 @@ class Table extends Component {
   render() {
     return (
       <Container>
-        <Header>HAVEN ASSETS</Header>
+        <Header>ZEPHYR ASSETS</Header>
         {this.renderCells()}
       </Container>
     );

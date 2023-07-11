@@ -1,7 +1,4 @@
-import {
-  addErrorNotification,
-  addExchangeSucceedMessage,
-} from "shared/actions/notification";
+import { addErrorNotification, addExchangeSucceedMessage } from "shared/actions/notification";
 import {
   EXCHANGE_CREATION_FAILED,
   EXCHANGE_CREATION_FETCHING,
@@ -12,7 +9,6 @@ import {
   EXCHANGE_SUCCEED,
   SELECT_FROM_TICKER,
   SELECT_TO_TICKER,
-  SET_COLLATERAL,
 } from "./types";
 import { walletProxy } from "shared/core/proxy";
 import { DesktopAppState } from "../../platforms/desktop/reducers";
@@ -20,15 +16,12 @@ import { Ticker } from "shared/reducers/types";
 import { showModal } from "shared/actions/modal";
 import { MODAL_TYPE } from "shared/reducers/modal";
 import { selectPrimaryAddress } from "shared/reducers/address";
-import {
-  ExchangeProcessInfo,
-} from "shared/reducers/exchangeProcess";
+import { ExchangeProcessInfo } from "shared/reducers/exchangeProcess";
 import { ITxConfig } from "typings";
-import MoneroDestination from "haven-wallet-core/src/main/js/wallet/model/MoneroDestination";
-import MoneroTxWallet from "haven-wallet-core/src/main/js/wallet/model/MoneroTxWallet";
+import MoneroDestination from "zephyr-javascript/src/main/js/wallet/model/MoneroDestination";
+import MoneroTxWallet from "zephyr-javascript/src/main/js/wallet/model/MoneroTxWallet";
 import bigInt from "big-integer";
-import {convertMoneyToBalance } from "utility/utility";
-
+import { convertMoneyToBalance } from "utility/utility";
 
 export const setToTicker = (toTicker: Ticker | null) => {
   return { type: SELECT_TO_TICKER, payload: toTicker };
@@ -38,17 +31,6 @@ export const setFromTicker = (fromTicker: Ticker | null) => {
   return { type: SELECT_FROM_TICKER, payload: fromTicker };
 };
 
-export const setRequiredCollateral = (fromTicker: Ticker, toTicker:Ticker, fromAmount:number) => {
-  return async (dispatch: any) => {
-    const amount = convertMoneyToBalance(fromAmount);
-    const response = await walletProxy.getCollateralRequirements(fromTicker, toTicker, amount.toString());
-    let collateral: bigInt.BigInteger = bigInt(response.toString());
-    dispatch({type: SET_COLLATERAL, payload: collateral});
-  }
-
-}
-
-//TOKENOMICS below - priority needs updating
 export function createExchange(
   fromTicker: Ticker,
   toTicker: Ticker,
@@ -56,69 +38,29 @@ export function createExchange(
   toAmount: number,
   priority: number,
   externAddress: string,
-  subaddressIndex:number | undefined,
+  subaddressIndex: number | undefined,
 ): any {
   return async (dispatch: any, getState: () => DesktopAppState) => {
-
-    const address =
-      externAddress.trim() !== ""
-        ? externAddress
-        : selectPrimaryAddress(getState().address.entrys);
+    const address = externAddress.trim() !== "" ? externAddress : selectPrimaryAddress(getState().address.entrys);
     //only handle exchanges
-    if(toTicker === fromTicker){
-      dispatch(addErrorNotification({"error":"Conversions must be between different assets"}));
-      return ;
+    if (toTicker === fromTicker) {
+      dispatch(addErrorNotification({ error: "Conversions must be between different assets" }));
+      return;
     }
 
-    //conversions should always be "proxied" via xUSD
-    if(toTicker !== Ticker.xUSD && fromTicker !== Ticker.xUSD){
-      dispatch(addErrorNotification({"error":"Conversions must be via xUSD"}));
-      return ;
+    //conversions should always be "proxied" via ZEPH
+    if (toTicker !== Ticker.ZEPH && fromTicker !== Ticker.ZEPH) {
+      dispatch(addErrorNotification({ error: "Cannot convert between Stable and Reserve" }));
+      return;
     }
 
-
-    // we have a xassetConversion when XHV is not involved
-    let xassetConversion: boolean = fromTicker !== Ticker.XHV && toTicker !== Ticker.XHV;
-
-    let exchangeAmount: number = 0;
-
-    // offshore/onshore tx sends XHV amount
-    if (!xassetConversion) {
-    //offshore TX
-    if(toTicker === Ticker.xUSD ){
-      exchangeAmount = fromAmount;
-    }
-    //onshore TX
-    else if (fromTicker === Ticker.xUSD){ 
-      exchangeAmount = toAmount;
-    }
-  }
-  // xasset conversions sends xUSD amount
-  else {
-    //xasset -> xUSD
-    if(toTicker === Ticker.xUSD ){
-      exchangeAmount = toAmount;
-    }
-    //offshore TX
-    else if (fromTicker === Ticker.xUSD){ 
-      exchangeAmount = fromAmount;
-    }
-  }
-
-    let amount = convertMoneyToBalance(exchangeAmount);
-    // we need to round the value as just for digits are allowed for onshore/offshore
+    let amount = convertMoneyToBalance(fromAmount);
+    // Only 4 decimal places are allowed for conversion txs
     const roundingValue = bigInt(100000000);
     amount = amount.divide(roundingValue).multiply(roundingValue);
-    dispatch(
-      onExchangeCreationFetch({ priority, address, xassetConversion } as Partial<
-        ExchangeProcessInfo
-      >)
-    );
-    const destinations = [
-      new MoneroDestination(address, amount.toString()).toJson(),
-    ];
+    dispatch(onExchangeCreationFetch({ priority, address } as Partial<ExchangeProcessInfo>));
+    const destinations = [new MoneroDestination(address, amount.toString()).toJson()];
 
-//TOKENOMICS below - priority needs updating
     const txConfig: Partial<ITxConfig> = {
       canSplit: true,
       destinations,
@@ -127,7 +69,7 @@ export function createExchange(
       priority,
       subaddressIndex,
       sourceCurrency: fromTicker,
-      destinationCurrency: toTicker
+      destinationCurrency: toTicker,
     } as Partial<ITxConfig>;
 
     try {
@@ -143,46 +85,34 @@ export function createExchange(
   };
 }
 
-const parseExchangeResonse = (
-  txList: MoneroTxWallet[]): Partial<ExchangeProcessInfo> => {
+const parseExchangeResonse = (txList: MoneroTxWallet[]): Partial<ExchangeProcessInfo> => {
   let fromAmount: bigInt.BigInteger;
   let toAmount: bigInt.BigInteger;
   let fee: bigInt.BigInteger;
   let change: bigInt.BigInteger = bigInt(0);
-  let requiredCollateral:bigInt.BigInteger = bigInt(0);
 
   //@ts-ignore
   toAmount = txList.reduce(
     (acc: bigInt.BigInteger, tx: MoneroTxWallet) =>
       //@ts-ignore
       acc.add(bigInt(tx.getIncomingAmount().toString())),
-    bigInt(0)
+    bigInt(0),
   );
   fromAmount = txList.reduce(
-    (acc: bigInt.BigInteger, tx: MoneroTxWallet) =>
-      acc.add(bigInt(tx.getOutgoingAmount().toString())),
-    bigInt(0)
+    (acc: bigInt.BigInteger, tx: MoneroTxWallet) => acc.add(bigInt(tx.getOutgoingAmount().toString())),
+    bigInt(0),
   );
   fee = txList.reduce(
-    (acc: bigInt.BigInteger, tx: MoneroTxWallet) =>
-      acc.add(bigInt(tx.getFee().toString())),
-    bigInt(0)
+    (acc: bigInt.BigInteger, tx: MoneroTxWallet) => acc.add(bigInt(tx.getFee().toString())),
+    bigInt(0),
   );
   change = txList.reduce(
-    (acc: bigInt.BigInteger, tx: MoneroTxWallet) =>
-      acc.add(bigInt(tx.getChangeAmount().toString())),
-    bigInt(0)
-  ); 
-  requiredCollateral = txList.reduce(
-    (acc: bigInt.BigInteger, tx: MoneroTxWallet) =>
-     //@ts-ignore
-      acc.add(bigInt(tx.getCollateralAmount().toString())),
-    bigInt(0)
-  ); 
-  const metaList: Array<string> = txList.map((tx: MoneroTxWallet) =>
-    tx.getMetadata()
+    (acc: bigInt.BigInteger, tx: MoneroTxWallet) => acc.add(bigInt(tx.getChangeAmount().toString())),
+    bigInt(0),
   );
-  return { fromAmount, toAmount, fee, metaList, change, requiredCollateral };
+
+  const metaList: Array<string> = txList.map((tx: MoneroTxWallet) => tx.getMetadata());
+  return { fromAmount, toAmount, fee, metaList, change };
 };
 
 export const confirmExchange = (metaList: Array<string>) => {
@@ -192,20 +122,8 @@ export const confirmExchange = (metaList: Array<string>) => {
     try {
       const hashes = await walletProxy.relayTxs(metaList);
       dispatch(onExchangeSucceed());
-      const {
-        fromAmount,
-        toAmount,
-        fromTicker,
-        toTicker,
-      } = getState().exchangeProcess;
-      dispatch(
-        addExchangeSucceedMessage(
-          fromTicker!,
-          toTicker!,
-          fromAmount!,
-          toAmount!
-        )
-      );
+      const { fromAmount, toAmount, fromTicker, toTicker } = getState().exchangeProcess;
+      dispatch(addExchangeSucceedMessage(fromTicker!, toTicker!, fromAmount!, toAmount!));
     } catch (e) {
       dispatch(addErrorNotification(e));
       dispatch(onExchangeFailed(e));

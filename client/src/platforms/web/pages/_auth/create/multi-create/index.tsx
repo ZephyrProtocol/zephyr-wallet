@@ -2,15 +2,7 @@
 import React, { Component } from "react";
 
 // Relative Imports
-import {
-  Container,
-  SubContainer,
-  SubDescription,
-  Title,
-  Header,
-  Tabs,
-  Tab,
-} from "./styles";
+import { Container, SubContainer, SubDescription, Title, Header, Tabs, Tab } from "./styles";
 import { RestoreWebComponent } from "./restore/restore";
 import { CreateWalletWebComponent } from "./create/create";
 
@@ -50,30 +42,19 @@ export class CreateWebComponent extends Component<any, CreateWebState> {
       <Container>
         <SubContainer>
           <Header>
-            <Title>
-              {this.state.selectedCreate ? "Create a Vault" : "Restore a Vault"}
-            </Title>
-            <SubDescription>
-              {"Privately store, exchange and transfer assets"}
-            </SubDescription>
+            <Title>{this.state.selectedCreate ? "Create a Wallet" : "Restore a Wallet"}</Title>
+            <SubDescription>{"Privately store, exchange and transfer assets"}</SubDescription>
           </Header>
           <Tabs>
             <Tab active={this.state.selectedCreate} onClick={this.selectCreate}>
               Create
             </Tab>
-            <Tab
-              active={this.state.selectedRestore}
-              onClick={this.selectRestore}
-            >
+            <Tab active={this.state.selectedRestore} onClick={this.selectRestore}>
               Restore
             </Tab>
           </Tabs>
 
-          {this.state.selectedCreate ? (
-            <CreateWalletWebComponent />
-          ) : (
-            <RestoreWebComponent />
-          )}
+          {this.state.selectedCreate ? <CreateWalletWebComponent /> : <RestoreWebComponent />}
         </SubContainer>
       </Container>
     );

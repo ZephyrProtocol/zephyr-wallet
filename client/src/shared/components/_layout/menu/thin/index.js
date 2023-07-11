@@ -16,6 +16,7 @@ class Menu extends Component {
         <Item to="/wallet/assets">Assets</Item>
         <Item to="/wallet/convert">Convert</Item>
         <Item to="/wallet/transfer">Transfer</Item>
+        <Item to="/wallet/protocol">Protocol</Item>
         <Item to="/wallet/settings">Settings</Item>
       </Container>
     );

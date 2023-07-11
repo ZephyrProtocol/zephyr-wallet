@@ -1,4 +1,4 @@
-import { HavenAppState } from "platforms/desktop/reducers";
+import { ZephyrAppState } from "platforms/desktop/reducers";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Transfer } from "shared/pages/_wallet/transfer";
@@ -9,25 +9,17 @@ import { createTransfer } from "shared/actions/transfer";
 import { useNavigate } from "react-router";
 
 class Container extends Component<any, any> {
-  private sendTicker: Ticker = Ticker.XHV;
+  private sendTicker: Ticker = Ticker.ZEPH;
   componentDidMount(): void {}
 
-  componentDidUpdate(
-    prevProps: Readonly<any>,
-    prevState: Readonly<any>,
-    snapshot?: any
-  ): void {
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any): void {
     if (this.props.transferSucceed) {
       this.props.resetTransferProcess();
       this.props.navigate("/wallet/assets/" + this.sendTicker);
     }
   }
 
-  onSendFunds = (
-    address: string,
-    amount: number,
-    ticker: Ticker = Ticker.XHV, sweepAll: boolean
-  ) => {
+  onSendFunds = (address: string, amount: number, ticker: Ticker = Ticker.ZEPH, sweepAll: boolean) => {
     this.sendTicker = ticker;
     this.props.createTransfer(address, amount, ticker, sweepAll);
   };
@@ -35,16 +27,12 @@ class Container extends Component<any, any> {
   render() {
     return (
       //@ts-ignore
-      <Transfer
-        isProcessing={this.props.tx.isFetching}
-        addresses={this.props.address}
-        sendFunds={this.onSendFunds}
-      />
+      <Transfer isProcessing={this.props.tx.isFetching} addresses={this.props.address} sendFunds={this.onSendFunds} />
     );
   }
 }
 
-export const mapStateToProps = (state: HavenAppState) => ({
+export const mapStateToProps = (state: ZephyrAppState) => ({
   address: state.address,
   transferSucceed: transferSucceed(state),
   tx: state.transferProcess,
@@ -55,8 +43,7 @@ const ConnectedTransferPage = connect(mapStateToProps, {
   resetTransferProcess,
 })(Container);
 
-
-export const HavenTransfer = () => {
+export const ZephyrTransfer = () => {
   const navigate = useNavigate();
-  return <ConnectedTransferPage navigate={navigate} />
-}
+  return <ConnectedTransferPage navigate={navigate} />;
+};

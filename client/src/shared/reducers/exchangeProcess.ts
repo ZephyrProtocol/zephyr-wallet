@@ -8,7 +8,6 @@ import {
   EXCHANGE_SUCCEED,
   SELECT_FROM_TICKER,
   SELECT_TO_TICKER,
-  SET_COLLATERAL,
 } from "shared/actions/types";
 import { AnyAction } from "redux";
 import { TxProcessInfo } from "./transferProcess";
@@ -18,8 +17,6 @@ export interface ExchangeProcessInfo extends TxProcessInfo {
   toTicker: Ticker | null;
   toAmount: number | null | bigInt.BigInteger;
   change: number | null | bigInt.BigInteger;
-  xassetConversion: boolean;
-  requiredCollateral: null | bigInt.BigInteger
 }
 
 const INITIAL_STATE: ExchangeProcessInfo = {
@@ -27,27 +24,20 @@ const INITIAL_STATE: ExchangeProcessInfo = {
   fromAmount: null,
   toAmount: null,
   fee: null,
-  change:null,
+  change: null,
   isFetching: false,
   info: "",
   error: "",
   created: false,
   succeed: false,
-//  txType: null,
-  toTicker: Ticker.xUSD,
-  fromTicker: Ticker.XHV,
+  //  txType: null,
+  toTicker: Ticker.ZEPHUSD,
+  fromTicker: Ticker.ZEPH,
   metaList: [],
-  xassetConversion: false,
-  requiredCollateral: null
 };
 
-export const exchangeProcess = (
-  state = INITIAL_STATE,
-  action: AnyAction
-): ExchangeProcessInfo => {
+export const exchangeProcess = (state = INITIAL_STATE, action: AnyAction): ExchangeProcessInfo => {
   switch (action.type) {
-    case SET_COLLATERAL:
-      return {...state, requiredCollateral:action.payload}
     case SELECT_FROM_TICKER:
       return { ...state, fromTicker: action.payload };
     case SELECT_TO_TICKER:
@@ -80,20 +70,18 @@ export const exchangeProcess = (
   }
 };
 
-export const selectIsProcessingExchange = (
-  offshoreProcess: ExchangeProcessInfo
-) => {
-  return offshoreProcess.isFetching;
+export const selectIsProcessingExchange = (exchangeProcess: ExchangeProcessInfo) => {
+  return exchangeProcess.isFetching;
 };
 
-export const selectExchangeSucceed = (offshoreProcess: ExchangeProcessInfo) => {
-  return offshoreProcess.succeed;
+export const selectExchangeSucceed = (exchangeProcess: ExchangeProcessInfo) => {
+  return exchangeProcess.succeed;
 };
 
-export const selectFromTicker = (offshoreProcess: ExchangeProcessInfo) => {
-  return offshoreProcess.fromTicker;
+export const selectFromTicker = (exchangeProcess: ExchangeProcessInfo) => {
+  return exchangeProcess.fromTicker;
 };
 
-export const selectToTicker = (offshoreProcess: ExchangeProcessInfo) => {
-  return offshoreProcess.toTicker;
+export const selectToTicker = (exchangeProcess: ExchangeProcessInfo) => {
+  return exchangeProcess.toTicker;
 };

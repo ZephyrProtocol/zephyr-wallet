@@ -1,9 +1,6 @@
 import { UPDATE_SAVED_WALLETS } from "platforms/desktop/actions/types";
 import { AnyAction } from "redux";
-import {
-  DesktopAppState,
-  HavenAppState,
-} from "platforms/desktop/reducers/index";
+import { DesktopAppState } from "platforms/desktop/reducers/index";
 
 interface StoredWallets {
   wallets: string[] | null;
@@ -15,10 +12,7 @@ const INITIAL_STATE: StoredWallets = {
   storePath: null,
 };
 
-export const storedWallets = function (
-  state = INITIAL_STATE,
-  action: AnyAction
-): StoredWallets {
+export const storedWallets = function (state = INITIAL_STATE, action: AnyAction): StoredWallets {
   switch (action.type) {
     case UPDATE_SAVED_WALLETS:
       return { ...state, ...action.payload };

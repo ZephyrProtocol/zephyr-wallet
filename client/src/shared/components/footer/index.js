@@ -2,14 +2,7 @@
 import React from "react";
 
 // Relative Imports
-import {
-  Container,
-  Title,
-  Internal,
-  External,
-  Section,
-  Wrapper
-} from "./styles";
+import { Container, Title, Internal, External, Section, Wrapper } from "./styles";
 
 const Footer = () => {
   return (
@@ -18,84 +11,37 @@ const Footer = () => {
         <Section>
           <Title>Mining Pools</Title>
 
-          <External
-            rel="noopener"
-            href="https://haven.herominers.com/"
-            target="_blank"
-          >
-            Hero Miners
+          <External rel="noopener" href="https://pool.zephyrprotocol.com/" target="_blank">
+            Zephyr Pool
           </External>
-          <External
-            rel="noopener"
-            href="http://pool.haven.frackingminer.com/"
-            target="_blank"
-          >
-            Fracking Miner
+          <External rel="noopener" href="https://ekapool.com/zeph/" target="_blank">
+            Ekapool
           </External>
-          <External
-            rel="noopener"
-            href="http://zergpool.com/site/mining?algo=cryptonight_haven"
-            target="_blank"
-          >
-            Zergpool
+          <External rel="noopener" href="https://moneroocean.stream/" target="_blank">
+            Moneroocean
           </External>
-          <External
-            rel="noopener"
-            href="https://haven.hashvault.pro/en/"
-            target="_blank"
-          >
-            Hashvault
+          <External rel="noopener" href="https://zephyr.miningocean.org/" target="_blank">
+            Mining Ocean
           </External>
-          <External
-            rel="noopener"
-            href="https://haven.miner.rocks/"
-            target="_blank"
-          >
-            Miner Rocks
+          <External rel="noopener" href="http://minergalaxy.org/ZEPH" target="_blank">
+            Miner Galaxy
           </External>
         </Section>
         <Section>
           <Title>Social</Title>
-          <External
-            rel="noopener"
-            href="https://discordapp.com/invite/CCtNxfG"
-            target="_blank"
-          >
+          <External rel="noopener" href="https://discord.gg/y4mzbDYSqQ" target="_blank">
             Discord
           </External>
-          <External
-            rel="noopener"
-            href="https://medium.com/@havencurrency"
-            target="_blank"
-          >
+          <External rel="noopener" href="https://medium.com/@zephyrcurrencyprotocol" target="_blank">
             Medium
           </External>
-          <External
-            rel="noopener"
-            href="https://twitter.com/HavenXHV"
-            target="_blank"
-          >
+          <External rel="noopener" href="https://twitter.com/zephyr_org" target="_blank">
             Twitter
           </External>
-          <External
-            rel="noopener"
-            href="https://www.reddit.com/r/havenprotocol/"
-            target="_blank"
-          >
-            Reddit
-          </External>
-          <External
-            rel="noopener"
-            href="https://github.com/haven-protocol-org"
-            target="_blank"
-          >
+          <External rel="noopener" href="https://github.com/ZephyrProtocol" target="_blank">
             Github
           </External>
-          <External
-            rel="noopener"
-            href="https://web.telegram.org/#/im?p=s1273047334_13986713956461503950"
-            target="_blank"
-          >
+          <External rel="noopener" href="https://t.me/zephyrprotocol" target="_blank">
             Telegram
           </External>
         </Section>
@@ -103,98 +49,44 @@ const Footer = () => {
           <Title>Products</Title>
           <External
             rel="noopener"
-            href="https://github.com/haven-protocol-org/haven/releases/download/v0.14.1-release/haven-macos-4.0.0-gui.zip"
-          >
-            Mac Wallet
-          </External>
-          <External
-            rel="noopener"
-            href="https://github.com/haven-protocol-org/haven/releases/download/v0.14.1-release/haven-win-x64-4.0.0-gui.zip"
+            href="https://github.com/ZephyrProtocol/zephyr/releases/download/v0.2.2/zephyr-gui-win-v0.2.2.zip"
           >
             Windows Wallet
           </External>
           <External
             rel="noopener"
-            href="https://github.com/haven-protocol-org/haven-protocol/releases/tag/v0.14.1.2a"
+            href="https://github.com/ZephyrProtocol/zephyr/releases/download/v0.2.2/zephyr-gui-linux-v0.2.2.zip"
           >
             Linux Wallet
           </External>
           <External
             rel="noopener"
-            href="https://github.com/haven-protocol-org/haven/releases/download/v0.14.1-release/haven-macos-v0.14.1-cli.zip"
+            href="https://github.com/ZephyrProtocol/zephyr/releases/download/v0.2.2/zephyr-cli-mac-v0.2.2.zip"
           >
             Mac CLI
           </External>
           <External
             rel="noopener"
-            href="https://github.com/haven-protocol-org/haven/releases/download/v0.14.1-release/haven-win-x64-v0.14.1-cli.zip"
+            href="https://github.com/ZephyrProtocol/zephyr/releases/download/v0.2.2/zephyr-cli-linux-v0.2.2.zip"
           >
-            Windows CLI
+            Linux CLI
           </External>
 
-          <External
-            rel="noopener"
-            href="https://explorer.havenprotocol.org/"
-            target="_blank"
-          >
+          <External rel="noopener" href="https://explorer.zephyrprotocol.com/" target="_blank">
             Block Explorer
           </External>
         </Section>
 
         <Section>
           <Title>Exchanges</Title>
-          <External
-            rel="noopener"
-            href="https://bittrex.com/Market/Index?MarketName=BTC-XHV"
-            target="_blank"
-          >
-            Bittrex
+          <External rel="noopener" href="https://www.sevenseas.exchange/market/ZEPH-USDT" target="_blank">
+            Seven Seas Exchange
           </External>
-          <External rel="noopener" href="https://www.abra.com/" target="_blank">
-            Abra
+          <External rel="noopener" href="https://tradeogre.com/exchange/ZEPH-BTC" target="_blank">
+            TradeOgre
           </External>
-          <External
-            rel="noopener"
-            href="https://www.tokok.com/market?symbol=XHV_BTC"
-            target="_blank"
-          >
-            Tokok
-          </External>
-          <External
-            rel="noopener"
-            href="https://vcc.exchange/exchange/basic?currency=btc&coin=xhv"
-            target="_blank"
-          >
-            VCC Exchange
-          </External>
-          <External
-            rel="noopener"
-            href="https://tradeogre.com/exchange/BTC-XHV"
-            target="_blank"
-          >
-            Trade Ogre
-          </External>
-          <External
-            rel="noopener"
-            href="https://trade.citex.co.kr/trade/XHV_BTC"
-            target="_blank"
-          >
-            Citex
-          </External>
-        </Section>
-        <Section>
-          <Title>About </Title>
-          <Internal to="/team">Team</Internal>
-          <Internal to="/blog">Blog</Internal>
-          <Internal to="/faq">F.A.Q</Internal>
-          <Internal to="/timeline">Timeline</Internal>
-          <Internal to="/whitepaper">White Papers</Internal>
-          <External
-            rel="noopener"
-            href="https://github.com/haven-protocol-org/brand-assets"
-            target="_blank"
-          >
-            Media Kit
+          <External rel="noopener" href="https://txbit.io/Trade/ZEPH/USDT" target="_blank">
+            TxBit
           </External>
         </Section>
       </Wrapper>

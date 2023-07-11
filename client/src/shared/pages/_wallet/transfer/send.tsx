@@ -14,16 +14,9 @@ import { Container } from "./styles";
 import TransferSummary from "shared/components/_summaries/transfer-summary";
 
 const assetOptions: AssetOption[] = [
-  { name: "Haven", ticker: Ticker.XHV },
-  { name: "U.S. Dollar", ticker: Ticker.xUSD },
-  { name: "Bitcoin", ticker: Ticker.xBTC },
-  { name: "Yuan", ticker: Ticker.xCNY },
-  { name: "Euro", ticker: Ticker.xEUR },
-  { name: "Gold", ticker: Ticker.XAU },
-  { name: "Silver", ticker: Ticker.XAG },
-  { name: "Swiss Franc", ticker: Ticker.xCHF },
-  { name: "Australian Dollar", ticker: Ticker.xAUD },
-  { name: "British Pound", ticker: Ticker.xGBP },
+  { name: "Zephyr", ticker: Ticker.ZEPH },
+  { name: "Stable coin", ticker: Ticker.ZEPHUSD },
+  { name: "Reserve coin", ticker: Ticker.ZEPHRSV },
 ];
 
 interface TransferOption {
@@ -35,12 +28,7 @@ interface AssetOption {
   name: string;
 }
 interface TransferOwnProps {
-  sendFunds: (
-    address: string,
-    amount: number,
-    ticker: Ticker,
-    sweepAll: boolean
-  ) => void;
+  sendFunds: (address: string, amount: number, ticker: Ticker, sweepAll: boolean) => void;
   isProcessing: boolean;
 }
 
@@ -112,29 +100,20 @@ class TransferContainer extends Component<TransferProps, TransferState> {
     const { send_amount, recipient_address, selectedAsset } = this.state;
 
     if (selectedAsset !== null) {
-      this.props.sendFunds(
-        recipient_address,
-        Number(send_amount),
-        selectedAsset.ticker,
-        this.state.sweep_all
-      );
+      this.props.sendFunds(recipient_address, Number(send_amount), selectedAsset.ticker, this.state.sweep_all);
     }
   };
 
   setMaxAmount = () => {
     const { selectedAsset } = this.state;
-  
+
     let availableBalance = null;
     let numDecimals = 2;
 
     if (selectedAsset) {
+      numDecimals = ["XAG", "XAU", "XBTC"].includes(selectedAsset.ticker) ? 8 : 2;
 
-      numDecimals = ( ["XAG","XAU","XBTC"].includes(selectedAsset.ticker) ) ? 8 : 2;
-
-      availableBalance = convertBalanceToMoney(
-        this.props.xBalances[selectedAsset.ticker].unlockedBalance,
-        numDecimals
-      );
+      availableBalance = convertBalanceToMoney(this.props.xBalances[selectedAsset.ticker].unlockedBalance, numDecimals);
     }
 
     if (availableBalance != null) {
@@ -152,7 +131,7 @@ class TransferContainer extends Component<TransferProps, TransferState> {
   amountIsValid = (availableBalance: number): string | true => {
     const { send_amount } = this.state;
 
-    const send_amount_num:number = parseFloat(send_amount);
+    const send_amount_num: number = parseFloat(send_amount);
 
     if (send_amount_num > availableBalance) {
       return "Not enough funds";
@@ -163,10 +142,12 @@ class TransferContainer extends Component<TransferProps, TransferState> {
 
   // @ts-ignore
   recipientIsValid = () => {
-    const havenRegex = new RegExp('^hv([xist]+)[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{90,110}$');
+    const zephyrRegex = new RegExp(
+      "^ZEPH([YRist]+)[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{90,110}$",
+    );
     const recipient = this.state.recipient_address;
-    if (recipient === "" || havenRegex.test(recipient) ) {
-        return "";
+    if (recipient === "" || zephyrRegex.test(recipient)) {
+      return "";
     } else {
       return "Enter a valid address";
     }
@@ -179,16 +160,11 @@ class TransferContainer extends Component<TransferProps, TransferState> {
 
     let availableBalance = 0;
     if (selectedAsset) {
-      availableBalance = convertBalanceToMoney(
-        this.props.xBalances[selectedAsset.ticker].unlockedBalance,
-        6
-      );
+      availableBalance = convertBalanceToMoney(this.props.xBalances[selectedAsset.ticker].unlockedBalance, 6);
     }
 
     const checkValidation =
-      send_amount.length > 0 &&
-      recipient_address.length > 97 &&
-      this.amountIsValid(availableBalance) === true;
+      send_amount.length > 0 && recipient_address.length > 97 && this.amountIsValid(availableBalance) === true;
 
     return (
       <Fragment>
@@ -204,11 +180,7 @@ class TransferContainer extends Component<TransferProps, TransferState> {
           />
           <InputButton
             // @ts-ignore
-            label={
-              availableBalance
-                ? `Amount (Avail. ${iNum(availableBalance)})`
-                : "Amount"
-            }
+            label={availableBalance ? `Amount (Avail. ${iNum(availableBalance)})` : "Amount"}
             placeholder="Enter amount"
             type="number"
             // @ts-ignore
@@ -247,9 +219,7 @@ class TransferContainer extends Component<TransferProps, TransferState> {
         </Form>
         <Container>
           <TransferSummary
-            recipientAddress={
-              recipient_address === "" ? "--" : recipient_address
-            }
+            recipientAddress={recipient_address === "" ? "--" : recipient_address}
             transferAsset={selectedAsset === null ? "--" : selectedAsset.ticker}
             transferAmount={send_amount === "" ? "--" : send_amount}
             onChange={this.handleReviewSubmit}
@@ -266,15 +236,9 @@ class TransferContainer extends Component<TransferProps, TransferState> {
   }
 }
 
-const mapStateToProps = (
-  state: any,
-  ownProps: TransferOwnProps
-): TransferReduxProps => ({
+const mapStateToProps = (state: any, ownProps: TransferOwnProps): TransferReduxProps => ({
   xBalances: state.xBalance,
   options: assetOptions,
 });
 
-export const SendFunds = connect<TransferReduxProps, {}, TransferOwnProps>(
-  mapStateToProps,
-  {}
-)(TransferContainer);
+export const SendFunds = connect<TransferReduxProps, {}, TransferOwnProps>(mapStateToProps, {})(TransferContainer);

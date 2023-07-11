@@ -12,12 +12,7 @@ import { AddressEntry } from "shared/reducers/address";
 // Relative Imports
 
 interface TransferOwnProps {
-  sendFunds: (
-    address: string,
-    amount: number,
-    ticker: Ticker,
-    sweepAll: boolean
-  ) => void;
+  sendFunds: (address: string, amount: number, ticker: Ticker, sweepAll: boolean) => void;
   addresses: AddressEntry[];
   isProcessing: boolean;
 }
@@ -66,10 +61,7 @@ export class Transfer extends Component<TransferProps, TransferState> {
     return (
       <Fragment>
         <Body>
-          <Header
-            title="Transfer"
-            description="Send or receive assets to and from your Haven Vault"
-          />
+          <Header title="Transfer" description="Send or receive assets to and from your Zephyr Wallet" />
           <Tab
             firstTabLabel="Send"
             secondTabLabel="Receive"
@@ -81,10 +73,7 @@ export class Transfer extends Component<TransferProps, TransferState> {
           />
 
           {this.state.firstTabState ? (
-            <SendFunds
-              sendFunds={this.props.sendFunds}
-              isProcessing={this.props.isProcessing}
-            />
+            <SendFunds sendFunds={this.props.sendFunds} isProcessing={this.props.isProcessing} />
           ) : (
             <OwnAddress />
           )}

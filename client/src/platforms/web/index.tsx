@@ -6,7 +6,7 @@ import { applyMiddleware, createStore, Store } from "redux";
 import reduxThunk from "redux-thunk";
 import reducers from "./reducers";
 import { logger } from "../../vendor/clipboard/dev-helper";
-import { HavenApp } from "shared/App";
+import { ZephyrApp } from "shared/App";
 import { addStoreWatchers } from "./watcher";
 
 let store: Store;
@@ -18,10 +18,7 @@ export const startWebApp = () => {
 };
 
 export const startWebAppInDevMode = () => {
-  const createStoreWithMiddleware = applyMiddleware(
-    reduxThunk,
-    logger
-  )(createStore);
+  const createStoreWithMiddleware = applyMiddleware(reduxThunk, logger)(createStore);
   store = createStoreWithMiddleware(reducers);
   addStoreWatchers(store);
 
@@ -32,8 +29,8 @@ const render = () => {
   ReactDOM.render(
     <Provider store={store}>
       <GlobalStyle />
-      <HavenApp />
+      <ZephyrApp />
     </Provider>,
-    document.querySelector("#root")
+    document.querySelector("#root"),
   );
 };

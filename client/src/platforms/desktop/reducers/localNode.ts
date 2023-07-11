@@ -1,6 +1,6 @@
 import { AnyAction } from "redux";
 import { LocalNode } from "platforms/desktop/types";
-import { GET_HAVEND_STATE_SUCCEED } from "platforms/desktop/actions/types";
+import { GET_ZEPHYRD_STATE_SUCCEED } from "platforms/desktop/actions/types";
 
 const INITAL_STATE: LocalNode = {
   isRunning: false,
@@ -8,12 +8,9 @@ const INITAL_STATE: LocalNode = {
   connections: { in: 0, out: 0 },
 };
 
-export const localNode = (
-  state = INITAL_STATE,
-  action: AnyAction
-): LocalNode => {
+export const localNode = (state = INITAL_STATE, action: AnyAction): LocalNode => {
   switch (action.type) {
-    case GET_HAVEND_STATE_SUCCEED:
+    case GET_ZEPHYRD_STATE_SUCCEED:
       return { ...action.payload };
     default:
       return state;
