@@ -11,6 +11,7 @@ export const ExchangeSummary = ({
   xRate,
   fromAmount,
   toAmount,
+  conversionFee,
   fromTicker,
   toTicker,
   fee,
@@ -45,20 +46,6 @@ export const ExchangeSummary = ({
 
   //unlock times
   let unlock_time = "~20m";
-  // if (fromTicker !== null && toTicker != null) {
-  //   if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
-  //     unlock_time = "~21d";
-  //   } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPH) {
-  //     unlock_time = "~21d";
-  //   } else {
-  //     unlock_time = "~48h";
-  //   }
-  // }
-
-  let conversionFee = toAmount * 0.02;
-  if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHRSV) {
-    conversionFee = 0;
-  }
 
   return (
     <Wrapper>
@@ -90,7 +77,7 @@ export const ExchangeSummary = ({
         <Row>
           <Key>Conversion Fee</Key>
           <Value>
-            {iNum(conversionFee)}&#160;
+            {conversionFee}&#160;
             {toTicker ? toTicker : "--"}
           </Value>
         </Row>

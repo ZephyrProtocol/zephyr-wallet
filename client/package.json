@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "big-integer": "^1.6.51",
-    "zephyr-javascript": "file:../../zephyr-javascript",
+    "zephyr-javascript": "github:ZephyrProtocol/zephyr-javascript",
     "history": "^5.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

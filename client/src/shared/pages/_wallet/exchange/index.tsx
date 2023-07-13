@@ -76,6 +76,7 @@ enum TxType {
 type ExchangeState = {
   fromAmount?: number;
   toAmount?: number;
+  conversionFee?: number;
   selectedTab: ExchangeTab;
   externAddress: string;
   selectedPrio: ExchangePrioOption;
@@ -115,6 +116,7 @@ const ALL_ADDRESSES: AddressEntry = { index: -1, label: "All Addresses", address
 const INITIAL_STATE: ExchangeState = {
   fromAmount: undefined,
   toAmount: undefined,
+  conversionFee: undefined,
   selectedTab: ExchangeTab.Advanced,
   externAddress: "",
   selectedPrio: exchangePrioOptions[0],
@@ -141,6 +143,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       this.setState({
         fromAmount: undefined,
         toAmount: undefined,
+        conversionFee: undefined,
         externAddress: "",
       });
       this.props.navigate("/wallet/assets/" + this.sendTicker);
@@ -303,18 +306,22 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       rate = 1 / xRate;
     }
 
-    const feerate = txType === TxType.MintReserve ? 1 : 0.98;
+    const feeRate = txType === TxType.MintReserve ? 0 : 0.02;
 
     if (fromAmount !== undefined && setToAmount) {
-      const toAmount = parseFloat(iNum(fromAmount * rate * feerate));
+      const amount = fromAmount * rate;
+      const conversionFee = amount * feeRate;
+      const toAmount = parseFloat(iNum(amount - conversionFee));
 
-      this.setState({ toAmount });
+      this.setState({ toAmount, conversionFee });
       return;
     }
 
     if (toAmount !== undefined && !setToAmount) {
-      const fromAmount = parseFloat(iNum(toAmount / rate / feerate));
-      this.setState({ fromAmount });
+      const amount = toAmount / rate;
+      const fromAmount = parseFloat(iNum(amount / (1 - feeRate)));
+      const conversionFee = parseFloat(iNum((toAmount / (1 - feeRate)) * feeRate));
+      this.setState({ fromAmount, conversionFee });
     }
   }
 
@@ -357,15 +364,6 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     } else {
       // If invalid then make this 'true' so the footer is disabled
       return true;
-    }
-  };
-
-  toAmountIsValid = (availableBalance: any) => {
-    const { toAmount } = this.state;
-
-    //@ts-ignore
-    if (convertToNum > convertBalance) {
-      return "Not enough funds";
     }
   };
 
@@ -418,6 +416,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     const {
       fromAmount,
       toAmount,
+      conversionFee,
       selectedTab,
       selectedPrio,
       externAddress,
@@ -556,6 +555,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
                 xRate={this.props.xRate}
                 fromAmount={iNum(fromAmount)}
                 toAmount={iNum(toAmount)}
+                conversionFee={iNum(conversionFee)}
                 toTicker={toTicker}
                 hasLatestXRate={hasLatestXRate}
                 usingSpot={usingSpot}
