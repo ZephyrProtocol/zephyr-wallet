@@ -1,6 +1,8 @@
 // Library Imports
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
+import { NET_TYPE_ID } from "constants/env";
+import { NetworkType } from "../../../../typings";
 import { Ticker } from "shared/reducers/types";
 import { XBalances } from "shared/reducers/xBalance";
 import { convertBalanceToMoney, iNum } from "utility/utility";
@@ -142,11 +144,17 @@ class TransferContainer extends Component<TransferProps, TransferState> {
 
   // @ts-ignore
   recipientIsValid = () => {
-    const zephyrRegex = new RegExp(
-      "^ZEPH([YRist]+)[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{90,110}$",
-    );
+    let addressRegex: RegExp;
+    if (NET_TYPE_ID === NetworkType.testnet) {
+      addressRegex = new RegExp("^ZPH([Ttsii]+)[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{90,110}$");
+    } else if (NET_TYPE_ID === NetworkType.stagenet) {
+      addressRegex = new RegExp("^ZPH([Sssii]+)[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{90,110}$");
+    } else {
+      addressRegex = new RegExp("^ZEPH([YRist]+)[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{90,110}$");
+    }
+
     const recipient = this.state.recipient_address;
-    if (recipient === "" || zephyrRegex.test(recipient)) {
+    if (recipient === "" || addressRegex.test(recipient)) {
       return "";
     } else {
       return "Enter a valid address";

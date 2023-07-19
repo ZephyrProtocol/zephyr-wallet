@@ -1,16 +1,16 @@
 {
   "testnet": [
     {
-      "address": "127.0.0.1",
-      "provider": "Local Zephyr Testnet Node",
+      "address": "testnet-remote-node.zephyrprotocol.com",
+      "provider": "Testnet - node",
       "port": "27767",
       "trusted": true,
       "default": true
     },
     {
-      "address": "https://node-testnet.zephyrprotocol.com",
-      "provider": "Testnet - node",
-      "port": "443",
+      "address": "127.0.0.1",
+      "provider": "Local Zephyr Testnet Node",
+      "port": "27767",
       "trusted": true,
       "default": false
     }
@@ -24,9 +24,9 @@
       "default": true
     },
     {
-      "address": "http://node-stagenet.zephyrprotocol.com",
+      "address": "stagenet-remote-node.zephyrprotocol.com",
       "provider": "Stagenet - node",
-      "port": "37750",
+      "port": "37767",
       "trusted": true,
       "default": false
     }

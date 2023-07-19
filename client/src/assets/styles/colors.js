@@ -1,10 +1,10 @@
 // These are colors for components that we don't want to be affected by themese
 
 module.exports = {
-  background: "#2B2E34",
-  background_hover: "#27292f",
-  foreground: "#36393F",
-  foreground_hover: "#313339",
+  background: "#080811",
+  background_hover: "#0b0b1a",
+  foreground: "#0f0e1c",
+  foreground_hover: "#141326",
   border: "#3A4048",
   primary: "#ffffff",
   secondary: "#8A8D90",

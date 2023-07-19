@@ -43,7 +43,6 @@ export class ZephyrWalletListener extends MoneroWalletListener {
     if (syncDistance % updateInterval === 0 || height === startHeight) {
       const chain: Partial<Chain> = {
         walletHeight: height,
-        chainHeight: endHeight,
         nodeHeight: endHeight,
       };
       logM(height);
