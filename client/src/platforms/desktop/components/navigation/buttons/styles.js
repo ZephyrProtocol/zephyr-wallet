@@ -34,7 +34,7 @@ export const Logout = styled.div`
   background: none;
   border: 1px solid ${(props) => props.theme.body.border};
   margin-right: 16px;
-  color: #fff;
+  color: ${(props) => props.theme.type.primary};
   font-size: 14px;
   border-radius: 4px;
   text-decoration: none;

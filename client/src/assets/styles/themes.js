@@ -52,21 +52,21 @@ export const light = {
   value: "Light Theme",
   name: "light",
   body: {
-    navigation: "#e5e5e5",
-    background: "#f5f5f5",
-    foreground: "#eeeeee",
+    navigation: "#fff",
+    background: "#fdfdfd",
+    foreground: "#fff",
     border: "#e0e0e0",
     active_menu: "#7289da",
   },
   button: {
-    primary: "#677bc4",
-    primary_hover: "#5b6eae",
-    primary_label: "#ffffff",
+    primary: "#64B5F6",
+    primary_hover: "#8193e6",
+    primary_label: "#fff",
   },
   type: {
     primary: "#1d1d1f",
     secondary: "#79797a",
-    inverse: "#fff",
+    inverse: "#7289da",
   },
   input: {
     input_border: "#e0e0e0",
@@ -83,7 +83,7 @@ export const light = {
     error: "#d84040", // Red
     warning: "#cf9e39", // Orange
     alert: "#017fdd", // Blue
-    default: "#677bc4", // Purple
+    default: "#64B5F6", // Purple
   },
   charts: {
     background: "rgba(114, 137, 218, 0.2)",
@@ -91,7 +91,7 @@ export const light = {
   },
   illustration: {
     border: "#79797a",
-    fill: "#677bc4",
+    fill: "#64B5F6",
     outline: "#1d1d1f",
   },
 };

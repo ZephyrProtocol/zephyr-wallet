@@ -25,19 +25,16 @@ class ModalContainer extends React.Component<any, any> {
         return <QRCodeModal />;
       case MODAL_TYPE.ShowAddressModal:
         return <ManageAddressModal />;
-//      case MODAL_TYPE.LoginOnboarding:
-//        return <LoginOnboardingModal />;
       case MODAL_TYPE.RescanBC:
         return <RescanBCMModal />;
+      case MODAL_TYPE.RescanBCLoading:
+        return <RescanBCMModal isLoading={true} />;
     }
     return null;
   }
 }
-
 const mapStateToProps = (state: DesktopAppState, props: any) => ({
   modalType: state.modal,
 });
 
-export const ModalContainerDesktop = connect(mapStateToProps, { hideModal })(
-  ModalContainer
-);
+export const ModalContainerDesktop = connect(mapStateToProps, { hideModal })(ModalContainer);

@@ -48,6 +48,19 @@ export const syncFromFirstIncomingTx = () => {
   };
 };
 
+export const setRestoreFromHeight = (height: number) => {
+  return async (dispatch: any, getState: () => ZephyrAppState) => {
+    dispatch({ type: SET_RESTORE_HEIGHT, payload: height });
+
+    await walletProxy.setRestoreHeight(height);
+
+    dispatch(showModal(MODAL_TYPE.RescanBCLoading));
+    await walletProxy.rescanBlockchain();
+    dispatch(saveWallet());
+    dispatch(hideModal());
+  };
+};
+
 export const rescanSpent = () => {
   return async (dispatch: any, getState: () => ZephyrAppState) => {
     dispatch({ type: "RESCAN_SPENT" });

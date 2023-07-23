@@ -8,7 +8,7 @@ import { syncFromFirstIncomingTx, rescanSpent } from "../../../../shared/actions
 
 class RescanBCM extends React.Component<any, any> {
   state = {
-    isLoading: false,
+    isLoading: this.props.isLoading ?? false,
   };
 
   startRescan = (e: any) => {

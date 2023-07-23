@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 // Library Imports
 import { selectTheme } from "shared/actions";
+import { setRestoreFromHeight } from "shared/actions/refresh";
 // Relative Imports
 import Body from "shared/components/_layout/body";
 import Header from "shared/components/_layout/header";
@@ -17,6 +18,7 @@ import { miningStatus, startMining, stopMining } from "platforms/desktop/actions
 import { ZephyrNodeSetting } from "platforms/desktop/pages/_wallet/settings/node/nodeSetting";
 import { Container } from "./styles";
 import DoubleFooter from "shared/components/_inputs/double_footer";
+import InputButton from "shared/components/_inputs/input_button";
 
 type ThemeOption = { theme: string; value: string };
 type BalanceOption = { ticker: string; value: string; code: string };
@@ -39,6 +41,8 @@ interface SettingsProps {
   title: string;
   description: string;
   localNode: boolean;
+  restoreHeight: number;
+  setRestoreFromHeight: (height: number) => void;
 }
 
 const options: ThemeOption[] = [
@@ -54,6 +58,7 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
     value: "",
     node: "remote",
     balance: "United States Dollars",
+    refreshFromHeight: this.props.restoreHeight,
   };
 
   componentDidMount() {
@@ -133,6 +138,17 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
 
   manageAddress = ({ name, address }: AddressOption) => {};
 
+  onChangeRestoreFromHeight = (event: any) => {
+    this.setState({
+      refreshFromHeight: event.target.value,
+    });
+  };
+
+  updateRestoreFromHeight = (event: any) => {
+    const height = Number(this.state.refreshFromHeight);
+    this.props.setRestoreFromHeight(height);
+  };
+
   render() {
     const { value } = this.state;
 
@@ -150,6 +166,17 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
           />
         </Form>
         <ZephyrNodeSetting />
+        <Header title="Refresh Height" description="Choose the block from which your wallet starts syncing from" />
+        <InputButton
+          type="number"
+          label="Restore From Height"
+          placeholder="Restore From Height"
+          name="restoreHeight"
+          button="Update"
+          value={this.state.refreshFromHeight.toString()}
+          onChange={this.onChangeRestoreFromHeight}
+          onClick={this.updateRestoreFromHeight}
+        />
         <Header title="Transaction History" description="Download your transaction history" />
         <Container>
           <DoubleFooter
@@ -175,6 +202,7 @@ const mapStateToProps = (state: DesktopAppState) => ({
   theme: state.theme,
   mining: state.mining,
   localNode: selectisLocalNode(state.connectedNode),
+  restoreHeight: state.walletSession.restoreHeight,
 });
 
 export const SettingsDesktop = connect(mapStateToProps, {
@@ -183,4 +211,5 @@ export const SettingsDesktop = connect(mapStateToProps, {
   stopMining,
   miningStatus,
   downloadTransfers,
+  setRestoreFromHeight,
 })(SettingsDesktopPage);
