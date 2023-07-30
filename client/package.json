@@ -1,6 +1,6 @@
 {
   "name": "zephyr_web_wallet",
-  "version": "1.0.0-pre",
+  "version": "0.9.0",
   "private": true,
   "dependencies": {
     "big-integer": "^1.6.51",
