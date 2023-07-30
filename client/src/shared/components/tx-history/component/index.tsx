@@ -52,7 +52,7 @@ export const Transaction = ({
     statusLabel = "Unlocks in";
   }
 
-  const txExplorerLink = `https://explorer${isMainnet() ? "" : "-" + getNetworkByName()}.zephyrprotocol.com/tx/${hash}`;
+  const txExplorerLink = `https://${isMainnet() ? "" : getNetworkByName() + "-"}explorer.zephyrprotocol.com/tx/${hash}`;
 
   /* -- this changes the type and shows the exchange style
   if(conversion.isConversion){

@@ -15,9 +15,11 @@ import { DesktopAppState } from "platforms/desktop/reducers";
 import { selectValueInOtherAsset, XBalances, XViewBalance } from "shared/reducers/xBalance";
 import { WebAppState } from "platforms/web/reducers";
 import { BlockHeaderRate, selectXRate } from "shared/reducers/blockHeaderExchangeRates";
-import { Row, Row3 } from "./styles";
+import { Row, Row3, Row4 } from "./styles";
 import Statistic from "shared/components/statistic";
 import { ReserveInfo } from "shared/reducers/reserveInfo";
+
+const tickerStyle = { color: "#7f7f7f", fontSize: "0.725rem", fontWeight: "bold" };
 
 interface AssetsProps {
   reserveInfo: ReserveInfo | null;
@@ -35,7 +37,6 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
     const reserveInfo = this.props.reserveInfo;
 
     const zephReserve = convertBalanceToMoney(reserveInfo?.zeph_reserve ?? 0).toLocaleString();
-    const liabilities = convertBalanceToMoney(reserveInfo?.liabilities ?? 0).toLocaleString();
 
     const assets = convertBalanceToMoney(reserveInfo?.assets ?? 0).toLocaleString();
     const assetsMA = convertBalanceToMoney(reserveInfo?.assets_ma ?? 0).toLocaleString();
@@ -49,45 +50,79 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
     const reserveRatio = convertBalanceToMoney(reserveInfo?.reserve_ratio?.multiply(100) ?? 0).toLocaleString();
     const reserveRatioMA = convertBalanceToMoney(reserveInfo?.reserve_ratio_ma?.multiply(100) ?? 0).toLocaleString();
 
-    const spanStyle = { color: "#7f7f7f", fontSize: "0.9rem", fontWeight: "bold" };
-
-    const chainHeight = this.props.chainHeight ?? 0;
-
     const spot = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["spot"] ?? 0);
     const movingAverage = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["moving_average"] ?? 0);
+
+    const stableRate = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["stable"] ?? 0);
+    const stableRateMA = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["stable_ma"] ?? 0);
+    const reserveRate = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["reserve"] ?? 0);
+    const reserveRateMA = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["reserve_ma"] ?? 0);
 
     return (
       <Body>
         <Header title="Protocol Info" description="" />
-        <Row>
-          {/* <Statistic label="Height" value={<div>{chainHeight}</div>} /> */}
-          <Statistic label="Spot Price" value={<div>${spot}</div>} />
-          <Statistic label="Moving Average" value={<div>${movingAverage}</div>} />
-        </Row>
-        <Row>
+        <Row3>
           <Statistic
             label="Reserve"
             value={
               <div>
-                {zephReserve} <span style={spanStyle}>ZEPH</span>
+                {zephReserve} <span style={tickerStyle}>ƵEPH</span>
               </div>
             }
           />
-          <Statistic label="ZephUSD Circulation" value={<div>${liabilities}</div>} />
-        </Row>
-        <Row3>
-          <Statistic label="Assets" value={<div>${assets}</div>} />
-          <Statistic label="Assets (MA)" value={<div>${assetsMA}</div>} />
-          <Statistic label="Equity" value={<div>${equity}</div>} />
-          <Statistic label="Equity (MA)" value={<div>${equity}</div>} />
+          <Statistic label="ZephUSD Circulation" value={<div>{numStable}</div>} />
+          <Statistic label="ZephRSV Circulation" value={<div>{numReserve}</div>} />
         </Row3>
-        <Row>
-          <Statistic label="Number of stablecoins" value={<div>{numStable}</div>} />
-          <Statistic label="Number of reserves" value={<div>{numReserve}</div>} />
-        </Row>
+        <Row4>
+          <Statistic label="Assets" value={<div>${assets}</div>} />
+          <Statistic label="Equity" value={<div>${equity}</div>} />
+          <Statistic label="Assets (MA)" value={<div>${assetsMA}</div>} />
+          <Statistic label="Equity (MA)" value={<div>${equityMA}</div>} />
+        </Row4>
         <Row>
           <Statistic label="Reserve ratio" value={<div>{reserveRatio}%</div>} />
           <Statistic label="Reserve ratio (MA)" value={<div>{reserveRatioMA}%</div>} />
+        </Row>
+        <Header title="Exchange Rates" description="" />
+        <Row>
+          <Statistic label="Spot" value={<div>${spot}</div>} />
+          <Statistic label="Moving Average" value={<div>${movingAverage}</div>} />
+        </Row>
+        <Row>
+          <Statistic
+            label="Stable Rate"
+            value={
+              <div>
+                {stableRate} <span style={tickerStyle}>ƵEPH</span>
+              </div>
+            }
+          />
+          <Statistic
+            label="Stable Rate (MA)"
+            value={
+              <div>
+                {stableRateMA} <span style={tickerStyle}>ƵEPH</span>
+              </div>
+            }
+          />
+        </Row>
+        <Row>
+          <Statistic
+            label="Reserve Rate"
+            value={
+              <div>
+                {reserveRate} <span style={tickerStyle}>ƵEPH</span>
+              </div>
+            }
+          />
+          <Statistic
+            label="Reserve Rate (MA)"
+            value={
+              <div>
+                {reserveRateMA} <span style={tickerStyle}>ƵEPH</span>
+              </div>
+            }
+          />
         </Row>
       </Body>
     );

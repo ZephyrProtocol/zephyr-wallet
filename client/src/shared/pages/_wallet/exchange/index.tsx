@@ -319,8 +319,10 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 
     if (toAmount !== undefined && !setToAmount) {
       const amount = toAmount / rate;
-      const fromAmount = parseFloat(iNum(amount / (1 - feeRate)));
+      const amountBeforeFee = amount / (1 - feeRate);
       const conversionFee = parseFloat(iNum((toAmount / (1 - feeRate)) * feeRate));
+
+      const fromAmount = parseFloat(amountBeforeFee.toFixed(4));
       this.setState({ fromAmount, conversionFee });
     }
   }

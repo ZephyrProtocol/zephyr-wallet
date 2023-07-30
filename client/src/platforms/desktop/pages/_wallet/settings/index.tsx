@@ -154,17 +154,6 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
 
     return (
       <Body>
-        <Header title="Theme " description="Choose between light and dark themes" />
-        <Form onSubmit={() => {}}>
-          <Theme
-            label="Select Theme"
-            placeholder="Dark Theme"
-            name="value"
-            value={value}
-            options={options}
-            onClick={this.handleClick}
-          />
-        </Form>
         <ZephyrNodeSetting />
         <Header title="Refresh Height" description="Choose the block from which your wallet starts syncing from" />
         <InputButton
@@ -193,6 +182,17 @@ class SettingsDesktopPage extends Component<SettingsProps, any> {
             rightOnClick={this.downloadTxCsv}
           />
         </Container>
+        <Header title="Theme " description="Choose between light and dark themes" />
+        <Form onSubmit={() => {}}>
+          <Theme
+            label="Select Theme"
+            placeholder="Dark Theme"
+            name="value"
+            value={value}
+            options={options}
+            onClick={this.handleClick}
+          />
+        </Form>
       </Body>
     );
   }
