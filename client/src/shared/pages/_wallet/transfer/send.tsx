@@ -32,6 +32,7 @@ interface AssetOption {
 interface TransferOwnProps {
   sendFunds: (address: string, amount: number, ticker: Ticker, sweepAll: boolean) => void;
   isProcessing: boolean;
+  fromAsset?: Ticker;
 }
 
 interface TransferReduxProps {
@@ -52,7 +53,7 @@ type TransferProps = TransferOwnProps & TransferReduxProps;
 
 class TransferContainer extends Component<TransferProps, TransferState> {
   state: TransferState = {
-    selectedAsset: this.props.options[0],
+    selectedAsset: this.props.options.find((option) => option.ticker === this.props.fromAsset) ?? this.props.options[0],
     send_amount: "",
     recipient_address: "",
     amountError: "",
@@ -62,10 +63,6 @@ class TransferContainer extends Component<TransferProps, TransferState> {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-
-    this.setState({
-      selectedAsset: this.props.options[0],
-    });
   }
 
   handleReviewSubmit = (event: any) => {
@@ -108,26 +105,17 @@ class TransferContainer extends Component<TransferProps, TransferState> {
 
   setMaxAmount = () => {
     const { selectedAsset } = this.state;
-
-    let availableBalance = null;
-    let numDecimals = 2;
-
-    if (selectedAsset) {
-      numDecimals = ["XAG", "XAU", "XBTC"].includes(selectedAsset.ticker) ? 8 : 2;
-
-      availableBalance = convertBalanceToMoney(this.props.xBalances[selectedAsset.ticker].unlockedBalance, numDecimals);
+    if (!selectedAsset?.ticker) {
+      this.setState({ amountError: "Select an asset" });
+      return;
     }
 
-    if (availableBalance != null) {
-      this.setState({
-        send_amount: availableBalance.toFixed(numDecimals),
-        sweep_all: true,
-      });
-    } else {
-      this.setState({
-        amountError: "Select an asset",
-      });
-    }
+    const availableBalance = convertBalanceToMoney(this.props.xBalances[selectedAsset.ticker].unlockedBalance, 2);
+
+    this.setState({
+      send_amount: availableBalance.toFixed(2),
+      sweep_all: true,
+    });
   };
 
   amountIsValid = (availableBalance: number): string | true => {

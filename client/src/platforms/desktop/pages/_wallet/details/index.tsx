@@ -30,14 +30,23 @@ class DetailsContainer extends Component<DetailsProps & RouteProps, any> {
       xRate = selectXRate(this.props.rates, Ticker.ZEPHRSV, Ticker.ZEPH);
     }
 
-    let amount: number = convertBalanceToMoney(this.props.balances[ticker].unlockedBalance, 12);
-    let value = amount * xRate;
+    const latestBlockerHeader: BlockHeaderRate = this.props.rates[this.props.rates.length - 1];
+    let spot = latestBlockerHeader?.stable?.toJSNumber() / Math.pow(10, 12) ?? 0;
+    let ma = latestBlockerHeader?.stable_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
+
+    let balance: number = convertBalanceToMoney(this.props.balances[ticker].balance, 12);
+    let unlockedBalance: number = convertBalanceToMoney(this.props.balances[ticker].unlockedBalance, 12);
+    let lockedBalance: number = convertBalanceToMoney(this.props.balances[ticker].lockedBalance, 12);
+    let value = balance * xRate;
     if (ticker === Ticker.ZEPHRSV) {
       const spotRate = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
       value *= spotRate;
+
+      spot = latestBlockerHeader?.reserve?.toJSNumber() / Math.pow(10, 12) ?? 0;
+      ma = latestBlockerHeader?.reserve_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
     }
 
-    const detailProps = { assetId: ticker, value, amount, price: xRate };
+    const detailProps = { assetId: ticker, value, balance, unlockedBalance, lockedBalance, price: xRate, spot, ma };
     return (
       <Details {...detailProps}>
         <TxHistoryDesktop assetId={ticker} />

@@ -39,7 +39,7 @@ export const Inner = styled.div`
   width: 50%;
   min-width: 580px;
   background: ${(props) => props.theme.body.background};
-  border-radius: 4px;
+  border-radius: 12px;
 
   ${media.tablet`
     min-width: 90%
@@ -64,7 +64,7 @@ export const Body = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-radius: 4px;
+  border-radius: 12px;
 `;
 
 export const Footer = styled.div`
@@ -83,7 +83,7 @@ export const Confirm = styled.button`
   color: white;
   font-size: 16px;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 12px;
   padding-left: 16px;
   padding-right: 16px;
   text-decoration: none;
@@ -115,7 +115,7 @@ export const Cancel = styled.button`
   color: ${(props) => props.theme.type.secondary};
   font-size: 16px;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 12px;
   padding-left: 16px;
   padding-right: 16px;
   text-decoration: none;

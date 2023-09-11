@@ -39,11 +39,10 @@ export const Displayed = styled.div`
   display: inline-block;
   width: 16px;
   height: 16px;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: all 150ms;
   box-shadow: 0 0 0 3px ${(props) => props.theme.button.primary};
-  background: ${(props) =>
-    props.checked ? props.theme.button.primary : props.theme.body.background};
+  background: ${(props) => (props.checked ? props.theme.button.primary : props.theme.body.background)};
 
   &:hover {
     cursor: pointer;

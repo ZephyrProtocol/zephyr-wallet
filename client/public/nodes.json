@@ -33,7 +33,7 @@
   ],
   "mainnet": [
     {
-      "address": "127.0.0.1",
+      "address": "remote-node.zephyrprotocol.com",
       "provider": "Zephyr Remote Node",
       "port": "17767",
       "trusted": true,

@@ -35,7 +35,7 @@ export const getMaxDestinationAmount = async (sourceAssetType: string, destinati
 export const getBalance = async (
   accountIdx: number | undefined = undefined,
   subaddressIdx: number | undefined = undefined,
-  assetType: string | undefined = "ZEPH",
+  assetType: string | undefined = undefined,
 ) => {
   if (!wallet) {
     throw Error("no wallet exist");
@@ -48,7 +48,7 @@ export const getBalance = async (
 export const getUnlockedBalance = async (
   accountIdx: number | undefined = undefined,
   subaddressIdx: number | undefined = undefined,
-  assetType: string | undefined = "ZEPH",
+  assetType: string | undefined = undefined,
 ) => {
   if (!wallet) {
     throw Error("no wallet exist");
@@ -141,6 +141,7 @@ export const isWalletSynced = async (): Promise<boolean> => {
 };
 
 export const isWalletConnected = async (): Promise<boolean> => {
+  if (!wallet) return false;
   return wallet.isConnectedToDaemon();
 };
 

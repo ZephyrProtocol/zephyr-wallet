@@ -18,7 +18,7 @@ export const Fill = styled.button`
   color: white;
   font-size: 16px;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 12px;
   padding-left: 16px;
   padding-right: 16px;
   text-decoration: none;
@@ -53,7 +53,7 @@ export const Outline = styled.button`
   color: ${(props) => props.theme.type.secondary};
   font-size: 16px;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 12px;
   padding-left: 16px;
   padding-right: 16px;
   text-decoration: none;

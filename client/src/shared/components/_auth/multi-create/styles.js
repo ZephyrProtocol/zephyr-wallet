@@ -7,13 +7,13 @@ export const Container = styled.div`
   flex-direction: column;
   margin: 20px;
   border: 1px solid #3a4048;
-  border-radius: 4px;
+  border-radius: 12px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
 `;
 
 export const Main = styled.div`
   background: #36393f;
-  border-radius: 2px 2px 0px 0px;
+  border-radius: 12px 12px 0px 0px;
   height: auto;
   padding: 10px;
 `;
@@ -43,7 +43,7 @@ export const Buttons = styled.div`
 
 export const Submit = styled.button`
   background: #7289da;
-  border-radius: 4px;
+  border-radius: 12px;
   font-family: Inter-Regular;
   font-size: 14px;
   color: #ffffff;
@@ -73,7 +73,7 @@ export const Submit = styled.button`
 
 export const Back = styled.div`
   background: #36393f;
-  border-radius: 4px;
+  border-radius: 12px;
   font-family: Inter-Regular;
   font-size: 14px;
   color: #ffffff;
@@ -97,7 +97,7 @@ export const Back = styled.div`
 
 export const Cancel = styled(Link)`
   background: #36393f;
-  border-radius: 4px;
+  border-radius: 12px;
   font-family: Inter-Regular;
   font-size: 14px;
   color: #ffffff;
@@ -128,7 +128,7 @@ export const Footer = styled.div`
   justify-content: center;
   width: 100%;
   background: #36393f;
-  border-radius: 0px 0px 4px 4px;
+  border-radius: 0px 0px 12px 12px;
 `;
 
 export const Route = styled(Link)`

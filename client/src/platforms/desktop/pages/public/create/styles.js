@@ -12,30 +12,14 @@ export const Page = styled.div`
   flex-direction: column;
 `;
 
-// / <!-- Take the theme background -->
-// <!-- Enter in https://maketintsandshades.com/-->
-// <!-- Select second value from left in top row -->
-
 export const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #000;
+  background-color: ${(props) => props.theme.body.background};
 `;
-
-// background-image: ${(props) => {
-//   switch (props.theme) {
-//     case "light":
-//       return `url(${light})`;
-//     case "dark":
-//       return `url(${dark})`;
-//     case "sepia":
-//       return `url(${sepia})`;
-//     default:
-//   }
-// }};
 
 export const Microcopy = styled.div`
   height: auto;

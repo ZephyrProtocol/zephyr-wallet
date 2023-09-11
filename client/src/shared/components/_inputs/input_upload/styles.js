@@ -21,7 +21,7 @@ export const Wrapped = styled.div`
   display: flex;
   border: 1px solid ${(props) => props.theme.input.input_border};
   align-items: center;
-  border-radius: 4px;
+  border-radius: 12px;
   -webkit-appearance: none;
 `;
 
@@ -60,7 +60,7 @@ export const Upload = styled.input`
 export const Field = styled.div`
   border: none;
   background: ${(props) => props.theme.input.input_background};
-  border-radius: 4px 0px 0px 4px;
+  border-radius: 12px 0px 0px 4px;
   width: 100%;
   padding: 16px;
   font-family: Inter-Regular;

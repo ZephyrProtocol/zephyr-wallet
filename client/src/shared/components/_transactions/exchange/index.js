@@ -24,11 +24,11 @@ const Transaction = ({
   const last = externAddress.substring(externAddress.length - 4);
   const truncatedAddress = first + "...." + last;
 
-  let unlock_time = "~20m";
-
   // Adding for simplicity and clarity
   const from = `${fromAmount} ${fromTicker}`;
   const to = `${toAmount} ${toTicker}`;
+
+  let unlock_time = "~20m";
 
   return (
     <Fragment>
@@ -37,12 +37,11 @@ const Transaction = ({
         <Cell left="Convert From" right={from} />
         <Cell left="Convert To" right={to} />
         {!isOwnAddress && <Cell left="Recipient Address" right={truncatedAddress} />}
-        <Cell left="Unlock Time" right={unlock_time + "s"} />
       </Container>
       <Container>
         <SubHeader>Transaction Details</SubHeader>
         <Cell left={`Change(${fromTicker})`} right={change} />
-        <Cell left="Unlock Time" right="~20m" />
+        <Cell left="Unlock Time" right={unlock_time} />
         <Row>
           <Key>Transaction Fee</Key>
           <Tag priority={priority}>

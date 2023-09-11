@@ -39,6 +39,7 @@ export function createExchange(
   priority: number,
   externAddress: string,
   subaddressIndex: number | undefined,
+  sweepAll: boolean = false,
 ): any {
   return async (dispatch: any, getState: () => DesktopAppState) => {
     const address = externAddress.trim() !== "" ? externAddress : selectPrimaryAddress(getState().address.entrys);
@@ -54,16 +55,8 @@ export function createExchange(
       return;
     }
 
-    let amount = convertMoneyToBalance(fromAmount);
-    // Only 4 decimal places are allowed for conversion txs
-    const roundingValue = bigInt(100000000);
-    amount = amount.divide(roundingValue).multiply(roundingValue);
-    dispatch(onExchangeCreationFetch({ priority, address } as Partial<ExchangeProcessInfo>));
-    const destinations = [new MoneroDestination(address, amount.toString()).toJson()];
-
     const txConfig: Partial<ITxConfig> = {
-      canSplit: true,
-      destinations,
+      canSplit: false,
       accountIndex: 0,
       relay: false,
       priority,
@@ -72,10 +65,27 @@ export function createExchange(
       destinationCurrency: toTicker,
     } as Partial<ITxConfig>;
 
-    try {
-      const createdTx: MoneroTxWallet[] = await walletProxy.transfer(txConfig);
+    if (sweepAll) {
+      txConfig.address = address;
+    } else {
+      let amount = convertMoneyToBalance(fromAmount);
+      // Only 4 decimal places are allowed for conversion txs
+      const roundingValue = bigInt(100000000);
+      amount = amount.divide(roundingValue).multiply(roundingValue);
+      dispatch(onExchangeCreationFetch({ priority, address } as Partial<ExchangeProcessInfo>));
+      const destinations = [new MoneroDestination(address, amount.toString()).toJson()];
+      txConfig.destinations = destinations;
+    }
 
-      const exchangeInfo = parseExchangeResonse(createdTx);
+    try {
+      let createdTx: MoneroTxWallet[];
+      if (sweepAll) {
+        createdTx = await walletProxy.sweep(txConfig);
+      } else {
+        createdTx = await walletProxy.transfer(txConfig);
+      }
+
+      const exchangeInfo = parseExchangeResponse(createdTx);
       dispatch(onExchangeCreationSucceed(exchangeInfo));
       dispatch(showModal(MODAL_TYPE.ConfirmExchange));
     } catch (e) {
@@ -85,7 +95,7 @@ export function createExchange(
   };
 }
 
-const parseExchangeResonse = (txList: MoneroTxWallet[]): Partial<ExchangeProcessInfo> => {
+const parseExchangeResponse = (txList: MoneroTxWallet[]): Partial<ExchangeProcessInfo> => {
   let fromAmount: bigInt.BigInteger;
   let toAmount: bigInt.BigInteger;
   let fee: bigInt.BigInteger;
@@ -98,6 +108,7 @@ const parseExchangeResonse = (txList: MoneroTxWallet[]): Partial<ExchangeProcess
       acc.add(bigInt(tx.getIncomingAmount().toString())),
     bigInt(0),
   );
+
   fromAmount = txList.reduce(
     (acc: bigInt.BigInteger, tx: MoneroTxWallet) => acc.add(bigInt(tx.getOutgoingAmount().toString())),
     bigInt(0),

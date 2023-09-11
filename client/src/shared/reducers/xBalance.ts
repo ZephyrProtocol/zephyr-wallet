@@ -75,6 +75,7 @@ export const selectBalances = (state: DesktopAppState | WebAppState): XViewBalan
 };
 
 export const selectPortfolioInUSD = (state: DesktopAppState | WebAppState): XViewBalance => {
+  const zephPortfolio: ViewBalance = { balance: 0, unlockedBalance: 0, lockedBalance: 0 };
   const usdPortfolio: ViewBalance = { balance: 0, unlockedBalance: 0, lockedBalance: 0 };
   const xBalance = state.xBalance;
 
@@ -94,10 +95,14 @@ export const selectPortfolioInUSD = (state: DesktopAppState | WebAppState): XVie
     Object.entries(balance).forEach(([balanceType, amount]: [string, bigInt.BigInteger]) => {
       const usdAmount = xRate * amount.toJSNumber();
       usdPortfolio[balanceType] += convertBalanceToMoney(usdAmount);
+
+      if (fromTicker === Ticker.ZEPH) {
+        zephPortfolio[balanceType] += convertBalanceToMoney(amount.toJSNumber());
+      }
     });
   });
 
-  return { [Ticker.ZEPHUSD]: usdPortfolio };
+  return { [Ticker.ZEPHUSD]: usdPortfolio, [Ticker.ZEPH]: zephPortfolio };
 };
 
 export const selectTotalBalances = (state: DesktopAppState | WebAppState): XViewBalance => {

@@ -58,7 +58,7 @@ export const Description = styled.div`
 
 export const Button = styled(NavLink)`
   background: #7289da;
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 16px;
   line-height: 36px;
   height: 56px;

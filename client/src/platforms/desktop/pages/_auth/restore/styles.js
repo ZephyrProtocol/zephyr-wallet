@@ -18,7 +18,7 @@ export const Url = styled.a`
 
 export const Submit = styled.button`
   background: ${(props) => props.theme.button.primary};
-  border-radius: 4px;
+  border-radius: 12px;
   font-family: Inter-Regular;
   font-size: 14px;
   color: ${(props) => props.theme.button.primary_label};
@@ -48,7 +48,7 @@ export const Submit = styled.button`
 
 export const Button = styled(Link)`
   background: ${(props) => props.theme.body.background};
-  border-radius: 4px;
+  border-radius: 12px;
   font-family: Inter-Regular;
   font-size: 14px;
   color: ${(props) => props.theme.type.secondary};

@@ -4,7 +4,7 @@ export const Container = styled.div`
   height: auto;
   width: 100%;
   background: pink;
-  border-radius: 4px;
+  border-radius: 12px;
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.body.border};
   margin-bottom: 12px;
@@ -27,7 +27,7 @@ export const Footer = styled.div`
   height: auto;
   padding: 16px 12px;
   margin-top: 12px;
-  border-radius: 4px;
+  border-radius: 12px;
   border-top: 1px solid ${(props) => props.theme.body.border};
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.body.border};

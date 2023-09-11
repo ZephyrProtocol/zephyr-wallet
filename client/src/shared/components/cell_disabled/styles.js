@@ -6,7 +6,7 @@ export const Container = styled.div`
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.body.border};
   padding: 20px;
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
   transition: 500ms;
   grid-column: ${(props) => (props.fullwidth ? "1 / 3" : null)}
@@ -27,7 +27,7 @@ export const Container = styled.div`
     background: ${(props) => props.theme.body.foreground};
     border: 1px solid ${(props) => props.theme.body.border};
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
+    border-radius: 12px;
     transition: 500ms;
 `;
 

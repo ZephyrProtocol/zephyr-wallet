@@ -27,11 +27,11 @@ interface BalanceState {
 }
 
 class Balances extends Component<BalanceProps, BalanceState> {
-  handleSync = (isSyncing: boolean, balance: any, totalBalance: any) => {
+  handleSync = (isSyncing: boolean, balance: any, inZeph = false) => {
     if (isSyncing || !this.props.showPrivateDetails) {
       return "-/-";
     } else {
-      return balance === -1 ? <Spinner /> : totalBalance;
+      return balance === -1 ? <Spinner /> : balance === 0 ? "-" : inZeph ? balance.toLocaleString("en-US") : balance.toLocaleString("en-US", { style: "currency", currency: "USD" });
     }
   };
 
@@ -42,19 +42,20 @@ class Balances extends Component<BalanceProps, BalanceState> {
       return (
         <Wrapper onClick={() => this.props.togglePrivacyDisplay()}>
           <Amount>-/-</Amount>
-          <Value>Portfolio Value Hidden</Value>
+          <Value>Total Balance Hidden</Value>
         </Wrapper>
       );
 
     const { balance } = this.props.balances[ticker]!;
-    const totalBalance = "$" + balance.toFixed(2);
+    const { balance: zephBalance } = this.props.balances[Ticker.ZEPH]!;
+
     const { isSyncing, blockHeight, scannedHeight } = this.props.syncState;
     const percentage = ((scannedHeight / blockHeight) * 100).toFixed(2);
 
     return (
       <Wrapper onClick={() => this.props.togglePrivacyDisplay()}>
-        <Amount isSyncing={isSyncing}>{this.handleSync(isSyncing, balance, totalBalance)}</Amount>
-        <Value>{isSyncing ? `Syncing Wallet... ${percentage}%` : `Portfolio Value (USD) `}</Value>
+        <Amount isSyncing={isSyncing}>{this.handleSync(isSyncing, balance || zephBalance, !balance)}</Amount>
+        <Value>{isSyncing ? `Syncing Wallet... ${percentage}%` : balance && balance > 0 ? `Total Balance (USD) ` : "Balance (ZEPH)"}</Value>
         {isSyncing && <ProgressBar percentage={percentage} />}
       </Wrapper>
     );

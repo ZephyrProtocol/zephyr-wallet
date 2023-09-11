@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 export const Container = styled.div`
   height: auto;
   min-height: auto;
-  max-width: 624px;
+  width: 45%;
+  max-width: 1024px;
   min-width: 420px;
   flex-direction: column;
   margin: 20px;
   border: 1px solid ${(props) => props.theme.body.border};
-  border-radius: 4px;
+  border-radius: 12px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
 `;
 
@@ -20,22 +21,23 @@ export const Main = styled.div`
   display: flex;
   flex-direction: column;
   align-items: space-between;
-  background: ${(props) => props.theme.body.background};
+  background: ${(props) => props.theme.body.foreground};
 `;
 
 export const Header = styled.div`
   padding: 20px;
-  background: ${(props) => props.theme.body.background};
+  background: ${(props) => props.theme.body.foreground};
   border-bottom: 1px solid ${(props) => props.theme.body.border};
-  border-radius: 3px 3px 0px 0px;
+  border-radius: 12px 12px 0px 0px;
 `;
 
 export const Title = styled.div`
   font-family: Inter-SemiBold;
-  font-size: 20px;
+  font-size: 28px;
+  font-weight: bold;
   color: ${(props) => props.theme.type.primary};
   letter-spacing: 0;
-  line-height: 30px;
+  line-height: 36px;
 `;
 
 export const Description = styled.div`
@@ -62,7 +64,7 @@ export const Buttons = styled.div`
 
 export const Submit = styled.button`
   background: ${(props) => props.theme.button.primary};
-  border-radius: 4px;
+  border-radius: 12px;
   font-family: Inter-Regular;
   font-size: 14px;
   color: ${(props) => props.theme.button.primary_label};
@@ -93,7 +95,7 @@ export const Submit = styled.button`
 export const Button = styled(Link)`
   visibility: ${(props) => (props.step < 3 ? "hidden" : "inherit")};
   background: ${(props) => props.theme.body.background};
-  border-radius: 4px;
+  border-radius: 12px;
   font-family: Inter-Regular;
   font-size: 14px;
   color: ${(props) => props.theme.type.secondary};
@@ -131,8 +133,8 @@ export const Footer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  background: ${(props) => props.theme.body.background};
-  border-radius: 0px 0px 4px 4px;
+  background: ${(props) => props.theme.body.foreground};
+  border-radius: 0px 0px 12px 12px;
 `;
 
 export const Route = styled(Link)`

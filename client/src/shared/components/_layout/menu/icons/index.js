@@ -14,6 +14,7 @@ import {
   Asset,
   Convert,
   Transfer,
+  Receive,
   Settings,
   Protocol,
   ChevronInactive,
@@ -56,6 +57,15 @@ class Menu extends Component {
           </Item>
         </Wrapper>
         <Wrapper>
+          <Item to="/wallet/receive" onClick={() => this.handleClick("receive")}>
+            <Aligner>
+              <Receive item={item} />
+              <Label>Receive</Label>
+            </Aligner>
+            {item === "receive" ? <Chevron /> : <ChevronInactive />}
+          </Item>
+        </Wrapper>
+        <Wrapper>
           <Item to="/wallet/transfer" onClick={() => this.handleClick("transfer")}>
             <Aligner>
               <Transfer item={item} />
@@ -68,7 +78,7 @@ class Menu extends Component {
           <Item to="/wallet/convert" onClick={() => this.handleClick("convert")}>
             <Aligner>
               <Convert item={item} />
-              <Label>Exchange</Label>
+              <Label>Swap</Label>
             </Aligner>
             {item === "convert" ? <Chevron /> : <ChevronInactive />}
           </Item>

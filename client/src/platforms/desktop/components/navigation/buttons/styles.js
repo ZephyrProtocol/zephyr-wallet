@@ -13,7 +13,7 @@ export const Auth = styled(Link)`
   margin-right: 16px;
   color: #fff;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
   height: 42px;
   min-width: 100px;
@@ -36,7 +36,7 @@ export const Logout = styled.div`
   margin-right: 16px;
   color: ${(props) => props.theme.type.primary};
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
   height: 42px;
   min-width: 100px;

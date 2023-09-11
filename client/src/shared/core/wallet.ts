@@ -37,7 +37,7 @@ export const getMaxDestinationAmount = async (sourceAssetType: Ticker, destinati
 export const getBalance = async (
   accountIdx: number | undefined = undefined,
   subaddressIdx: number | undefined = undefined,
-  assetType: string | undefined = "ZEPH",
+  assetType: string | undefined = undefined,
 ) => {
   if (!wallet) {
     throw Error("no wallet exist");
@@ -190,7 +190,7 @@ export const setRestoreHeight = (syncHeight: number) => {
   return wallet.setRestoreHeight(syncHeight);
 };
 
-export const getRestoreHeight = () => {
+export const getRestoreHeight = async () => {
   return wallet.getRestoreHeight();
 };
 

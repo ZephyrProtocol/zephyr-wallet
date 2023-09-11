@@ -10,7 +10,7 @@ class CreateDesktop extends Component {
   render() {
     return (
       <Page>
-        <Container theme={this.props.theme.name}>
+        <Container theme={this.props.theme}>
           <Microcopy>
             <MultiCreateDesktop />
           </Microcopy>

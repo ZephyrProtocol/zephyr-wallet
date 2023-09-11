@@ -6,7 +6,7 @@ export const Container = styled.div`
   height: 100vh;
   background: #36393f;
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 290px 1fr;
   position: fixed;
   align-items: center;
   justify-content: center;

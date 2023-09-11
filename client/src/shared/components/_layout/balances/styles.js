@@ -57,8 +57,7 @@ export const Pending = styled.div`
 export const Amount = styled.div`
   font-size: 32px;
   font-family: Inter-Bold;
-  color: ${(props) =>
-    props.isSyncing ? props.theme.type.secondary : props.theme.type.primary};
+  color: ${(props) => (props.isSyncing ? props.theme.type.secondary : props.theme.type.primary)};
   letter-spacing: 0;
   line-height: 30px;
 `;

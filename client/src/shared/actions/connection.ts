@@ -10,8 +10,6 @@ export const getWalletConnectionState = () => {
 
 export const getAppConnectionState = () => {
   return async (dispatch: any) => {
-    console.log(zephyrdProxy);
-
     const isAppConnected: boolean = (await zephyrdProxy.isConnected()) as boolean;
     dispatch(setApptoDaemonConnectionState(isAppConnected));
   };

@@ -9,7 +9,7 @@ export const Container = styled.div`
   justify-content: center;
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.body.border};
-  border-radius: 4px;
+  border-radius: 12px;
   padding: 16px;
 `;
 

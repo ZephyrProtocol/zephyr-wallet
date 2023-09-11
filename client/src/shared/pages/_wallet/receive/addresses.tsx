@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import AddressDropdown from "../../../components/_inputs/addresses_dropdown/index.js";
+import AddressDropdown from "../../../components/_inputs/addresses_dropdown";
 import Description from "../../../components/_inputs/description";
 import DoubleFooter from "../../../components/_inputs/double_footer";
 import Form from "../../../components/_inputs/form";
 import Input from "../../../components/_inputs/input";
-import { Container } from "./styles";
+import { Container } from "./styles.js";
 import { DesktopAppState } from "platforms/desktop/reducers";
 
 // Address parts

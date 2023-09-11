@@ -7,7 +7,7 @@ export const Container = styled(Link)`
   flex-direction: column;
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.body.border};
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
   height: auto;
   transition: 500ms;
@@ -17,7 +17,7 @@ export const Container = styled(Link)`
     background: ${(props) => props.theme.body.foreground};
     border: 1px solid ${(props) => props.theme.body.border};
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
+    border-radius: 12px;
     transition: 500ms;
   }
 

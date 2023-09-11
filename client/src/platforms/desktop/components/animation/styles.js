@@ -6,7 +6,7 @@ export const Container = styled.div`
   grid-column: 100%;
   display: grid;
   grid-column: 1 / 3;
-  border-radius: 4px;
+  border-radius: 12px;
   border: 1px solid ${(props) => props.theme.body.border};
   background: ${(props) => props.theme.body.foreground};
   margin-bottom: 40px;

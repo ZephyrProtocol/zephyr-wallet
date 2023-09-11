@@ -19,6 +19,8 @@ import { Row, Row3, Row4 } from "./styles";
 import Statistic from "shared/components/statistic";
 import { ReserveInfo } from "shared/reducers/reserveInfo";
 
+import { ChartContainer } from "../../../components/chart-container";
+
 const tickerStyle = { color: "#7f7f7f", fontSize: "0.725rem", fontWeight: "bold" };
 
 interface AssetsProps {
@@ -84,6 +86,9 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
           <Statistic label="Reserve ratio (MA)" value={<div>{reserveRatioMA}%</div>} />
         </Row>
         <Header title="Exchange Rates" description="" />
+        <Row>
+          <ChartContainer assetId="ZEPH" price={spot} />
+        </Row>
         <Row>
           <Statistic label="Spot" value={<div>${spot}</div>} />
           <Statistic label="Moving Average" value={<div>${movingAverage}</div>} />

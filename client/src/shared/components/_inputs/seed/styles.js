@@ -22,7 +22,7 @@ export const Field = styled.textarea.attrs((props) => ({
   align-items: flex-start;
   border: 1px solid ${(props) => props.theme.input.input_border};
   border-bottom: none;
-  border-radius: 4px;
+  border-radius: 12px;
   padding: 16px;
   font-family: Inter-Regular;
   font-size: 16px;

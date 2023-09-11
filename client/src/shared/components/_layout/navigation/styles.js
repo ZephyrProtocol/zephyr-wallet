@@ -22,7 +22,7 @@ export const Tag = styled.div`
   padding: 4px 8px;
   background: #34d8ac;
   font-size: 10px;
-  border-radius: 3px;
+  border-radius: 12px;
   margin-left: 12px;
   color: #26282c;
 `;
@@ -51,7 +51,7 @@ export const Theme = styled.div`
   height: auto;
   color: white;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
 
   transition: 500ms;
@@ -71,7 +71,7 @@ export const Button = styled(Link)`
   height: auto;
   color: white;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
   margin-right: 20px;
   font-family: "Inter-Regular";
@@ -92,7 +92,7 @@ export const Logout = styled.div`
   height: auto;
   color: white;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
   font-family: "Inter-Regular";
 

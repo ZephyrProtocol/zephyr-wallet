@@ -4,7 +4,7 @@ export const Container = styled.div`
   height: 52px;
   width: 100%;
   background: ${(props) => props.theme.button.primary};
-  border-radius: 4px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;

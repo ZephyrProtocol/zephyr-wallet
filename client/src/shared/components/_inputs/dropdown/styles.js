@@ -24,7 +24,7 @@ export const Select = styled.div`
   display: inline-block;
   background: ${(props) => props.theme.input.input_background};
   border: 1px solid ${(props) => props.theme.input.input_border};
-  border-radius: 4px;
+  border-radius: 12px;
   grid-column: 1 / 3;
   transition: 500ms;
 
@@ -47,7 +47,7 @@ export const Wrapper = styled.ul`
   width: auto;
   position: absolute;
   grid-column: 1;
-  border-radius: 4px;
+  border-radius: 12px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   background: ${(props) => props.theme.input.input_background};
@@ -105,7 +105,7 @@ export const Button = styled.button`
   outline: none;
   grid-column: 1 / 3;
   padding: 20px;
-  border-radius: 3px;
+  border-radius: 12px;
   font-size: 16px;
   color: ${(props) => props.theme.type.primary};
   display: flex;
@@ -125,13 +125,18 @@ export const Button = styled.button`
     width: 0px;
     height: 0px;
     border: 7px solid;
-    border-color: ${(props) => props.theme.type.primary} transparent transparent
-      transparent;
+    border-color: ${(props) => props.theme.type.primary} transparent transparent transparent;
     right: 16px;
-    top: 24px;
+    top: 32px;
 
     &::placeholder {
       color: ${(props) => props.theme.type.secondary};
     }
   }
+`;
+
+export const Icon = styled.img`
+  height: 30px;
+  width: 30px;
+  margin-right: 12px;
 `;

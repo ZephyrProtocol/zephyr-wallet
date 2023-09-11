@@ -13,7 +13,7 @@ export const Tabs = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  border-radius: 4px;
+  border-radius: 12px;
   overflow: clip;
 `;
 
@@ -25,13 +25,9 @@ export const Item = styled.div`
   align-items: center;
   font-family: Inter-Regular;
 
-  color: ${(props) =>
-    props.active
-      ? props.theme.button.primary_label
-      : props.theme.type.secondary};
+  color: ${(props) => (props.active ? props.theme.button.primary_label : props.theme.type.secondary)};
 
-  background: ${(props) =>
-    props.active ? props.theme.button.primary : props.theme.body.foreground};
+  background: ${(props) => (props.active ? props.theme.button.primary : props.theme.body.foreground)};
 
   &:hover {
     cursor: pointer;

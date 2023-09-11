@@ -1,26 +1,20 @@
 import React from "react";
-import {
-  Container,
-  Select,
-  Wrapper,
-  Item,
-  Button,
-  Labels,
-  Ticker,
-  Name,
-  Row,
-} from "./styles";
+import { Ticker } from "shared/reducers/types";
+import { Container, Select, Wrapper, Item, Button, Labels, Ticker as TickerWrapper, Name, Row, Icon } from "./styles";
 import { Label, Error } from "../../../../assets/styles/type.js";
+// import logo from "../../../../assets/icons/zephyr.png";
+// import stableLogo from "../../../../assets/icons/stable.png";
+// import reserveLogo from "../../../../assets/icons/reserve.png";
 
 class Dropdown extends React.Component {
   state = {
     displayMenu: false,
     selected: this.props.placeholder,
-    buttonRef: null
+    buttonRef: null,
   };
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.buttonRef = React.createRef();
   }
@@ -28,33 +22,35 @@ class Dropdown extends React.Component {
   showDropdownMenu = () => {
     this.setState({ displayMenu: true });
     document.addEventListener("click", this.onClickOutside);
-  }
+  };
 
   hideDropdownMenu = () => {
     this.setState({ displayMenu: false });
     document.removeEventListener("click", this.onClickOutside);
-  }
+  };
 
   onClickOutside = (e) => {
     const { target } = e;
     const { current } = this.buttonRef;
     if (current && !current.contains(target)) this.hideDropdownMenu();
-  }
-
+  };
 
   componentWillUnmount = () => {
     document.removeEventListener("click", this.onClickOutside);
-  }
+  };
 
   renderOptions = () => {
     const { onClick, options } = this.props;
     return options.map((option) => {
       const { name, ticker } = option;
+      // const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
+
       return (
         <Item key={name} onClick={() => onClick(option)}>
           <Row>
+            {/* <Icon src={image} /> */}
             <Name>{name}</Name>
-            {ticker ? <Ticker>{ticker}</Ticker> : null}
+            {ticker ? <TickerWrapper>{ticker}</TickerWrapper> : null}
           </Row>
         </Item>
       );
@@ -63,15 +59,9 @@ class Dropdown extends React.Component {
 
   render() {
     const { displayMenu } = this.state;
-    const {
-      label,
-      error,
-      placeholder,
-      value,
-      ticker,
-      width,
-      disabled,
-    } = this.props;
+    const { label, error, placeholder, value, ticker, width, disabled } = this.props;
+
+    // const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
 
     return (
       <Container width={width}>
@@ -85,8 +75,10 @@ class Dropdown extends React.Component {
               placeholder
             ) : (
               <Row>
+                {/* <Icon src={image} /> */}
+                <div style={{ height: "30px", display: "block" }}></div>
                 <Name>{value}</Name>
-                <Ticker>{ticker}</Ticker>
+                <TickerWrapper>{ticker}</TickerWrapper>
               </Row>
             )}
           </Button>

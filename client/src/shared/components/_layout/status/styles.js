@@ -47,7 +47,7 @@ export const Content = styled.div`
   margin: 12px 1vw;
   padding: 12px 1vw 0 1vw;
   width: 96vw;
-  border-radius: 4px;
+  border-radius: 12px;
   text-align: center;
   background: ${(props) => props.theme.states[props.type]};
 `;
@@ -59,9 +59,9 @@ export const TimerBar = styled.div`
   margin-top: 4px;
   margin-left: -1vw;
   margin-right: -1vw;
-  background-color: rgba(0.5,0.5,0.5,0.15);
-  animation: ${timer} ${(props) => props.duration*0.001}s normal;
+  background-color: rgba(0.5, 0.5, 0.5, 0.15);
+  animation: ${timer} ${(props) => props.duration * 0.001}s normal;
   transform-origin: 0% 0%;
-  animation-timing-function:linear;
+  animation-timing-function: linear;
   animation-fill-mode: forwards;
 `;

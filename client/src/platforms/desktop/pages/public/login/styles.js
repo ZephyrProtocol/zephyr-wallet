@@ -1,10 +1,5 @@
 import styled from "styled-components";
 
-// https://www.svgbackgrounds.com/#wavey-fingerprint
-import light from "../../../../../assets/backgrounds/light.svg";
-import dark from "../../../../../assets/backgrounds/dark.svg";
-import sepia from "../../../../../assets/backgrounds/sepia.svg";
-
 export const Page = styled.div`
   height: 100vh;
   width: 100%;
@@ -12,33 +7,18 @@ export const Page = styled.div`
   flex-direction: column;
 `;
 
-// <!-- Take the theme background -->
-// <!-- Enter in https://maketintsandshades.com/-->
-// <!-- Select second value from left in top row -->
-
 export const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #000;
+  background-color: ${(props) => props.theme.body.background};
 `;
 
 export const Microcopy = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
-
-// background-image: ${(props) => {
-//   switch (props.theme) {
-//     case "light":
-//       return `url(${light})`;
-//     case "dark":
-//       return `url(${dark})`;
-//     case "sepia":
-//       return `url(${sepia})`;
-//     default:
-//   }
-// }};

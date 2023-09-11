@@ -16,12 +16,13 @@ export const Container = styled.div`
 
 export const Wrapped = styled.div`
   width: auto;
+  height: 100%;
   background: ${(props) => props.theme.input.input_background};
   border: 1px solid ${(props) => props.theme.input.input_border};
   display: flex;
   border: 1px solid ${(props) => props.theme.input.input_border};
   align-items: center;
-  border-radius: 4px;
+  border-radius: 12px;
   -webkit-appearance: none;
 `;
 
@@ -35,7 +36,7 @@ export const Button = styled.div`
   background: ${(props) => props.theme.button.primary};
   color: white;
   margin-right: 16px;
-  border-radius: 2px;
+  border-radius: 12px;
   font-size: 12px;
 
   text-transform: uppercase;
@@ -52,8 +53,9 @@ export const Button = styled.div`
 export const Field = styled.input`
   border: none;
   background: ${(props) => props.theme.input.input_background};
-  border-radius: 4px 0px 0px 4px;
+  border-radius: 12px 0px 0px 12px;
   width: 100%;
+  // height: 100%;
   padding: 16px;
   font-family: Inter-Regular;
   font-size: 16px;

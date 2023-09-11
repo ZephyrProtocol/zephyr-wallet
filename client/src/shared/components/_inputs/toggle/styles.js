@@ -19,7 +19,7 @@ export const Wrapper = styled.div`
   display: flex;
   background: ${(props) => props.theme.input.input_background};
   border: 1px solid ${(props) => props.theme.input.input_border};
-  border-radius: 4px;
+  border-radius: 12px;
   align-items: center;
   word-wrap: break-word;
 `;
@@ -58,7 +58,7 @@ export const Field = styled.input`
   outline: none;
   transition: 500ms;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   background: ${(props) => props.theme.input.input_background};
   -webkit-appearance: none;
 

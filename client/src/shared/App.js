@@ -17,6 +17,7 @@ import { ZephyrDetailWithParams } from "platforms/desktop/pages/_wallet/details"
 import { ExchangePage } from "shared/pages/_wallet/exchange";
 import { ProtocolInfo } from "shared/pages/_wallet/protocol";
 import { ZephyrTransfer } from "platforms/desktop/pages/_wallet/transfer";
+import { ZephyrReceive } from "platforms/desktop/pages/_wallet/receive";
 import { SettingsDesktop } from "platforms/desktop/pages/_wallet/settings";
 import { SettingsWeb } from "platforms/web/pages/_wallet/settings";
 import { RestoreDesktop } from "platforms/desktop/pages/_auth/restore";
@@ -41,8 +42,11 @@ class App extends Component {
                 <Route path="assets" element={<AssetsDesktop />} />
                 <Route path="assets/:id" element={<ZephyrDetailWithParams />} />
                 <Route path="transfer" element={<ZephyrTransfer />} />
+                <Route path="transfer/:asset" element={<ZephyrTransfer />} />
+                <Route path="receive" element={<ZephyrReceive />} />
                 <Route path="settings" element={isDesktop() ? <SettingsDesktop /> : <SettingsWeb />} />
                 <Route path="convert" element={<ExchangePage />} />
+                <Route path="convert/:asset" element={<ExchangePage />} />
                 <Route path="protocol" element={<ProtocolInfo />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />

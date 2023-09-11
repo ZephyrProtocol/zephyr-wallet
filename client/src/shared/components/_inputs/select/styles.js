@@ -11,7 +11,7 @@ export const Container = styled.div`
 export const Field = styled.select`
   background: #2b2e32;
   border: 1px solid #4a4d52;
-  border-radius: 4px;
+  border-radius: 12px;
   padding-top: 16px;
   padding-bottom: 16px;
   padding-left: 16px;

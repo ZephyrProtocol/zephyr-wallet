@@ -6,21 +6,17 @@ export const Container = styled.div`
   width: auto;
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.body.border};
-  border-radius: 4px;
+  border-radius: 12px;
   display: none;
   padding: 20px;
 
   ${media.laptop`
     display: inline;
     grid-column: 1 / 3;
-    height: 260px;
+    // height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
-  `}
-
-  ${media.mobile`
-    height: 200px;
   `}
 `;
 

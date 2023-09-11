@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   height: auto;
   width: 100%;
-  border-radius: 4px;
+  border-radius: 12px;
   margin-top: 4px;
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.input.input_border};
@@ -50,7 +50,7 @@ export const FeeRow = styled.div`
   width: 100%;
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.input.input_border};
-  border-radius: 0px 0px 4px 4px;
+  border-radius: 0px 0px 12px 12px;
 `;
 
 export const Tag = styled.div`
@@ -63,8 +63,7 @@ export const Tag = styled.div`
   justify-content: left;
   padding-left: 8px;
   padding-right: 8px;
-  border: 1px solid ${(props) =>
-    props.priority === 1 ? props.theme.body.border : "none"}
+  border: 1px solid ${(props) => (props.priority === 1 ? props.theme.body.border : "none")}
   background: ${(props) => {
     switch (props.priority) {
       case 1:

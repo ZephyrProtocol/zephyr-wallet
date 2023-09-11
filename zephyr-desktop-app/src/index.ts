@@ -23,10 +23,10 @@ const wallet = new ZephyrWallet();
 createMenu();
 const startApp = (): void => {
   const browserOptions: BrowserWindowConstructorOptions = {
-    width: 992,
+    width: 1240,
     minWidth: 470,
     minHeight: 720,
-    height: 750,
+    height: 860,
     /// icon:path.join(__dirname, "../icons/icon.png"),
   };
 

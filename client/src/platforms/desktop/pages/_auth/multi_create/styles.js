@@ -9,7 +9,7 @@ export const Container = styled.div`
   flex-direction: column;
   margin: 20px;
   border: 1px solid ${(props) => props.theme.body.border};
-  border-radius: 4px;
+  border-radius: 12px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
 `;
 
@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Main = styled.div`
-  background: ${(props) => props.theme.body.background};
+  background: ${(props) => props.theme.body.foreground};
   min-height: 350px;
   padding: 10px;
 `;
@@ -29,7 +29,7 @@ export const Body = styled.div`
 `;
 
 export const Tabs = styled.div`
-  height: 40px;
+  height: 50px;
   width: 100%;
   display: flex;
 `;
@@ -39,9 +39,10 @@ export const Tab = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  color: ${(props) => (props.active ? props.theme.type.primary : props.theme.type.secondary)};
-  background: ${(props) => (props.active ? props.theme.body.background : props.theme.body.foreground)};
+  font-size: 14px;
+  font-weight: bold;
+  color: ${(props) => (props.active ? props.theme.button.primary_label : props.theme.type.secondary)};
+  background: ${(props) => (props.active ? props.theme.button.primary : props.theme.body.background)};
   border-top: none;
   transition: 500ms;
 
@@ -54,8 +55,8 @@ export const Tab = styled.div`
 
 export const Header = styled.div`
   padding: 20px;
-  border-radius: 3px 3px 0px 0px;
-  background: ${(props) => props.theme.body.background};
+  border-radius: 12px 12px 0px 0px;
+  background: ${(props) => props.theme.body.foreground};
   border-bottom: 1px solid ${(props) => props.theme.body.border};
 `;
 
@@ -79,12 +80,12 @@ export const Step = styled.div`
     (props.width === 1 ? "10%" : null) || (props.width === 2 ? "50%" : null) || (props.width === 3 ? "100%" : null)};
   background: #7289da;
   height: auto;
-  border-radius: 4px;
+  border-radius: 12px;
 `;
 
 export const Button = styled(Link)`
   background: #7289da;
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 16px;
   line-height: 36px;
   height: 56px;
@@ -113,8 +114,8 @@ export const Footer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  background: ${(props) => props.theme.body.background};
-  border-radius: 0px 0px 4px 4px;
+  background: ${(props) => props.theme.body.foreground};
+  border-radius: 0px 0px 12px 12px;
 `;
 
 export const Route = styled(Link)`

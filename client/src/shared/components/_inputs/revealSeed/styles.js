@@ -22,7 +22,7 @@ export const Field = styled.textarea.attrs((props) => ({
   display: flex;
   align-items: flex-start;
   border: 1px solid #4a4d52;
-  border-radius: 4px;
+  border-radius: 12px;
   padding: 16px;
   font-family: Inter-Regular;
   font-size: 16px;

@@ -5,23 +5,26 @@ export const dark = {
   name: "dark",
   body: {
     navigation: "#0a0915",
-    background: "#080811",
+    background: "#0b0b15",
     foreground: "#0f0e1c",
-    border: "#3A4048", // 292554
+    border: "#1b2129",
     active_menu: "#8ea1e1",
   },
   button: {
     primary: "#7289da",
     primary_hover: "#677bc4",
     primary_label: "#ffffff",
+    secondary: "#c2c1c1ad",
+    inverse: "none",
   },
   type: {
     primary: "#ffffff",
     secondary: "#8A8D90",
     inverse: "#fff",
+    contrast: "#818c9d",
   },
   input: {
-    input_border: "#4a4d52",
+    input_border: "#2f3b50",
     input_border_focus: "#5c5f63",
     input_placeholder: "#8a8d90",
     input_background: "#0c0e19",
@@ -55,18 +58,21 @@ export const light = {
     navigation: "#fff",
     background: "#fdfdfd",
     foreground: "#fff",
-    border: "#e0e0e0",
+    border: "#ececec",
     active_menu: "#7289da",
   },
   button: {
     primary: "#64B5F6",
-    primary_hover: "#8193e6",
+    primary_hover: "#f1f1f1",
     primary_label: "#fff",
+    secondary: "#c2c2c2",
+    inverse: "#252554",
   },
   type: {
     primary: "#1d1d1f",
     secondary: "#79797a",
     inverse: "#7289da",
+    contrast: "#818c9d",
   },
   input: {
     input_border: "#e0e0e0",
@@ -110,11 +116,13 @@ export const sepia = {
     primary: "#704214",
     primary_hover: "#653b12",
     primary_label: "#ffffff",
+    inverse: "#704214",
   },
   type: {
     primary: "#43280c",
     secondary: "#7e552c",
     inverse: "#fff",
+    contrast: "#818c9d",
   },
   input: {
     input_border: "#b8a18a",

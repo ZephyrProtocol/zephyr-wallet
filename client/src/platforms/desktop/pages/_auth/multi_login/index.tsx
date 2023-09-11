@@ -46,7 +46,7 @@ class MultiLoginPage extends Component<MultiLoginProps, MultiloginState> {
     return (
       <Container>
         <Header>
-          <Title>Zephyr Wallet</Title>
+          <Title>Zephyr Protocol</Title>
           <Description>The Untraceable Stablecoin</Description>
         </Header>
         <Main>

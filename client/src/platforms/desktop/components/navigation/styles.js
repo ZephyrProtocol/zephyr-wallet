@@ -23,7 +23,7 @@ export const Container = styled.header`
 
 export const Scan = styled.div`
   font-size: 13px;
-  border-radius: 4px;
+  border-radius: 12px;
   margin: 8px;
   height: 36px;
   background: ${(props) => props.theme.button.primary};
@@ -108,7 +108,7 @@ export const OptionsList = styled.div`
   width: 280px;
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.body.border};
-  border-radius: 4px;
+  border-radius: 12px;
   position: fixed;
   right: 12px;
   top: 74px;
@@ -152,7 +152,7 @@ export const Button = styled(Link)`
   height: auto;
   color: white;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
   transition: 500ms;
 
@@ -171,7 +171,7 @@ export const Logout = styled.div`
   height: auto;
   color: white;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 12px;
   text-decoration: none;
 
   transition: 500ms;

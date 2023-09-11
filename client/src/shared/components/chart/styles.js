@@ -7,7 +7,7 @@ export const Container = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-radius: 0px 0px 4px 4px;
+  border-radius: 0px 0px 12px 12px;
   padding-top: 4px;
   padding-bottom: -4px;
   background: ${(props) => props.theme.body.foreground};
@@ -59,7 +59,7 @@ export const Placeholder = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-radius: 0px 0px 4px 4px;
+  border-radius: 0px 0px 12px 12px;
   padding-top: 4px;
   padding-bottom: -4px;
   background: ${(props) => props.theme.body.foreground};
@@ -87,7 +87,7 @@ export const Spacer = styled.div`
 export const Header = styled.div`
   height: auto;
   grid-column: 1/ 3;
-  border-radius: 4px 4px 0px 0px;
+  border-radius: 12px 4px 0px 0px;
   margin-bottom: -20px;
   background: ${(props) => props.theme.body.foreground};
   border-bottom: 1px solid ${(props) => props.theme.body.border};
@@ -113,8 +113,7 @@ export const Button = styled.div`
   border-left: 1px solid ${(props) => props.theme.body.border};
   font-family: "Inter-Regular";
   color: ${(props) => (props.active ? "#fff" : props.theme.type.secondary)};
-  background: ${(props) =>
-    props.active ? props.theme.button.primary : props.theme.body.foreground};
+  background: ${(props) => (props.active ? props.theme.button.primary : props.theme.body.foreground)};
   transition: 500ms;
 
   &:hover {
@@ -129,7 +128,7 @@ export const Buttons = styled.div`
   height: auto;
   display: flex;
   width: auto;
-  border-radius: 4px;
+  border-radius: 12px;
   overflow: hidden;
   border: 1px solid ${(props) => props.theme.body.border};
   border-left: none;

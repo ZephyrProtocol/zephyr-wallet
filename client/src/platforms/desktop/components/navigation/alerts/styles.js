@@ -66,7 +66,7 @@
 //   width: 280px;
 //   background: ${(props) => props.theme.body.foreground}
 //   border: 1px solid ${(props) => props.theme.body.border};
-//   border-radius: 4px;
+//   border-radius: 12px;
 //   position: fixed;
 //   left: 10px;
 //   top: 74px;

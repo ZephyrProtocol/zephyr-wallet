@@ -16,12 +16,26 @@ import {
   Balances,
   PendingWrapper,
   PendingSpacer,
+  PendingBoxWrapper,
+  PendingBox,
+  PendingSection,
   Balance,
   Arrow,
+  Icon,
   ShortRow,
+  MainBalance,
+  Buttons,
+  Button,
+  SendIcon,
+  AddressBookIcon,
+  SwapIcon,
 } from "./styles";
 import Dots from "../_animations/dots";
 import { Ticker } from "shared/reducers/types";
+// import logo from "../../../assets/icons/zephyr.png";
+// import stableLogo from "../../../assets/icons/stable.png";
+// import reserveLogo from "../../../assets/icons/reserve.png";
+import BalanceDetailSection from "../balance-container/detail-section";
 
 const Cell = ({
   tokenName,
@@ -33,103 +47,97 @@ const Cell = ({
   lockedBalance,
   unlockedBalance,
   showPrivateDetails,
+  spotPrice,
+  maPrice,
 }) => {
   const [open, openBalance] = useState(false);
-  const balance = totalBalance * price;
   const hiddenBalance = "-/-";
 
-  const displayBalance = (balance) => {
-    return showPrivateDetails ? balance : hiddenBalance;
+  const displayBalance = (balance, useTwoDP) => {
+    return !showPrivateDetails
+      ? hiddenBalance
+      : useTwoDP
+      ? balance
+          .toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+          .replace("$", "")
+      : balance
+          .toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 12,
+            maximumFractionDigits: 12,
+          })
+          .replace("$", "");
   };
+
+  // const logoImage = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
 
   return (
     <>
-      {lockedBalance === 0 ? (
-        <Container>
-          <Unlocked to={`/wallet/assets/${ticker}`}>
-            <Column>
-              <Row>
-                <Asset>
-                  <Title>{tokenName}</Title>
-                </Asset>
-                <Balance>
-                  {price === 0 ? (
-                    <ShortRow>
-                      $ <Dots />
-                    </ShortRow>
-                  ) : (
-                    `${"$" + displayBalance(value.unlockedBalance.toFixed(2))}`
-                  )}
-                </Balance>
-              </Row>
-              <Row>
-                <Subtitle>
-                  {ticker} {totalBalance === 0 ? displayBalance("0.00") : displayBalance(totalBalance)}
-                </Subtitle>
-                <Subtitle>
-                  {price === 0 ? (
-                    <Row>
-                      $ <Dots />
-                    </Row>
-                  ) : ticker === Ticker.ZEPHRSV ? (
-                    `${displayBalance(price.toFixed(2)) + " ZEPH"}`
-                  ) : (
-                    `${"$" + displayBalance(price.toFixed(2))}`
-                  )}
-                </Subtitle>
-              </Row>
-            </Column>
-            <Route>
-              <Arrow />
-            </Route>
-          </Unlocked>
-        </Container>
-      ) : (
-        <Container>
-          <Locked to={`/wallet/assets/${ticker}`}>
-            <Column>
-              <Row>
-                <Asset>
-                  <Title>{tokenName}</Title>
-                </Asset>
-                <Balance>{"$" + displayBalance(balance.toFixed(2))}</Balance>
-              </Row>
-              <Row>
-                <Subtitle>
-                  {ticker} {displayBalance(totalBalance)}
-                </Subtitle>
-                <Subtitle>{"$" + displayBalance(price.toFixed(2))}</Subtitle>
-              </Row>
-            </Column>
-            <Route>
-              <Arrow />
-            </Route>
-          </Locked>
-          {open && (
-            <PendingWrapper to={`/wallet/assets/${ticker}`}>
-              <PendingSpacer />
-              <Pending>
-                <Subtitle>Total Balance</Subtitle>
-                <Subtitle>{displayBalance(totalBalance)}</Subtitle>
-              </Pending>
-              <Pending>
-                <Subtitle>Locked Balance</Subtitle>
-                <Subtitle>{displayBalance(lockedBalance)}</Subtitle>
-              </Pending>
-              <Pending>
-                <Subtitle>Unlocked Balance</Subtitle>
-                <Subtitle>{displayBalance(unlockedBalance)}</Subtitle>
-              </Pending>
-              <PendingSpacer />
-            </PendingWrapper>
-          )}
-          <Balances onClick={() => openBalance(!open)}>
+      <Container>
+        <Unlocked to={`/wallet/assets/${ticker}`}>
+          <Column>
             <Row>
-              <Subtitle>{open ? "Hide Pending Balances" : "Show Pending Balances"}</Subtitle>
+              {/* <div style={{ display: "flex", alignItems: "center" }}>
+                <Icon src={logoImage} />
+              </div> */}
+              <div>
+                <MainBalance>
+                  {totalBalance === 0 ? displayBalance("0.00") : displayBalance(Number(totalBalance ?? 0), true)}{" "}
+                  <Subtitle style={{ fontSize: 18 }}>{ticker.replace("Z", "Ƶ")}</Subtitle>
+                </MainBalance>
+                <Balance>
+                  <Subtitle>{"$" + displayBalance(value.balance, true)}</Subtitle>
+                  <Subtitle
+                    style={{ position: "absolute", bottom: 0, marginLeft: 4, lineHeight: "28px", fontSize: 12 }}
+                  >
+                    USD
+                  </Subtitle>
+                </Balance>
+              </div>
             </Row>
-          </Balances>
-        </Container>
-      )}
+            <Row>
+              <Buttons>
+                <Button to={`/wallet/assets/${ticker}`}>
+                  <AddressBookIcon /> History
+                </Button>
+                <Button to={`/wallet/transfer/${ticker}`}>
+                  <SendIcon /> Send
+                </Button>
+                <Button to={`/wallet/convert/${ticker}`}>
+                  <SwapIcon /> Swap
+                </Button>
+              </Buttons>
+            </Row>
+          </Column>
+        </Unlocked>
+        {open && (
+          <PendingWrapper to={`/wallet/assets/${ticker}`}>
+            <PendingSpacer />
+            <PendingBoxWrapper>
+              <BalanceDetailSection
+                assetId={ticker}
+                balance={totalBalance}
+                lockedBalance={lockedBalance}
+                unlockedBalance={unlockedBalance}
+                spot={spotPrice}
+                ma={maPrice}
+              />
+            </PendingBoxWrapper>
+            <PendingSpacer />
+          </PendingWrapper>
+        )}
+        <Balances onClick={() => openBalance(!open)}>
+          <Row>
+            <Subtitle style={{ fontSize: "12px" }}>{open ? "Hide Details" : "Show details"}</Subtitle>
+          </Row>
+        </Balances>
+      </Container>
     </>
   );
 };

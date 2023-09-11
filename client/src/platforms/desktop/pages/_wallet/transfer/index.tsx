@@ -6,7 +6,7 @@ import { Ticker } from "shared/reducers/types";
 import { resetTransferProcess } from "shared/actions/transfer";
 import { transferSucceed } from "../../../../../shared/reducers/transferProcess";
 import { createTransfer } from "shared/actions/transfer";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 class Container extends Component<any, any> {
   private sendTicker: Ticker = Ticker.ZEPH;
@@ -27,7 +27,12 @@ class Container extends Component<any, any> {
   render() {
     return (
       //@ts-ignore
-      <Transfer isProcessing={this.props.tx.isFetching} addresses={this.props.address} sendFunds={this.onSendFunds} />
+      <Transfer
+        isProcessing={this.props.tx.isFetching}
+        addresses={this.props.address}
+        sendFunds={this.onSendFunds}
+        fromAsset={this.props.fromAsset}
+      />
     );
   }
 }
@@ -45,5 +50,6 @@ const ConnectedTransferPage = connect(mapStateToProps, {
 
 export const ZephyrTransfer = () => {
   const navigate = useNavigate();
-  return <ConnectedTransferPage navigate={navigate} />;
+  const { asset } = useParams();
+  return <ConnectedTransferPage navigate={navigate} fromAsset={asset} />;
 };

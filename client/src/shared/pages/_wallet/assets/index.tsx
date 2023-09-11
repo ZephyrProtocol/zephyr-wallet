@@ -34,7 +34,7 @@ class AssetsPage extends Component<AssetsProps, any> {
   }
 
   renderBalance = (ticker: keyof XBalances) => {
-    const numDecimals = 2;
+    const numDecimals = 12;
 
     const unlockedBalance = convertBalanceToMoney(this.props.balances[ticker].unlockedBalance, numDecimals);
 
@@ -47,11 +47,18 @@ class AssetsPage extends Component<AssetsProps, any> {
     let value = selectValueInOtherAsset(this.props.balances[ticker], this.props.rates, ticker, toTicker); // this.props.assetsInUSD[xTicker]!.unlockedBalance;
     const xRate = selectXRate(this.props.rates, ticker, toTicker);
 
+    const latestBlockerHeader: BlockHeaderRate = this.props.rates[this.props.rates.length - 1];
+    let spot = latestBlockerHeader?.stable?.toJSNumber() / Math.pow(10, 12) ?? 0;
+    let ma = latestBlockerHeader?.stable_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
+
     if (ticker === Ticker.ZEPHRSV) {
       const spotPrice = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
       value.balance *= spotPrice;
       value.unlockedBalance *= spotPrice;
       value.lockedBalance *= spotPrice;
+
+      spot = latestBlockerHeader?.reserve?.toJSNumber() / Math.pow(10, 12) ?? 0;
+      ma = latestBlockerHeader?.reserve_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
     }
 
     return (
@@ -61,6 +68,8 @@ class AssetsPage extends Component<AssetsProps, any> {
         tokenName={name}
         ticker={ticker}
         price={xRate}
+        spotPrice={spot}
+        maPrice={ma}
         value={value}
         totalBalance={totalBalance}
         lockedBalance={lockedBalance}
@@ -71,11 +80,11 @@ class AssetsPage extends Component<AssetsProps, any> {
   };
 
   render() {
-    const unlockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.unlockedBalance);
+    const unlockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.unlockedBalance, 12);
 
-    const totalBalance = convertBalanceToMoney(this.props.balances.ZEPH.balance);
+    const totalBalance = convertBalanceToMoney(this.props.balances.ZEPH.balance, 12);
 
-    const lockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.lockedBalance);
+    const lockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.lockedBalance, 12);
 
     const zephInUSD = selectValueInOtherAsset(
       this.props.balances.ZEPH,
@@ -85,20 +94,27 @@ class AssetsPage extends Component<AssetsProps, any> {
       true,
     );
 
+    const latestBlockerHeader: BlockHeaderRate = this.props.rates[this.props.rates.length - 1];
+    const spot = latestBlockerHeader?.spot?.toJSNumber() / Math.pow(10, 12) ?? 0;
+    const ma = latestBlockerHeader?.moving_average?.toJSNumber() / Math.pow(10, 12) ?? 0;
+
     const xRate = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
     return (
       <Body>
+        <Header title="Balances" description="Overview of your Zephyr assets" />
+
         <Overview />
-        <Header title="All Balances" description="" />
         <Cell
           //@ts-ignore
           key={1}
           tokenName={"Zephyr"}
           ticker={"ZEPH"}
           price={xRate}
+          spotPrice={spot}
+          maPrice={ma}
           value={zephInUSD}
           fullwidth="fullwidth"
-          totalBalance={totalBalance.toFixed(2)}
+          totalBalance={totalBalance}
           lockedBalance={lockedBalance}
           unlockedBalance={unlockedBalance}
           showPrivateDetails={this.props.showPrivateDetails}

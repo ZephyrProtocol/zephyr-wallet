@@ -14,7 +14,7 @@ export const Container = styled.div`
 export const Dot = styled.div`
   width: 4px;
   height: 4px;
-  border-radius: 4px;
+  border-radius: 12px;
   color: ${(props) => props.theme.type.primary};
   animation: ${fade} 2s ease infinite;
   opacity: 0;

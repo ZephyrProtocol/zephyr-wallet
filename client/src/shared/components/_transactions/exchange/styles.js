@@ -78,15 +78,13 @@ export const Value = styled.div`
 `;
 
 export const SubHeader = styled.div`
-display: flex;
-justify-content: center;
-font-family: Inter-Regular;
-margin: 12px;
-font-size:14px;
-color: ${(props) => props.theme.type.primary};
-`
-
-
+  display: flex;
+  justify-content: center;
+  font-family: Inter-Regular;
+  margin: 12px;
+  font-size: 14px;
+  color: ${(props) => props.theme.type.primary};
+`;
 
 export const Tag = styled.div`
   width: auto;
@@ -99,8 +97,7 @@ export const Tag = styled.div`
   padding-left: 8px;
   padding-right: 8px;
   border-radius: 2px;
-  border: 1px solid
-    ${(props) => (props.priority === 0 ? props.theme.body.border : "none")};
+  border: 1px solid ${(props) => (props.priority === 0 ? props.theme.body.border : "none")};
 
   background: ${(props) => {
     switch (props.priority) {

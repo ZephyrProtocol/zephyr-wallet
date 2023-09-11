@@ -2,13 +2,17 @@
 import React, { Component } from "react";
 // Relative Imports
 import Body from "../../../components/_layout/body";
-import { ChartContainer } from "shared/components/chart-container";
+import { BalanceContainer } from "shared/components/balance-container";
 
 interface DetailsProps {
-  amount: number;
+  balance: number;
+  unlockedBalance: number;
+  lockedBalance: number;
   price: number;
   value: number;
   assetId: string;
+  spot: number;
+  ma: number;
 }
 
 export class Details extends Component<DetailsProps, any> {
@@ -19,7 +23,7 @@ export class Details extends Component<DetailsProps, any> {
   render() {
     return (
       <Body>
-        <ChartContainer {...this.props} />
+        <BalanceContainer {...this.props} />
         {this.props.children}
       </Body>
     );

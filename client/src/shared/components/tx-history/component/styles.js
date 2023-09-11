@@ -8,14 +8,14 @@ export const Container = styled.a`
   grid-template-columns: 16px 1fr;
   margin-bottom: 20px;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 12px;
   background: ${(props) => props.theme.body.foreground};
   border: 1px solid ${(props) => props.theme.body.border};
 
   &:hover {
     cursor: pointer;
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
+    border-radius: 12px;
     transition: 500ms;
   }
 `;
@@ -58,7 +58,7 @@ export const State = styled.div`
   color: #fff;
   justify-content: center;
   border-right: 1px solid ${(props) => props.theme.body.border};
-  border-radius: 4px 0px 0px 4px;
+  border-radius: 12px 0px 0px 4px;
   border-right: none;
   background: ${(props) => {
     switch (props.status) {
@@ -99,7 +99,7 @@ export const Column = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-radius: 4px;
+  border-radius: 12px;
 `;
 
 export const Value = styled.div`
@@ -109,7 +109,7 @@ export const Value = styled.div`
   letter-spacing: 0;
   line-height: 24px;
   text-align: ${(props) => props.alignment};
-  text-transform: capitalize;  
+  text-transform: capitalize;
 `;
 
 export const Label = styled.div`

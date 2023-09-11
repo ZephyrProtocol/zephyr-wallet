@@ -9,7 +9,7 @@ import Description from "../../../components/_inputs/description";
 import AddressDropdown from "../../../components/_inputs/addresses_dropdown";
 // import InputButton from "../../../components/_inputs/input_button";
 import Form from "../../../components/_inputs/form";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Footer from "../../../components/_inputs/footer";
 import Dropdown from "../../../components/_inputs/dropdown";
 import {
@@ -63,6 +63,7 @@ interface ExchangeProps {
   balances: XBalances;
   addresses: AddressEntry[];
   navigate: (path: string) => void;
+  fromAsset?: Ticker;
 }
 
 enum TxType {
@@ -134,8 +135,15 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.props.setFromTicker(Ticker.ZEPH);
-    this.props.setToTicker(Ticker.ZEPHUSD);
+    const { fromAsset } = this.props;
+    const defaultFromAsset = fromAsset ?? Ticker.ZEPH;
+    const defaultFromOption = assetOptions.find((o) => o.ticker === defaultFromAsset);
+    if (!defaultFromOption) {
+      this.props.setFromTicker(Ticker.ZEPH);
+      this.props.setToTicker(Ticker.ZEPHUSD);
+    } else {
+      this.setFromAsset(defaultFromOption);
+    }
   }
 
   componentDidUpdate(prevProps: Readonly<ExchangeProps>, nextContext: any): void {
@@ -158,31 +166,12 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     }
   }
 
-  setMaxAmount = async () => {
-    if (this.state.txType === TxType.None) {
-      return;
-    }
-
-    let amount = await walletProxy.getMaxDestinationAmount(this.props.fromTicker!, this.props.toTicker!);
-    amount = convertBalanceToMoney(amount);
-
-    const { txType } = this.state;
-    const { fromTicker } = this.props;
-    let stateUpdate;
-    let setToAmount: boolean;
-
-    switch (txType) {
-      case TxType.MintStable:
-        stateUpdate = fromTicker === Ticker.ZEPH ? { fromAmount: amount } : { toAmount: amount };
-        setToAmount = fromTicker === Ticker.ZEPH ? true : false;
-        break;
-      case TxType.RedeemStable:
-        stateUpdate = fromTicker === Ticker.ZEPHUSD ? { fromAmount: amount } : { toAmount: amount };
-        setToAmount = fromTicker === Ticker.ZEPHUSD ? true : false;
-        break;
-    }
-    this.setState({ ...stateUpdate }, () => {
-      this.calcConversion(setToAmount);
+  setSweepAll = async () => {
+    const fromTicker = this.props.fromTicker;
+    if (!fromTicker) return;
+    const unlockedBalance = convertBalanceToMoney(this.props.balances[fromTicker].unlockedBalance, 4);
+    this.setState({ fromAmount: unlockedBalance }, () => {
+      this.calcConversion(true);
     });
   };
 
@@ -195,13 +184,6 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     });
   };
 
-  onEnterExternAddress = (event: any) => {
-    const name = event.target.name;
-    const value = event.target.value;
-
-    this.setState({ ...this.state, [name]: value });
-  };
-
   onEnterToAmount = (event: any) => {
     const name = event.target.name;
     const value = parseFloat(event.target.value);
@@ -209,6 +191,13 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     this.setState({ ...this.state, [name]: value }, () => {
       this.calcConversion(false);
     });
+  };
+
+  onEnterExternAddress = (event: any) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    this.setState({ ...this.state, [name]: value });
   };
 
   setToAssetOptions(fromTicker: Ticker | null): void {
@@ -231,7 +220,9 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     // Call back function from Dropdown
     this.props.setFromTicker(option.ticker);
     //on mismatch, just reset the other ticker
-    if (option.ticker === Ticker.ZEPHUSD || option.ticker === Ticker.ZEPHRSV) {
+    if (option.ticker === Ticker.ZEPH) {
+      this.props.setToTicker(Ticker.ZEPHUSD);
+    } else if (option.ticker === Ticker.ZEPHUSD || option.ticker === Ticker.ZEPHRSV) {
       this.props.setToTicker(Ticker.ZEPH);
     } else if (this.isTickerMismatch(option.ticker, this.props.toTicker)) {
       this.props.setToTicker(null);
@@ -338,6 +329,9 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 
     const selectedAddressIndex = this.state.selectedAddress.index !== -1 ? this.state.selectedAddress.index : undefined;
 
+    const unlockedBalance = convertBalanceToMoney(this.props.balances[fromTicker].unlockedBalance, 4);
+    const sweepAll = fromAmount === unlockedBalance;
+
     this.props.createExchange(
       fromTicker,
       toTicker,
@@ -346,6 +340,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       this.state.selectedPrio.prio,
       this.state.externAddress,
       selectedAddressIndex,
+      sweepAll,
     );
   };
 
@@ -358,7 +353,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     const fromAmountValid = fromAmount !== undefined;
     const toAmountValid = toAmount !== undefined;
     const { hasLatestXRate } = this.props;
-    const hasEnoughFunds = fromAmount !== undefined ? fromAmount < availableBalance : false;
+    const hasEnoughFunds = fromAmount !== undefined ? fromAmount <= availableBalance : false;
 
     if (fromAmountValid && toAmountValid && hasLatestXRate && hasEnoughFunds) {
       // If valid then make this 'false' so the footer is enabled
@@ -375,10 +370,6 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     //@ts-ignore
     if (fromAmount > availableBalance) {
       return "Not enough funds";
-    }
-    //@ts-ignore
-    if (fromAmount === availableBalance) {
-      return "Save some for fees";
     }
   };
 
@@ -476,7 +467,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     return (
       <Fragment>
         <Body>
-          <Header title="Exchange " description="Mint and Redeem Stable or Reserve coins" />
+          <Header title="Swap" description="Mint and Redeem Stable or Reserve coins" />
 
           <Fragment>
             <Form onSubmit={this.handleSubmit}>
@@ -489,7 +480,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
                 options={fromOptions}
                 onClick={this.setFromAsset}
               />
-              <Input
+              <InputButton
                 // @ts-ignore
                 label={"From Amount " + (availBalance !== 0 ? `(Avail: ${iNum(availBalance)})` : "")}
                 placeholder="Enter amount"
@@ -500,8 +491,8 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
                 onChange={this.onEnterFromAmount}
                 error={this.fromAmountIsValid(availBalance)}
                 readOnly={fromTicker === null}
-                // button={"max"}
-                // onClick={this.setMaxAmount}
+                button={"max"}
+                onClick={this.setSweepAll}
               />
               <Dropdown
                 label={"To Asset"}
@@ -514,7 +505,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
               />
               <Input
                 // @ts-ignore
-                label={"To Amount " + (toBalance !== 0 ? `(Avail: ${iNum(toBalance)})` : "")}
+                label="To Amount "
                 placeholder="Enter amount"
                 name="toAmount"
                 type="number"
@@ -541,7 +532,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 
                   <Description
                     label="Recipient Address (Optional)"
-                    placeholder="Exchange to another address"
+                    placeholder="Swap to another address"
                     name="externAddress"
                     type="text"
                     value={externAddress}
@@ -603,5 +594,6 @@ const ConnectedExchangePage = connect(mapStateToProps, {
 
 export const ExchangePage = () => {
   const navigate = useNavigate();
-  return <ConnectedExchangePage navigate={navigate} />;
+  const { asset } = useParams();
+  return <ConnectedExchangePage navigate={navigate} fromAsset={asset as Ticker} />;
 };

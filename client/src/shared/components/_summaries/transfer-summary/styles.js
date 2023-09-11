@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   height: auto;
-  border-radius: 4px;
+  border-radius: 12px;
   border: 1px solid ${(props) => props.theme.input.input_border};
   border-bottom: none;
   margin-top: 20px;
@@ -45,7 +45,7 @@ export const FeeRow = styled.div`
   background: ${(props) => props.theme.body.foreground};
   border-top: 1px solid ${(props) => props.theme.input.input_border};
   border-bottom: 1px solid ${(props) => props.theme.input.input_border};
-  border-radius: 0px 0px 4px 4px;
+  border-radius: 0px 0px 12px 12px;
 `;
 
 export const Tag = styled.div`

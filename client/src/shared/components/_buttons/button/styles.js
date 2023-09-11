@@ -3,7 +3,7 @@ import media from "../../../../assets/styles/media.js";
 
 export const Container = styled.div`
   background: clear;
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 16px;
   line-height: 36px;
   height: 56px;

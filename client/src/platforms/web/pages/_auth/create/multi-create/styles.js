@@ -23,7 +23,7 @@ export const SubContainer = styled.div`
   flex-direction: column;
   margin: 20px;
   border: 1px solid #3a4048;
-  border-radius: 4px;
+  border-radius: 12px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
 
   ${media.laptop`
@@ -116,7 +116,7 @@ export const Description = styled.div`
 
 export const Button = styled(NavLink)`
   background: #7289da;
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 16px;
   line-height: 36px;
   height: 56px;

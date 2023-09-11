@@ -93,13 +93,13 @@ const zephyrMenu: MenuItemConstructorOptions[] = [
           await shell.openExternal("https://discord.gg/y4mzbDYSqQ");
         },
       },
-      // {
-      //   label: "Telegram",
-      //   click: async () => {
-      //     const { shell } = require("electron");
-      //     await shell.openExternal("https://web.telegram.org/#/im?p=s1273047334_13986713956461503950");
-      //   },
-      // },
+      {
+        label: "Telegram",
+        click: async () => {
+          const { shell } = require("electron");
+          await shell.openExternal("https://t.me/zephyrprotocol");
+        },
+      },
       { type: "separator" },
       {
         label: "Github",
@@ -115,7 +115,7 @@ const zephyrMenu: MenuItemConstructorOptions[] = [
     label: "Knowledge",
     submenu: [
       {
-        label: "White Papers",
+        label: "White Paper",
         click: async () => {
           const { shell } = require("electron");
           await shell.openExternal("https://www.zephyrprotocol.com/s/Zephyr_Whitepaper_v1.pdf");

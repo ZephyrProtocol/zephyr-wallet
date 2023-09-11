@@ -3,7 +3,7 @@ import media from "../../../../assets/styles/media.js";
 
 export const Container = styled.div`
   width: auto;
-  height: auto;
+  // height: 100%;
   display: flex;
   flex-direction: column;
   padding-bottom: 12px;
@@ -17,8 +17,8 @@ export const Container = styled.div`
 export const Field = styled.input`
   background: ${(props) => props.theme.input.input_background};
   border: 1px solid ${(props) => props.theme.input.input_border};
-  border-radius: 4px;
-  padding: 16px;
+  border-radius: 12px;
+  padding: 22px;
   font-family: Inter-Regular;
   font-size: 16px;
   color: ${(props) => props.theme.input.input_value};
