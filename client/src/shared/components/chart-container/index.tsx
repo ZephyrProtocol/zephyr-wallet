@@ -22,7 +22,7 @@ class ChartWrapper extends Component<any, any> {
   render() {
     const { assetId, price } = this.props;
 
-    let prices;
+    let prices = [];
     let labels;
 
     if (assetId === Ticker.ZEPH) {
@@ -37,12 +37,14 @@ class ChartWrapper extends Component<any, any> {
       labels = [new Date(1792, 3, 2).toLocaleDateString(), new Date().toLocaleDateString()];
     }
 
+    const lastPrice = price ? price : prices[prices.length - 1];
+
     return (
       <Chart
         prices={prices}
         labels={labels}
         ticker={assetId}
-        price={price}
+        price={lastPrice ? lastPrice.toFixed(2) : 0}
         onChangePriceRange={(args: number | string) => this.selectPriceHistory(args)}
       />
     );
