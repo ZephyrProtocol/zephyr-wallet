@@ -5,7 +5,7 @@ import React from "react";
 import { Wrapper, Container, Row, Key, Value } from "./styles";
 import { Error } from "../../../../assets/styles/type.js";
 import { Ticker } from "shared/reducers/types";
-import { iNum } from "utility/utility";
+import { iNum, convertToNewTicker } from "utility/utility";
 
 export const ExchangeSummary = ({
   xRate,
@@ -26,11 +26,7 @@ export const ExchangeSummary = ({
   let rate = xRate;
   let conversion_info = "";
 
-  if (fromTicker === Ticker.ZEPHUSD && toTicker !== null) {
-    xToTicker = fromTicker;
-    xFromTicker = toTicker;
-    rate = 1 / xRate;
-  } else if (toTicker === null || fromTicker === null) {
+  if (toTicker === null || fromTicker === null) {
     rate = 1;
     xFromTicker = "-";
     xToTicker = "-";
@@ -56,7 +52,7 @@ export const ExchangeSummary = ({
             {!hasLatestXRate ? (
               <Error>Fetching latest rates...</Error>
             ) : (
-              `1 ${xToTicker} : ${iNum(rate)} ${xFromTicker}`
+              `1 ${xToTicker} : ${iNum(rate)} ${convertToNewTicker(xFromTicker)}`
             )}
           </Value>
         </Row>
@@ -64,21 +60,21 @@ export const ExchangeSummary = ({
           <Key>Converting From</Key>
           <Value>
             {fromAmount}&#160;
-            {fromTicker ? fromTicker : "--"}
+            {fromTicker ? convertToNewTicker(fromTicker) : "--"}
           </Value>
         </Row>
         <Row>
           <Key>Converting To</Key>
           <Value>
             {toAmount}&#160;
-            {toTicker ? toTicker : "--"}
+            {toTicker ? convertToNewTicker(toTicker) : "--"}
           </Value>
         </Row>
         <Row>
           <Key>Conversion Fee</Key>
           <Value>
             {conversionFee}&#160;
-            {toTicker ? toTicker : "--"}
+            {toTicker ? convertToNewTicker(toTicker) : "--"}
           </Value>
         </Row>
         <Row>

@@ -2,9 +2,10 @@ import React from "react";
 import { Ticker } from "shared/reducers/types";
 import { Container, Select, Wrapper, Item, Button, Labels, Ticker as TickerWrapper, Name, Row, Icon } from "./styles";
 import { Label, Error } from "../../../../assets/styles/type.js";
-// import logo from "../../../../assets/icons/zephyr.png";
-// import stableLogo from "../../../../assets/icons/stable.png";
-// import reserveLogo from "../../../../assets/icons/reserve.png";
+import {convertToNewTicker} from "../../../../utility/utility";
+import logo from "../../../../assets/icons/zephyr.png";
+import stableLogo from "../../../../assets/icons/stable.png";
+import reserveLogo from "../../../../assets/icons/reserve.png";
 
 class Dropdown extends React.Component {
   state = {
@@ -43,14 +44,14 @@ class Dropdown extends React.Component {
     const { onClick, options } = this.props;
     return options.map((option) => {
       const { name, ticker } = option;
-      // const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
+      const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
 
       return (
         <Item key={name} onClick={() => onClick(option)}>
           <Row>
-            {/* <Icon src={image} /> */}
+            <Icon src={image} />
             <Name>{name}</Name>
-            {ticker ? <TickerWrapper>{ticker}</TickerWrapper> : null}
+            {ticker ? <TickerWrapper>{convertToNewTicker(ticker)}</TickerWrapper> : null}
           </Row>
         </Item>
       );
@@ -61,7 +62,7 @@ class Dropdown extends React.Component {
     const { displayMenu } = this.state;
     const { label, error, placeholder, value, ticker, width, disabled } = this.props;
 
-    // const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
+    const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
 
     return (
       <Container width={width}>
@@ -75,10 +76,10 @@ class Dropdown extends React.Component {
               placeholder
             ) : (
               <Row>
-                {/* <Icon src={image} /> */}
+                <Icon src={image} />
                 <div style={{ height: "30px", display: "block" }}></div>
                 <Name>{value}</Name>
-                <TickerWrapper>{ticker}</TickerWrapper>
+                <TickerWrapper>{convertToNewTicker(ticker)}</TickerWrapper>
               </Row>
             )}
           </Button>

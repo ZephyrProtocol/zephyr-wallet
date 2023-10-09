@@ -6,6 +6,7 @@ import { Container, State, Status, Label, Value, Column, Row, Data, ShortRow, St
 import { getNetworkByName, isMainnet } from "constants/env";
 import { Conversion } from "shared/components/tx-history/container";
 import Dots from "../../_animations/dots";
+import { convertToNewTicker } from "utility/utility";
 
 export interface TransactionProps {
   type: any;
@@ -73,7 +74,7 @@ export const Transaction = ({
               {conversion.isConversion && conversion.amountStr && (
                 <Strapline>
                   {" "}
-                  {conversion.prefixStr} {conversion.amountStr} {conversion.assetId}{" "}
+                  {conversion.prefixStr} {conversion.amountStr} {convertToNewTicker(conversion.assetId)}{" "}
                 </Strapline>
               )}
             </Value>

@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { PRICE_RANGE_MONTH } from "../../reducers/priceHistory";
 import { getPriceHistory } from "../../actions";
 import BalanceDetailSection from "./detail-section";
+import { convertToNewTicker } from "utility/utility";
 
 class BalanceWrapper extends Component<any, any> {
   state = { selectedRangeInDays: PRICE_RANGE_MONTH };
@@ -24,7 +25,7 @@ class BalanceWrapper extends Component<any, any> {
     const { assetId } = this.props;
     return (
       <>
-        <Header back title={`${assetId} Balance`} description="" />
+        <Header back title={`${convertToNewTicker(assetId)} Balance`} description="" />
         <Row>
           <BalanceDetailSection {...this.props} />
         </Row>

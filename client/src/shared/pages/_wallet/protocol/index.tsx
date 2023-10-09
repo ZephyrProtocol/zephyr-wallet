@@ -72,8 +72,8 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
               </div>
             }
           />
-          <Statistic label="ZephUSD Circulation" value={<div>{numStable}</div>} />
-          <Statistic label="ZephRSV Circulation" value={<div>{numReserve}</div>} />
+          <Statistic label="Stable Dollar Circulation" value={<div>{numStable}</div>} />
+          <Statistic label="Reserve Share Circulation" value={<div>{numReserve}</div>} />
         </Row3>
         <Row4>
           <Statistic label="Assets" value={<div>${assets}</div>} />

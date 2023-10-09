@@ -5,6 +5,7 @@ import React, { Fragment } from "react";
 import { Container, Row, Key, Value, Tag, Url } from "./styles";
 import Confirm from "../../confirm/index.js";
 import { Information } from "../exchange/styles";
+import { convertToNewTicker } from "utility/utility";
 
 export const Transaction = ({ checked, onChange, recipientAddress, ticker, transferAmount, fee }) => {
   const first = recipientAddress.substring(0, 4);
@@ -17,7 +18,7 @@ export const Transaction = ({ checked, onChange, recipientAddress, ticker, trans
         <Row>
           <Key>Transfer Asset</Key>
           <Value>
-            {transferAmount} {ticker}
+            {transferAmount} {convertToNewTicker(ticker)}
           </Value>
         </Row>
 
@@ -34,7 +35,7 @@ export const Transaction = ({ checked, onChange, recipientAddress, ticker, trans
           <Key>Final Transfer Fee</Key>
           <Tag>
             <Value>
-              {fee} {ticker}
+              {fee} {convertToNewTicker(ticker)}
             </Value>
           </Tag>
         </Row>

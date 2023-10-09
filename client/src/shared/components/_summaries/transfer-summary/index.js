@@ -4,6 +4,7 @@ import React from "react";
 // Relative Imports
 import { Container, Row, Key, Value } from "./styles";
 // import Confirm from "../../confirm/index.js";
+import { convertToNewTicker } from "utility/utility";
 
 const TransferSummary = ({
   transferAsset,
@@ -25,7 +26,7 @@ const TransferSummary = ({
             : transferAmount && !isNaN(transferAmount)
             ? transferAmount
             : "0"}{" "}
-          {transferAsset}
+          {convertToNewTicker(transferAsset)}
         </Value>
       </Row>
       <Row>

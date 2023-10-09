@@ -99,9 +99,9 @@ export interface ExchangePrioOption {
   prio: number;
 }
 
-const rsvOption = { name: "Reserve coin", ticker: Ticker.ZEPHRSV };
-const stableOption = { name: "Stable coin", ticker: Ticker.ZEPHUSD };
 const zephOption = { name: "Zephyr", ticker: Ticker.ZEPH };
+const stableOption = { name: "Zephyr Stable Dollar", ticker: Ticker.ZEPHUSD };
+const rsvOption = { name: "Zephyr Reserve Share", ticker: Ticker.ZEPHRSV };
 
 const assetOptions: AssetOption[] = [zephOption, stableOption, rsvOption];
 
@@ -467,7 +467,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     return (
       <Fragment>
         <Body>
-          <Header title="Swap" description="Mint and Redeem Stable or Reserve coins" />
+          <Header title="Swap" description="Swap between Zephyr and Stable Dollars or Reserve Shares" />
 
           <Fragment>
             <Form onSubmit={this.handleSubmit}>

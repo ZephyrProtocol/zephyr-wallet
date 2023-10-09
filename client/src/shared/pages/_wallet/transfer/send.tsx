@@ -17,8 +17,8 @@ import TransferSummary from "shared/components/_summaries/transfer-summary";
 
 const assetOptions: AssetOption[] = [
   { name: "Zephyr", ticker: Ticker.ZEPH },
-  { name: "Stable coin", ticker: Ticker.ZEPHUSD },
-  { name: "Reserve coin", ticker: Ticker.ZEPHRSV },
+  { name: "Zephyr Stable Dollar", ticker: Ticker.ZEPHUSD },
+  { name: "Zephyr Reserve Share", ticker: Ticker.ZEPHRSV },
 ];
 
 interface TransferOption {

@@ -1,6 +1,6 @@
 import { EmptyState, History, Message, NoTransactions, Illustration } from "shared/pages/_wallet/details/styles";
 import { Spinner } from "shared/components/spinner";
-import { convertBalanceToMoney, createRemainingTimeString, iNum } from "utility/utility";
+import { convertBalanceToMoney, createRemainingTimeString, iNum, convertToNewTicker } from "utility/utility";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Transaction, TransactionProps } from "shared/components/tx-history/component";
@@ -71,7 +71,7 @@ class TxHistoryContainer extends Component<TxHistoryProps, any> {
 
     return (
       <>
-        <Header title="History" description={`Review your ${this.props.assetId} transaction history`} />
+        <Header title="History" description={`Review your ${convertToNewTicker(this.props.assetId)} transaction history`} />
         {isFetching && all == null ? (
           <EmptyState>
             <Spinner />

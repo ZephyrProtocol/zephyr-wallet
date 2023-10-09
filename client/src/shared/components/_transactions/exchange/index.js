@@ -5,6 +5,7 @@ import { Ticker } from "shared/reducers/types.ts";
 import { Container, Row, Key, Value, Tag, SubHeader, Information, Url, Strong } from "./styles";
 import Confirm from "../../confirm/index.js";
 import Cell from "../cells/index.js";
+import { convertToNewTicker } from "utility/utility";
 
 const Transaction = ({
   xRate,
@@ -25,8 +26,8 @@ const Transaction = ({
   const truncatedAddress = first + "...." + last;
 
   // Adding for simplicity and clarity
-  const from = `${fromAmount} ${fromTicker}`;
-  const to = `${toAmount} ${toTicker}`;
+  const from = `${fromAmount} ${convertToNewTicker(fromTicker)}`;
+  const to = `${toAmount} ${convertToNewTicker(toTicker)}`;
 
   let unlock_time = "~20m";
 
@@ -40,13 +41,13 @@ const Transaction = ({
       </Container>
       <Container>
         <SubHeader>Transaction Details</SubHeader>
-        <Cell left={`Change(${fromTicker})`} right={change} />
+        <Cell left={`Change(${convertToNewTicker(fromTicker)})`} right={change} />
         <Cell left="Unlock Time" right={unlock_time} />
         <Row>
           <Key>Transaction Fee</Key>
           <Tag priority={priority}>
             <Value>
-              {fee} {fromTicker}
+              {fee} {convertToNewTicker(fromTicker)}
             </Value>
           </Tag>
         </Row>

@@ -29,13 +29,15 @@ import {
   SendIcon,
   AddressBookIcon,
   SwapIcon,
+  CoinName,
 } from "./styles";
 import Dots from "../_animations/dots";
 import { Ticker } from "shared/reducers/types";
-// import logo from "../../../assets/icons/zephyr.png";
-// import stableLogo from "../../../assets/icons/stable.png";
-// import reserveLogo from "../../../assets/icons/reserve.png";
+import logo from "../../../assets/icons/zephyr.png";
+import stableLogo from "../../../assets/icons/stable.png";
+import reserveLogo from "../../../assets/icons/reserve.png";
 import BalanceDetailSection from "../balance-container/detail-section";
+import { convertToNewTicker } from "utility/utility";
 
 const Cell = ({
   tokenName,
@@ -75,21 +77,24 @@ const Cell = ({
           .replace("$", "");
   };
 
-  // const logoImage = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
+  const logoImage = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
 
   return (
     <>
       <Container>
         <Unlocked to={`/wallet/assets/${ticker}`}>
+          <CoinName>
+            <h1>{tokenName}</h1>
+          </CoinName>
           <Column>
             <Row>
-              {/* <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <Icon src={logoImage} />
-              </div> */}
+              </div>
               <div>
                 <MainBalance>
                   {totalBalance === 0 ? displayBalance("0.00") : displayBalance(Number(totalBalance ?? 0), true)}{" "}
-                  <Subtitle style={{ fontSize: 18 }}>{ticker.replace("Z", "Ƶ")}</Subtitle>
+                  <Subtitle style={{ fontSize: 18 }}>{convertToNewTicker(ticker)}</Subtitle>
                 </MainBalance>
                 <Balance>
                   <Subtitle>{"$" + displayBalance(value.balance, true)}</Subtitle>

@@ -15,7 +15,7 @@ export const getPriceHistory = (rangeInDays) => {
     dispatch(getPriceDataFetching());
     fetch(`https://api.coingecko.com/api/v3/coins/zephyr-protocol/market_chart?vs_currency=usd&days=${rangeInDays}`)
       .then((response) => response.json())
-      .then(decreasePricePoints)
+      // .then(decreasePricePoints)
       .then((priceData) => dispatch(getPriceDataSucceed(priceData.prices, rangeInDays)))
       .catch((error) => dispatch(getPriceDataFailed(error)));
   };

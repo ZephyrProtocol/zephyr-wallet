@@ -172,3 +172,12 @@ export const iNum = (rawNumber: number | undefined | null): string => {
 const numDigits = (value: number) => {
   return Math.max(Math.floor(Math.log10(Math.abs(value))), 0) + 1;
 };
+
+export function convertToNewTicker(ticker: Ticker | undefined) {
+  if (ticker === Ticker.ZEPHUSD) {
+    return "ZSD";
+  } else if (ticker === Ticker.ZEPHRSV) {
+    return "ZRS";
+  }
+  return ticker ?? "";
+}

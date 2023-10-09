@@ -52,10 +52,10 @@ export const Unlocked = styled(Link)`
   border-bottom: none;
   border-radius: 12px 12px 0px 0px;
   text-decoration: none;
-  flex-direction: row;
   height: auto;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  // justify-content: space-between;
 `;
 
 export const Route = styled.div`
@@ -76,11 +76,25 @@ export const Column = styled.div`
   height: auto;
   display: flex;
   padding: 20px 33px;
-  width: 100%;
+  // width: 100%;
   align-items: center;
   justify-content: space-between;
 
   gap: 2px;
+`;
+
+export const CoinName = styled.div`
+font-size: 9px;
+color: ${(props) => props.theme.type.contrast};
+letter-spacing: 0;
+line-height: 30px;
+padding: 10px 33px;
+border-bottom: 1px solid ${(props) => props.theme.body.border};
+
+h1 {
+    font-weight: 700;
+    margin: 0;
+  }
 `;
 
 export const Row = styled.div`

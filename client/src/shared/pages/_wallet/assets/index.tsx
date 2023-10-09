@@ -42,7 +42,7 @@ class AssetsPage extends Component<AssetsProps, any> {
 
     const lockedBalance = convertBalanceToMoney(this.props.balances[ticker].lockedBalance, numDecimals);
 
-    const name = ticker === Ticker.ZEPHRSV ? "Reserve" : "Stable";
+    const name = ticker === Ticker.ZEPHRSV ? "Reserve Shares" : "Stable Dollars";
     const toTicker = ticker === Ticker.ZEPHRSV ? Ticker.ZEPH : ticker;
     let value = selectValueInOtherAsset(this.props.balances[ticker], this.props.rates, ticker, toTicker); // this.props.assetsInUSD[xTicker]!.unlockedBalance;
     const xRate = selectXRate(this.props.rates, ticker, toTicker);
