@@ -30,7 +30,7 @@ export const Button = styled.div`
   margin-left: 16px;
   padding: 8px 12px;
   width: 64px;
-  border-radius: 2px;
+  border-radius: 12px;
   font-size: 11px;
   color: ${(props) => props.theme.button.primary_label};
   font-family: Inter-Regular;

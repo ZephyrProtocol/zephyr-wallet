@@ -6,13 +6,13 @@ export const Container = styled.div`
   width: 624px;
   flex-direction: column;
   margin: 20px;
-  border: 1px solid #3a4048;
+  border: 1px solid ${(props) => props.theme.body.border};
   border-radius: 12px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
 `;
 
 export const Main = styled.div`
-  background: #36393f;
+  background: ${(props) => props.theme.body.foreground};
   border-radius: 12px 12px 0px 0px;
   height: auto;
   padding: 10px;
@@ -22,8 +22,8 @@ export const Header = styled.div`
   height: auto;
   width: auto;
   padding: 20px;
-  background: #36393f;
-  border-bottom: 1px solid #3a4048;
+  background: ${(props) => props.theme.body.foreground};
+  border-bottom: 1px solid ${(props) => props.theme.body.border};
 `;
 
 export const Title = styled.div`
@@ -172,13 +172,13 @@ export const Cancel = styled(Link)`
 
 export const Footer = styled.div`
   height: 60px;
-  border-top: 1px solid #3a4048;
+  border-top: 1px solid ${(props) => props.theme.body.border};
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  background: #36393f;
+  background: ${(props) => props.theme.body.foreground};
   border-radius: 0px 0px 12px 12px;
 `;
 

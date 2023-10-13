@@ -9,8 +9,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${background};
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23222' stroke-width='5' stroke-opacity='0.25'%3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
+  background: ${(props) => props.theme.body.background};
 
   ${media.mobile`
     padding-top: 50px;
@@ -22,9 +21,10 @@ export const SubContainer = styled.div`
   width: 624px;
   flex-direction: column;
   margin: 20px;
-  border: 1px solid #3a4048;
+  border: 1px solid ${(props) => props.theme.body.border};
   border-radius: 12px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
+  background: ${(props) => props.theme.body.foreground};
 
   ${media.laptop`
     animation: none;
@@ -35,12 +35,11 @@ export const Header = styled.div`
   height: auto;
   width: auto;
   padding: 20px;
-  background: #36393f;
-  border-bottom: 1px solid #3a4048;
+  border-bottom: 1px solid ${(props) => props.theme.body.border};
 `;
 
 export const Tabs = styled.div`
-  height: 40px;
+  height: 50px;
   width: 100%;
   display: flex;
   font-family: Inter-Regular;
@@ -52,11 +51,15 @@ export const Tab = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  background: ${(props) => (props.active ? "#36393F" : "#2B2E32")};
-  color: ${(props) => (props.active ? "#ffffff" : "#8a8d90")};
+  font-weight: bold;
+
+  color: ${(props) => (props.active ? props.theme.button.primary_label : props.theme.type.secondary)};
+  background: ${(props) => (props.active ? props.theme.button.primary : props.theme.body.background)};
 
   &:hover {
     cursor: pointer;
+    transition: 500ms;
+    color: ${(props) => props.theme.type.primary};
   }
 `;
 

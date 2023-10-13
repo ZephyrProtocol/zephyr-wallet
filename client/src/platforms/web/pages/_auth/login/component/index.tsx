@@ -159,8 +159,8 @@ export default class Login extends Component<LoginProps, LoginState> {
     return (
       <Container>
         <Auth
-          title={this.state.selectKeystore ? "Zephyr Wallet" : "Seed Login"}
-          description={"Privately store, exchange and transfer assets"}
+          title={this.state.selectKeystore ? "Zephyr Protocol" : "Seed Login"}
+          description={"The Untraceable Stablecoin"}
           link="/"
           route="Create or Restore"
           label="Need a Wallet?"

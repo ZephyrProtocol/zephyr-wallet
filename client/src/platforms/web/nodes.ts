@@ -5,5 +5,6 @@ export const webWalletConnection = (): IMonerRPCConnection => {
   const uri = process.env.REACT_APP_ZEPHYR_DIRECT_HOST
     ? process.env.REACT_APP_ZEPHYR_DIRECT_HOST
     : window.location.protocol + "//" + window.location.hostname + ":" + getPort();
-  return { uri, username: "super", password: "super" };
+
+  return { uri, username: "", password: "" };
 };

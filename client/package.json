@@ -26,10 +26,11 @@
     "build:web:ci": "bash -ac \". ./env/.env.web; react-scripts build\"",
     "build:desktop:ci": "bash -ac \". ./env/.env.desktop; . ./env/.env.desktop.build;  react-scripts build\"",
     "copy-build": "rm -rf ../zephyr-desktop-app/client && rm -rf ./build/{ZephyrWebWorker*,zephyr*} && cp -rf ./build ../zephyr-desktop-app/client",
-    "copy-zephyr-core": "bash -ac 'cp ./node_modules/zephyr-javascript/dist/{ZephyrWebWorker*,zephyr*} ./public'",
+    "copy-zephyr-core": "bash -ac 'cp ./node_modules/zephyr-javascript/dist/{MoneroWebWorker*,monero*} ./public'",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:17767",
   "eslintConfig": {
     "extends": "react-app"
   },

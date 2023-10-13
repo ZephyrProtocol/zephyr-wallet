@@ -1,15 +1,18 @@
 import styled from "styled-components";
 
 export const Title = styled.div`
+  text-align: center;
   font-family: Inter-SemiBold;
-  font-size: 20px;
+  font-size: 28px;
+  font-weight: bold;
   color: ${(props) => props.theme.type.primary};
   letter-spacing: 0;
-  line-height: 30px;
+  line-height: 36px;
 `;
 
 export const Description = styled.div`
   font-family: Inter-Regular;
+  text-align: center;
   font-size: 14px;
   color: ${(props) => props.theme.type.secondary};
   line-height: 24px;

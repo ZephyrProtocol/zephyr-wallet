@@ -38,6 +38,7 @@ export const Title = styled.div`
   color: ${(props) => props.theme.type.primary};
   letter-spacing: 0;
   line-height: 36px;
+  text-align: center;
 `;
 
 export const Description = styled.div`
@@ -45,6 +46,7 @@ export const Description = styled.div`
   font-size: 14px;
   color: ${(props) => props.theme.type.secondary};
   line-height: 24px;
+  text-align: center;
 `;
 
 export const Body = styled.div`

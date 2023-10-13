@@ -12,7 +12,6 @@ export const Container = styled.div`
 `;
 
 export const Main = styled.div`
-  background: #36393f;
   border-radius: 12px 12px 0px 0px;
   height: auto;
   padding: 10px;
@@ -121,13 +120,13 @@ export const Cancel = styled(Link)`
 
 export const Footer = styled.div`
   height: 60px;
-  border-top: 1px solid #3a4048;
+  border-top: 1px solid ${(props) => props.theme.body.border};
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  background: #36393f;
+  background: ${(props) => props.theme.body.foreground};
   border-radius: 0px 0px 12px 12px;
 `;
 

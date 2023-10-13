@@ -126,6 +126,7 @@ export const isWalletSynced = async (): Promise<boolean> => {
 };
 
 export const isWalletConnected = async (): Promise<boolean> => {
+  if (!wallet) return false;
   return wallet.isConnectedToDaemon();
 };
 

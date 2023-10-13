@@ -170,56 +170,6 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
             onClick={this.handleClick}
           />
         </Form>
-        <Header title="Addresses" description="Manage and create addresses" />
-        <>
-          <Form>
-            <AddressDropdown
-              label="Select or Create Address"
-              readOnly={true}
-              value={handleLabel}
-              options={addresses}
-              address={truncated}
-              onClick={this.selectAddress}
-              editable={true}
-              editAddress={this.showAddressModal}
-            />
-            {windowWidth < 1380 ? (
-              <Description
-                label={`Address (${handleLabel})`}
-                width={true}
-                value={selected!.address}
-                readOnly={true}
-                rows={windowWidth < 600 ? "3" : "2"}
-              />
-            ) : (
-              <Input
-                label={`Address (${handleLabel})`}
-                placeholder="Select an address"
-                width={true}
-                type={"text"}
-                name="address"
-                value={selected!.address}
-                readOnly={true}
-              />
-            )}
-          </Form>
-          <Container>
-            <DoubleFooter
-              // Left Section
-              leftLabel={"Show QR"}
-              leftDisabled={false}
-              leftLoading={false}
-              leftOnClick={this.showQRCodeModal}
-              leftVisible={true}
-              // Right Section
-              rightLabel={this.state.copyButtonState}
-              rightDisabled={false}
-              rightLoading={false}
-              rightOnClick={this.clipboardAddress}
-            />
-          </Container>
-        </>
-
         <Header title="Transaction History" description="Download your transaction history" />
         <>
           <Container>
