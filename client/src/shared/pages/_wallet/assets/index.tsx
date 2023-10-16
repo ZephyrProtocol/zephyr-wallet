@@ -107,7 +107,7 @@ class AssetsPage extends Component<AssetsProps, any> {
         <Cell
           //@ts-ignore
           key={1}
-          tokenName={"Zephyr"}
+          tokenName={"Zeph"}
           ticker={"ZEPH"}
           price={xRate}
           spotPrice={spot}

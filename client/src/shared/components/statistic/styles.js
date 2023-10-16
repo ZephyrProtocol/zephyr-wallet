@@ -26,3 +26,9 @@ export const Description = styled.div`
   font-size: 14px;
   color: ${(props) => props.theme.type.secondary};
 `;
+
+export const Icon = styled.img`
+  height: 30px;
+  width: 30px;
+  margin-bottom: 2px;
+`;

@@ -7,7 +7,6 @@ import Header from "../../../components/_layout/header";
 import Overview from "../../../components/_layout/overview";
 import Cell from "../../../components/cell";
 import CellDisabled from "../../../components/cell_disabled";
-
 import { AssetList } from "constants/assets";
 import { convertBalanceToMoney } from "utility/utility";
 import { Ticker } from "shared/reducers/types";
@@ -18,8 +17,10 @@ import { BlockHeaderRate, selectXRate } from "shared/reducers/blockHeaderExchang
 import { Row, Row3, Row4 } from "./styles";
 import Statistic from "shared/components/statistic";
 import { ReserveInfo } from "shared/reducers/reserveInfo";
-
 import { ChartContainer } from "../../../components/chart-container";
+import logo from "../../../../assets/icons/zephyr.png";
+import stableLogo from "../../../../assets/icons/stable.png";
+import reserveLogo from "../../../../assets/icons/reserve.png";
 
 const tickerStyle = { color: "#7f7f7f", fontSize: "0.725rem", fontWeight: "bold" };
 
@@ -65,15 +66,12 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
         <Header title="Protocol Info" description="" />
         <Row3>
           <Statistic
+            image={logo}
             label="Reserve"
-            value={
-              <div>
-                {zephReserve} <span style={tickerStyle}>ƵEPH</span>
-              </div>
-            }
+            value={<div>{zephReserve}</div>}
           />
-          <Statistic label="Stable Dollar Circulation" value={<div>{numStable}</div>} />
-          <Statistic label="Reserve Share Circulation" value={<div>{numReserve}</div>} />
+          <Statistic label="Stable Dollar Circulation" value={<div>{numStable}</div>} image={stableLogo} />
+          <Statistic label="Reserve Share Circulation" value={<div>{numReserve}</div>} image={reserveLogo} />
         </Row3>
         <Row4>
           <Statistic label="Assets" value={<div>${assets}</div>} />

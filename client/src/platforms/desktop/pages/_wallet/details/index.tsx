@@ -34,6 +34,11 @@ class DetailsContainer extends Component<DetailsProps & RouteProps, any> {
     let spot = latestBlockerHeader?.stable?.toJSNumber() / Math.pow(10, 12) ?? 0;
     let ma = latestBlockerHeader?.stable_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
 
+    if (ticker === Ticker.ZEPH) {
+      spot = latestBlockerHeader?.spot?.toJSNumber() / Math.pow(10, 12) ?? 0;
+      ma = latestBlockerHeader?.moving_average?.toJSNumber() / Math.pow(10, 12) ?? 0;
+    }
+
     let balance: number = convertBalanceToMoney(this.props.balances[ticker].balance, 12);
     let unlockedBalance: number = convertBalanceToMoney(this.props.balances[ticker].unlockedBalance, 12);
     let lockedBalance: number = convertBalanceToMoney(this.props.balances[ticker].lockedBalance, 12);
