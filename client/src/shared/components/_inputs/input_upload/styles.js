@@ -34,7 +34,7 @@ export const Download = styled.a`
   background: ${(props) => props.theme.button.primary};
   color: white;
   margin-right: 4px;
-  border-radius: 2px;
+  border-radius: 12px;
   font-size: 12px;
   font-family: Inter-Regular;
   text-transform: uppercase;
@@ -60,7 +60,7 @@ export const Upload = styled.input`
 export const Field = styled.div`
   border: none;
   background: ${(props) => props.theme.input.input_background};
-  border-radius: 12px 0px 0px 4px;
+  border-radius: 12px;
   width: 100%;
   padding: 16px;
   font-family: Inter-Regular;
@@ -99,7 +99,7 @@ export const Labeled = styled.label`
   padding: 8px 12px;
   width: 64px;
   margin-right: 16px;
-  border-radius: 2px;
+  border-radius: 12px;
   font-size: 11px;
   text-transform: uppercase;
   transition: 500ms;

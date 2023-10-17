@@ -27,8 +27,10 @@ import { showModal } from "../../../actions/modal";
 import { MODAL_TYPE } from "../../../reducers/modal";
 import { selectSelectedAddress } from "../../../reducers/address";
 import { setSelectedAddress } from "shared/actions/address";
+import { setRestoreFromHeight } from "shared/actions/refresh";
 import AddressDropdown from "../../../components/_inputs/addresses_dropdown/index.js";
 import Description from "../../../components/_inputs/description";
+import InputButton from "shared/components/_inputs/input_button";
 
 const options = [
   { theme: "dark", value: "Dark Theme" },
@@ -48,6 +50,8 @@ interface SettingsProps extends IKeys {
   addresses: AddressEntry[];
   showModal: (modalType: MODAL_TYPE) => void;
   setSelectedAddress: (index: number) => void;
+  restoreHeight: number;
+  setRestoreFromHeight: (height: number) => void;
 }
 
 interface SettingsState {
@@ -59,6 +63,7 @@ interface SettingsState {
   seed: string;
   synced: boolean;
   copyButtonState: string;
+  refreshFromHeight: number;
 }
 
 class SettingsPage extends Component<SettingsProps, SettingsState> {
@@ -71,6 +76,7 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
     seed: "",
     synced: true,
     copyButtonState: "Copy",
+    refreshFromHeight: this.props.restoreHeight,
   };
 
   componentDidMount() {
@@ -133,6 +139,17 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
     this.props.downloadTransfers("csv");
   };
 
+  onChangeRestoreFromHeight = (event: any) => {
+    this.setState({
+      refreshFromHeight: event.target.value,
+    });
+  };
+
+  updateRestoreFromHeight = (event: any) => {
+    const height = Number(this.state.refreshFromHeight);
+    this.props.setRestoreFromHeight(height);
+  };
+
   render() {
     const { value, reveal } = this.state;
     const seed = this.props.mnemonic;
@@ -170,6 +187,17 @@ class SettingsPage extends Component<SettingsProps, SettingsState> {
             onClick={this.handleClick}
           />
         </Form>
+        <Header title="Refresh Height" description="Choose the block from which your wallet starts syncing from" />
+        <InputButton
+          type="number"
+          label="Restore From Height"
+          placeholder="Restore From Height"
+          name="restoreHeight"
+          button="Update"
+          value={this.state.refreshFromHeight.toString()}
+          onChange={this.onChangeRestoreFromHeight}
+          onClick={this.updateRestoreFromHeight}
+        />
         <Header title="Transaction History" description="Download your transaction history" />
         <>
           <Container>
@@ -270,6 +298,7 @@ const mapStateToProps = (state: ZephyrAppState) => ({
   syncState: selectSyncState(state),
   wallet: state.walletSession,
   tempWallet: selectIsTemporaryWallet(state),
+  restoreHeight: state.walletSession.restoreHeight,
 });
 
 export const Settings = connect(mapStateToProps, {
@@ -278,4 +307,5 @@ export const Settings = connect(mapStateToProps, {
   setSelectedAddress,
   storeKeyFileToDisk,
   downloadTransfers,
+  setRestoreFromHeight,
 })(SettingsPage);
