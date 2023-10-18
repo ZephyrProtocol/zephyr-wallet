@@ -40,6 +40,15 @@ export const ExchangeSummary = ({
     }
   }
 
+  if (fromTicker === Ticker.ZEPHUSD) {
+    xFromTicker = Ticker.ZEPH;
+    xToTicker = Ticker.ZEPHUSD;
+  } else if (fromTicker === Ticker.ZEPHRSV) {
+    xFromTicker = Ticker.ZEPH;
+    xToTicker = Ticker.ZEPHRSV;
+  }
+
+
   //unlock times
   let unlock_time = "~20m";
 
@@ -52,7 +61,7 @@ export const ExchangeSummary = ({
             {!hasLatestXRate ? (
               <Error>Fetching latest rates...</Error>
             ) : (
-              `1 ${xToTicker} : ${iNum(rate)} ${convertToNewTicker(xFromTicker)}`
+              `1 ${convertToNewTicker(xToTicker)} : ${iNum(rate)} ${convertToNewTicker(xFromTicker)}`
             )}
           </Value>
         </Row>
