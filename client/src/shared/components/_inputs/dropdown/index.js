@@ -44,12 +44,12 @@ class Dropdown extends React.Component {
     const { onClick, options } = this.props;
     return options.map((option) => {
       const { name, ticker } = option;
-      const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
+      const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZEPHRSV ? reserveLogo : null;
 
       return (
         <Item key={name} onClick={() => onClick(option)}>
           <Row>
-            <Icon src={image} />
+            {image && <Icon src={image} />}
             <Name>{name}</Name>
             {ticker ? <TickerWrapper>{convertToNewTicker(ticker)}</TickerWrapper> : null}
           </Row>
@@ -62,7 +62,7 @@ class Dropdown extends React.Component {
     const { displayMenu } = this.state;
     const { label, error, placeholder, value, ticker, width, disabled } = this.props;
 
-    const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
+    const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZEPHRSV ? reserveLogo : null;
 
     return (
       <Container width={width}>
@@ -76,7 +76,7 @@ class Dropdown extends React.Component {
               placeholder
             ) : (
               <Row>
-                <Icon src={image} />
+                {image && <Icon src={image} />}
                 <div style={{ height: "30px", display: "block" }}></div>
                 <Name>{value}</Name>
                 <TickerWrapper>{convertToNewTicker(ticker)}</TickerWrapper>
