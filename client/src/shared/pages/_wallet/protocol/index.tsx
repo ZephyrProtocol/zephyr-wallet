@@ -61,6 +61,8 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
     const reserveRate = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["reserve"] ?? 0);
     const reserveRateMA = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["reserve_ma"] ?? 0);
 
+    const hfVersion = Number(reserveInfo?.hf_version) ?? 0;
+
     return (
       <Body>
         <Header title="Protocol Info" description="" />
@@ -73,12 +75,19 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
           <Statistic label="Stable Dollar Circulation" value={<div>{numStable}</div>} image={stableLogo} />
           <Statistic label="Reserve Share Circulation" value={<div>{numReserve}</div>} image={reserveLogo} />
         </Row3>
-        <Row4>
-          <Statistic label="Assets" value={<div>${assets}</div>} />
-          <Statistic label="Equity" value={<div>${equity}</div>} />
-          <Statistic label="Assets (MA)" value={<div>${assetsMA}</div>} />
-          <Statistic label="Equity (MA)" value={<div>${equityMA}</div>} />
-        </Row4>
+        {hfVersion <= 4 ? (
+          <Row4>
+            <Statistic label="Assets" value={<div>${assets}</div>} />
+            <Statistic label="Equity" value={<div>${equity}</div>} />
+            <Statistic label="Assets (MA)" value={<div>${assetsMA}</div>} />
+            <Statistic label="Equity (MA)" value={<div>${equityMA}</div>} />
+          </Row4>
+        ) : (
+          <Row>
+            <Statistic label="Assets" value={<div>${assets}</div>} />
+            <Statistic label="Equity" value={<div>${equity}</div>} />
+          </Row>
+        )}
         <Row>
           <Statistic label="Reserve ratio" value={<div>{reserveRatio}%</div>} />
           <Statistic label="Reserve ratio (MA)" value={<div>{reserveRatioMA}%</div>} />

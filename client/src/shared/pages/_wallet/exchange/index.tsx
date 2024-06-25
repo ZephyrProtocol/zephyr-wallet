@@ -64,6 +64,7 @@ interface ExchangeProps {
   addresses: AddressEntry[];
   navigate: (path: string) => void;
   fromAsset?: Ticker;
+  hfVersion: number;
 }
 
 enum TxType {
@@ -297,7 +298,14 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       rate = 1 / xRate;
     }
 
-    const feeRate = txType === TxType.MintReserve ? 0 : 0.02;
+    let feeRate = txType === TxType.MintReserve ? 0 : 0.02;
+    if (this.props.hfVersion >= 5) {
+      if (txType === TxType.MintReserve || txType === TxType.RedeemReserve) {
+        feeRate = 0.01;
+      } else {
+        feeRate = 0.001;
+      }
+    }
 
     if (fromAmount !== undefined && setToAmount) {
       const amount = fromAmount * rate;
@@ -582,6 +590,7 @@ const mapStateToProps = (state: DesktopAppState) => ({
   toTicker: selectToTicker(state.exchangeProcess),
   balances: state.xBalance,
   addresses: [ALL_ADDRESSES, ...state.address.entrys],
+  hfVersion: Number(state.reserveInfo?.hf_version) ?? 0,
 });
 
 //@ts-ignore

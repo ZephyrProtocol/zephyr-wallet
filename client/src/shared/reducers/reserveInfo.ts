@@ -13,6 +13,7 @@ export type ReserveInfo = {
   equity_ma: bigInt.BigInteger;
   reserve_ratio: bigInt.BigInteger;
   reserve_ratio_ma: bigInt.BigInteger;
+  hf_version: bigInt.BigInteger;
 };
 
 const INITALSTATE: ReserveInfo = {} as ReserveInfo;
