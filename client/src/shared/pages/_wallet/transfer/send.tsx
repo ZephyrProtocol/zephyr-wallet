@@ -19,6 +19,7 @@ const assetOptions: AssetOption[] = [
   { name: "Zephyr", ticker: Ticker.ZEPH },
   { name: "Zephyr Stable Dollar", ticker: Ticker.ZEPHUSD },
   { name: "Zephyr Reserve Share", ticker: Ticker.ZEPHRSV },
+  { name: "Zephyr Yield Share", ticker: Ticker.ZYIELD },
 ];
 
 interface TransferOption {

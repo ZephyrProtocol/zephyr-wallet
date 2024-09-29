@@ -87,6 +87,8 @@ export const selectPortfolioInUSD = (state: DesktopAppState | WebAppState): XVie
 
     if (fromTicker === Ticker.ZEPHRSV) {
       xRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPHRSV, Ticker.ZEPH) * spotRate;
+    } else if (fromTicker === Ticker.ZYIELD) {
+      xRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZYIELD, Ticker.ZEPHUSD, true);
     } else if (fromTicker === Ticker.ZEPHUSD) {
       xRate = 1;
     }

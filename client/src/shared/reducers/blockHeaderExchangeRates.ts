@@ -28,6 +28,7 @@ interface BlockHeader {
   stable_ma: bigInt.BigInteger;
   reserve: bigInt.BigInteger;
   reserve_ma: bigInt.BigInteger;
+  yield_price?: bigInt.BigInteger;
   timestamp: bigInt.BigInteger;
 }
 
@@ -65,11 +66,6 @@ export const selectXRate = (
     return 0;
   }
 
-  // one of the tickers must be ZEPH
-  if (fromTicker !== Ticker.ZEPH && toTicker !== Ticker.ZEPH) {
-    return 0;
-  }
-
   const latestBlockerHeader: BlockHeaderRate = blockHeaderExchangeRate[blockHeaderExchangeRate.length - 1];
 
   if (useSpot && fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
@@ -83,6 +79,8 @@ export const selectXRate = (
   let reserve_rate = latestBlockerHeader["reserve"].toJSNumber() / Math.pow(10, 12);
   let reserve_ma_rate = latestBlockerHeader["reserve_ma"].toJSNumber() / Math.pow(10, 12);
 
+  let yield_price = (latestBlockerHeader["yield_price"]?.toJSNumber() ?? 0) / Math.pow(10, 12);
+
   if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
     return Math.max(stable_rate, stable_ma_rate);
   } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPH) {
@@ -91,6 +89,8 @@ export const selectXRate = (
     return Math.max(reserve_rate, reserve_ma_rate);
   } else if (fromTicker === Ticker.ZEPHRSV && toTicker === Ticker.ZEPH) {
     return Math.min(reserve_rate, reserve_ma_rate);
+  } else if (fromTicker === Ticker.ZYIELD || toTicker === Ticker.ZYIELD) {
+    return yield_price;
   }
 
   return 0;

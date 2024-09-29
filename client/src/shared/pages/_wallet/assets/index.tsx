@@ -42,7 +42,7 @@ class AssetsPage extends Component<AssetsProps, any> {
 
     const lockedBalance = convertBalanceToMoney(this.props.balances[ticker].lockedBalance, numDecimals);
 
-    const name = ticker === Ticker.ZEPHRSV ? "Reserve Shares" : "Stable Dollars";
+    const name = ticker === Ticker.ZYIELD ? "Yield Shares" : ticker === Ticker.ZEPHRSV ? "Reserve Shares" : "Stable Dollars";
     const toTicker = ticker === Ticker.ZEPHRSV ? Ticker.ZEPH : ticker;
     let value = selectValueInOtherAsset(this.props.balances[ticker], this.props.rates, ticker, toTicker); // this.props.assetsInUSD[xTicker]!.unlockedBalance;
     const xRate = selectXRate(this.props.rates, ticker, toTicker);
@@ -59,6 +59,16 @@ class AssetsPage extends Component<AssetsProps, any> {
 
       spot = latestBlockerHeader?.reserve?.toJSNumber() / Math.pow(10, 12) ?? 0;
       ma = latestBlockerHeader?.reserve_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
+    }
+
+    if (ticker === Ticker.ZYIELD) {
+      const spotPrice = selectXRate(this.props.rates, Ticker.ZEPHUSD, Ticker.ZYIELD, true);
+      value.balance *= spotPrice;
+      value.unlockedBalance *= spotPrice;
+      value.lockedBalance *= spotPrice;
+
+      spot = (latestBlockerHeader?.yield_price?.toJSNumber() ?? 0) / Math.pow(10, 12) ?? 0;
+      ma = spot;
     }
 
     return (
@@ -121,6 +131,7 @@ class AssetsPage extends Component<AssetsProps, any> {
         />
         {this.renderBalance(Ticker.ZEPHUSD)}
         {this.renderBalance(Ticker.ZEPHRSV)}
+        {this.renderBalance(Ticker.ZYIELD)}
       </Body>
     );
   }

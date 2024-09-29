@@ -6,6 +6,7 @@ import {convertToNewTicker} from "../../../../utility/utility";
 import logo from "../../../../assets/icons/zephyr.png";
 import stableLogo from "../../../../assets/icons/stable.png";
 import reserveLogo from "../../../../assets/icons/reserve.png";
+import yieldLogo from "../../../../assets/icons/yield.png";
 
 class Dropdown extends React.Component {
   state = {
@@ -44,7 +45,7 @@ class Dropdown extends React.Component {
     const { onClick, options } = this.props;
     return options.map((option) => {
       const { name, ticker } = option;
-      const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZEPHRSV ? reserveLogo : null;
+      const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZEPHRSV ? reserveLogo : ticker === Ticker.ZYIELD ? yieldLogo : null;
 
       return (
         <Item key={name} onClick={() => onClick(option)}>
@@ -62,7 +63,7 @@ class Dropdown extends React.Component {
     const { displayMenu } = this.state;
     const { label, error, placeholder, value, ticker, width, disabled } = this.props;
 
-    const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZEPHRSV ? reserveLogo : null;
+    const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZEPHRSV ? reserveLogo : ticker === Ticker.ZYIELD ? yieldLogo : null;
 
     return (
       <Container width={width}>

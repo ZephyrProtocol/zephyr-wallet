@@ -7,8 +7,8 @@ import { Ticker } from "shared/reducers/types";
 class BalanceDetailSection extends Component<any, any> {
   render() {
     const { assetId, balance, unlockedBalance, lockedBalance, spot, ma } = this.props;
-    const spotString = assetId === Ticker.ZEPH ? `$${spot.toFixed(4)}` : `${spot.toFixed(4)} ƵEPH`;
-    const maString = assetId === Ticker.ZEPH ? `$${ma.toFixed(4)}` : `${ma.toFixed(4)} ƵEPH`;
+    const spotString = (assetId === Ticker.ZEPH || assetId === Ticker.ZYIELD) ? `$${spot.toFixed(4)}` : `${spot.toFixed(4)} ƵEPH`;
+    const maString = (assetId === Ticker.ZEPH || assetId === Ticker.ZYIELD) ? `$${ma.toFixed(4)}` : `${ma.toFixed(4)} ƵEPH`;
 
     const displayBalance = (balance: number, useTwoDP = false) => {
       return useTwoDP
@@ -47,11 +47,11 @@ class BalanceDetailSection extends Component<any, any> {
         <DetailBox>
           <DetailSection>
             <Detail>Spot:</Detail>
-            <Detail>24hr avg:</Detail>
+            {assetId !== Ticker.ZYIELD && <Detail>24hr avg:</Detail>}
           </DetailSection>
           <DetailSection>
             <Detail>{spotString}</Detail>
-            <Detail>{maString}</Detail>
+            {assetId !== Ticker.ZYIELD && <Detail>{maString}</Detail>}
           </DetailSection>
         </DetailBox>
       </>

@@ -40,7 +40,10 @@ export const ExchangeSummary = ({
     }
   }
 
-  if (fromTicker === Ticker.ZEPHUSD) {
+  if (fromTicker === Ticker.ZYIELD || toTicker === Ticker.ZYIELD) {
+    xFromTicker = Ticker.ZEPHUSD;
+    xToTicker = Ticker.ZYIELD;
+  } else if (fromTicker === Ticker.ZEPHUSD) {
     xFromTicker = Ticker.ZEPH;
     xToTicker = Ticker.ZEPHUSD;
   } else if (fromTicker === Ticker.ZEPHRSV) {

@@ -36,6 +36,7 @@ import { Ticker } from "shared/reducers/types";
 import logo from "../../../assets/icons/zephyr.png";
 import stableLogo from "../../../assets/icons/stable.png";
 import reserveLogo from "../../../assets/icons/reserve.png";
+import yieldLogo from "../../../assets/icons/yield.png";
 import BalanceDetailSection from "../balance-container/detail-section";
 import { convertToNewTicker } from "utility/utility";
 
@@ -77,7 +78,7 @@ const Cell = ({
           .replace("$", "");
   };
 
-  const logoImage = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : reserveLogo;
+  const logoImage = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZYIELD ? yieldLogo : reserveLogo;
 
   return (
     <>

@@ -51,6 +51,14 @@ class DetailsContainer extends Component<DetailsProps & RouteProps, any> {
       ma = latestBlockerHeader?.reserve_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
     }
 
+    if (ticker === Ticker.ZYIELD) {
+      const spotRate = selectXRate(this.props.rates, Ticker.ZYIELD, Ticker.ZYIELD, true);
+      value *= spotRate;
+
+      spot = (latestBlockerHeader?.yield_price?.toJSNumber() ?? 0) / Math.pow(10, 12) ?? 0;
+      ma = spot
+    }
+
     const detailProps = { assetId: ticker, value, balance, unlockedBalance, lockedBalance, price: xRate, spot, ma };
     return (
       <Details {...detailProps}>

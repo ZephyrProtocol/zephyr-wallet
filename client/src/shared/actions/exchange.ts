@@ -49,12 +49,6 @@ export function createExchange(
       return;
     }
 
-    //conversions should always be "proxied" via ZEPH
-    if (toTicker !== Ticker.ZEPH && fromTicker !== Ticker.ZEPH) {
-      dispatch(addErrorNotification({ error: "Cannot convert between Stable and Reserve" }));
-      return;
-    }
-
     const txConfig: Partial<ITxConfig> = {
       canSplit: false,
       accountIndex: 0,

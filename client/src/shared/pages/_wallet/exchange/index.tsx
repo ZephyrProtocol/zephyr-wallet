@@ -72,6 +72,8 @@ enum TxType {
   RedeemStable,
   MintReserve,
   RedeemReserve,
+  MintYield,
+  RedeemYield,
   None,
 }
 
@@ -103,8 +105,9 @@ export interface ExchangePrioOption {
 const zephOption = { name: "Zephyr", ticker: Ticker.ZEPH };
 const stableOption = { name: "Zephyr Stable Dollar", ticker: Ticker.ZEPHUSD };
 const rsvOption = { name: "Zephyr Reserve Share", ticker: Ticker.ZEPHRSV };
+const yieldOption = { name: "Zephyr Yield Share", ticker: Ticker.ZYIELD };
 
-const assetOptions: AssetOption[] = [zephOption, stableOption, rsvOption];
+const assetOptions: AssetOption[] = [zephOption, stableOption, rsvOption, yieldOption];
 
 const exchangePrioOptions: ExchangePrioOption[] = [
   { name: "Default", ticker: "Unlocks ~21d", prio: 0 },
@@ -208,12 +211,12 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 
     if (fromTicker === Ticker.ZEPH) {
       this.setState({ toOptions: [stableOption, rsvOption] });
-      return;
-    }
-
-    if (fromTicker === Ticker.ZEPHUSD || fromTicker === Ticker.ZEPHRSV) {
+    } else if (fromTicker === Ticker.ZEPHUSD) {
+      this.setState({ toOptions: [zephOption, yieldOption] });
+    } else if (fromTicker === Ticker.ZEPHRSV) {
       this.setState({ toOptions: [zephOption] });
-      return;
+    } else if (fromTicker === Ticker.ZYIELD) {
+      this.setState({ toOptions: [stableOption] });
     }
   }
 
@@ -251,8 +254,21 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       return true;
     }
 
-    // Not allowed between Stable and Reserve
-    if (fromticker !== Ticker.ZEPH && toTicker !== Ticker.ZEPH) {
+
+    // Not allowed ZSD -> ZRS
+    if (fromticker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPHRSV) {
+      return true;
+    }
+    // Not allowed ZRS -> ZSD
+    if (fromticker === Ticker.ZEPHRSV && toTicker === Ticker.ZEPHUSD) {
+      return true;
+    }
+    // Not allowed ZEPH or ZRS -> ZYS
+    if ((fromticker === Ticker.ZEPH || fromticker === Ticker.ZEPHRSV) && toTicker === Ticker.ZYIELD) {
+      return true;
+    }
+    // Not allowed ZYS -> ZEPH or ZRS
+    if (fromticker === Ticker.ZYIELD && (toTicker === Ticker.ZEPH || toTicker === Ticker.ZEPHRSV)) {
       return true;
     }
 
@@ -273,6 +289,10 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       txType = TxType.MintReserve;
     } else if (fromTicker === Ticker.ZEPHRSV && toTicker === Ticker.ZEPH) {
       txType = TxType.RedeemReserve;
+    } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZYIELD) {
+      txType = TxType.MintYield;
+    } else if (fromTicker === Ticker.ZYIELD && toTicker === Ticker.ZEPHUSD) {
+      txType = TxType.RedeemYield;
     } else {
       txType = TxType.None;
     }
@@ -294,7 +314,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     }
 
     let rate = xRate;
-    if (txType === TxType.MintStable || txType === TxType.MintReserve) {
+    if (txType === TxType.MintStable || txType === TxType.MintReserve || txType === TxType.MintYield) {
       rate = 1 / xRate;
     }
 
@@ -475,7 +495,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     return (
       <Fragment>
         <Body>
-          <Header title="Swap" description="Swap between Zephyr and Stable Dollars or Reserve Shares" />
+          <Header title="Swap" description="Swap between Zephyr assets" />
 
           <Fragment>
             <Form onSubmit={this.handleSubmit}>

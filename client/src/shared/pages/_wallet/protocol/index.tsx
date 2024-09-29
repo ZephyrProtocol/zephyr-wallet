@@ -61,6 +61,10 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
     const reserveRate = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["reserve"] ?? 0);
     const reserveRateMA = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["reserve_ma"] ?? 0);
 
+    const zyieldPrice = convertBalanceToMoney(this.props.rates[this.props.rates.length - 1]?.["yield_price"] ?? 0);
+    const zyieldCirc = convertBalanceToMoney(reserveInfo?.zyield_circ ?? 0).toLocaleString();
+    const zyieldRsv = convertBalanceToMoney(reserveInfo?.zyield_rsv ?? 0).toLocaleString();
+
     const hfVersion = Number(reserveInfo?.hf_version) ?? 0;
 
     return (
@@ -92,6 +96,18 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
           <Statistic label="Reserve ratio" value={<div>{reserveRatio}%</div>} />
           <Statistic label="Reserve ratio (MA)" value={<div>{reserveRatioMA}%</div>} />
         </Row>
+
+        {hfVersion >= 6 && (
+          <>
+            <Header title="Yield Info" description="" />
+            <Row3>
+              <Statistic label="ZYS price" value={<div>${zyieldPrice}</div>} />
+              <Statistic label="ZYS Circulation" value={<div>{zyieldCirc} <span style={tickerStyle}>ƵYS</span></div>} />
+              <Statistic label="Yield Reserve" value={<div>{zyieldRsv} <span style={tickerStyle}>ƵSD</span></div>} />
+            </Row3>
+          </>
+        )}
+
         <Header title="Exchange Rates" description="" />
         <Row>
           <ChartContainer assetId="ZEPH" price={spot} />

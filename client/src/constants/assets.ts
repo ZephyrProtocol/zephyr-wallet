@@ -20,4 +20,10 @@ export const AssetList = [
     ticker: "ZEPHRSV",
     symbol: "Z",
   },
+  {
+    id: Ticker.ZYIELD,
+    token: "Yield",
+    ticker: "ZYIELD",
+    symbol: "$",
+  },
 ];

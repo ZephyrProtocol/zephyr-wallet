@@ -14,6 +14,8 @@ export type ReserveInfo = {
   reserve_ratio: bigInt.BigInteger;
   reserve_ratio_ma: bigInt.BigInteger;
   hf_version: bigInt.BigInteger;
+  zyield_circ: bigInt.BigInteger;
+  zyield_rsv: bigInt.BigInteger;
 };
 
 const INITALSTATE: ReserveInfo = {} as ReserveInfo;

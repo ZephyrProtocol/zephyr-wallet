@@ -178,6 +178,8 @@ export function convertToNewTicker(ticker: Ticker | undefined) {
     return "ZSD";
   } else if (ticker === Ticker.ZEPHRSV) {
     return "ZRS";
+  } else if (ticker === Ticker.ZYIELD) {
+    return "ZYS";
   }
   return ticker ?? "";
 }
