@@ -51,14 +51,13 @@ export const ExchangeSummary = ({
     xToTicker = Ticker.ZEPHRSV;
   }
 
-
   //unlock times
   let unlock_time = "~20m";
 
   return (
     <Wrapper>
       <Container>
-        <Row>
+        {/* <Row>
           <Key>Conversion Rate{conversion_info}</Key>
           <Value active={true}>
             {!hasLatestXRate ? (
@@ -67,28 +66,28 @@ export const ExchangeSummary = ({
               `1 ${convertToNewTicker(xToTicker)} : ${iNum(rate)} ${convertToNewTicker(xFromTicker)}`
             )}
           </Value>
-        </Row>
+        </Row> */}
         <Row>
-          <Key>Converting From</Key>
+          <Key>Auditing From</Key>
           <Value>
             {fromAmount}&#160;
             {fromTicker ? convertToNewTicker(fromTicker) : "--"}
           </Value>
         </Row>
         <Row>
-          <Key>Converting To</Key>
+          <Key>Auditing To</Key>
           <Value>
             {toAmount}&#160;
             {toTicker ? convertToNewTicker(toTicker) : "--"}
           </Value>
         </Row>
-        <Row>
+        {/* <Row>
           <Key>Conversion Fee</Key>
           <Value>
             {conversionFee}&#160;
             {toTicker ? convertToNewTicker(toTicker) : "--"}
           </Value>
-        </Row>
+        </Row> */}
         <Row>
           <Key>Unlock Time</Key>
           <Value>{unlock_time}</Value>

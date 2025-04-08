@@ -121,7 +121,7 @@ const prepareTxInfo = (
   rates: BlockHeaderRate[],
 ): TransactionProps => {
   let xRate = selectXRate(rates, ticker, Ticker.ZEPHUSD, true);
-  if (ticker === Ticker.ZEPHRSV) {
+  if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
     const spotRate = selectXRate(rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
     xRate = selectXRate(rates, ticker, Ticker.ZEPH) * spotRate;
   }

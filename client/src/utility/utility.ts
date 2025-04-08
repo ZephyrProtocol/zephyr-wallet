@@ -174,12 +174,16 @@ const numDigits = (value: number) => {
 };
 
 export function convertToNewTicker(ticker: Ticker | undefined) {
-  if (ticker === Ticker.ZEPHUSD) {
-    return "ZSD";
+  if (ticker === Ticker.ZEPH) {
+    return "ZEPH (unaudited)";
+  } else if (ticker === Ticker.ZEPHUSD) {
+    return "ZSD (unaudited)";
   } else if (ticker === Ticker.ZEPHRSV) {
-    return "ZRS";
+    return "ZRS (unaudited)";
   } else if (ticker === Ticker.ZYIELD) {
-    return "ZYS";
+    return "ZYS (unaudited)";
+  } else if (ticker === Ticker.ZEPH_V2) {
+    return "ZEPH";
   }
   return ticker ?? "";
 }

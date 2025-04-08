@@ -85,11 +85,11 @@ export const selectPortfolioInUSD = (state: DesktopAppState | WebAppState): XVie
     let spotRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPH, Ticker.ZEPHUSD, true);
     let xRate = spotRate;
 
-    if (fromTicker === Ticker.ZEPHRSV) {
+    if (fromTicker === Ticker.ZEPHRSV || fromTicker === Ticker.ZRS) {
       xRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPHRSV, Ticker.ZEPH) * spotRate;
-    } else if (fromTicker === Ticker.ZYIELD) {
+    } else if (fromTicker === Ticker.ZYIELD || fromTicker === Ticker.ZYS) {
       xRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZYIELD, Ticker.ZEPHUSD, true);
-    } else if (fromTicker === Ticker.ZEPHUSD) {
+    } else if (fromTicker === Ticker.ZEPHUSD || fromTicker === Ticker.ZSD) {
       xRate = 1;
     }
 
@@ -98,7 +98,7 @@ export const selectPortfolioInUSD = (state: DesktopAppState | WebAppState): XVie
       const usdAmount = xRate * amount.toJSNumber();
       usdPortfolio[balanceType] += convertBalanceToMoney(usdAmount);
 
-      if (fromTicker === Ticker.ZEPH) {
+      if (fromTicker === Ticker.ZEPH || fromTicker === Ticker.ZEPH_V2) {
         zephPortfolio[balanceType] += convertBalanceToMoney(amount.toJSNumber());
       }
     });

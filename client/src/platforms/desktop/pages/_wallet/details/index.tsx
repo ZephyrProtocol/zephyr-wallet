@@ -26,7 +26,7 @@ class DetailsContainer extends Component<DetailsProps & RouteProps, any> {
   render() {
     const ticker = this.props.assetId;
     let xRate = selectXRate(this.props.rates, ticker, Ticker.ZEPHUSD, true);
-    if (ticker === Ticker.ZEPHRSV) {
+    if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
       xRate = selectXRate(this.props.rates, Ticker.ZEPHRSV, Ticker.ZEPH);
     }
 
@@ -43,7 +43,7 @@ class DetailsContainer extends Component<DetailsProps & RouteProps, any> {
     let unlockedBalance: number = convertBalanceToMoney(this.props.balances[ticker].unlockedBalance, 12);
     let lockedBalance: number = convertBalanceToMoney(this.props.balances[ticker].lockedBalance, 12);
     let value = balance * xRate;
-    if (ticker === Ticker.ZEPHRSV) {
+    if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
       const spotRate = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
       value *= spotRate;
 
@@ -51,7 +51,7 @@ class DetailsContainer extends Component<DetailsProps & RouteProps, any> {
       ma = latestBlockerHeader?.reserve_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
     }
 
-    if (ticker === Ticker.ZYIELD) {
+    if (ticker === Ticker.ZYIELD || ticker === Ticker.ZYS) {
       const spotRate = selectXRate(this.props.rates, Ticker.ZYIELD, Ticker.ZYIELD, true);
       value *= spotRate;
 

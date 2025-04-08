@@ -9,9 +9,21 @@ export const AssetList = [
     symbol: "Z",
   },
   {
+    id: Ticker.ZEPH_V2,
+    token: "Zeph",
+    ticker: "ZPH",
+    symbol: "Z",
+  },
+  {
     id: Ticker.ZEPHUSD,
     token: "Stable",
     ticker: "ZEPHUSD",
+    symbol: "$",
+  },
+  {
+    id: Ticker.ZSD,
+    token: "Stable",
+    ticker: "ZSD",
     symbol: "$",
   },
   {
@@ -21,9 +33,21 @@ export const AssetList = [
     symbol: "Z",
   },
   {
+    id: Ticker.ZRS,
+    token: "Reserve",
+    ticker: "ZRS",
+    symbol: "Z",
+  },
+  {
     id: Ticker.ZYIELD,
     token: "Yield",
     ticker: "ZYIELD",
+    symbol: "$",
+  },
+  {
+    id: Ticker.ZYS,
+    token: "Yield",
+    ticker: "ZYS",
     symbol: "$",
   },
 ];

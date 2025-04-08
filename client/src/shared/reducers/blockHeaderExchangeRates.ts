@@ -81,13 +81,13 @@ export const selectXRate = (
 
   let yield_price = (latestBlockerHeader["yield_price"]?.toJSNumber() ?? 0) / Math.pow(10, 12);
 
-  if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
+  if ((fromTicker === Ticker.ZEPH || fromTicker === Ticker.ZEPH_V2) && toTicker === Ticker.ZEPHUSD) {
     return Math.max(stable_rate, stable_ma_rate);
-  } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPH) {
+  } else if ((fromTicker === Ticker.ZEPHUSD || fromTicker === Ticker.ZSD) && toTicker === Ticker.ZEPH) {
     return Math.min(stable_rate, stable_ma_rate);
-  } else if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHRSV) {
+  } else if ((fromTicker === Ticker.ZEPH || fromTicker === Ticker.ZEPH_V2) && toTicker === Ticker.ZEPHRSV) {
     return Math.max(reserve_rate, reserve_ma_rate);
-  } else if (fromTicker === Ticker.ZEPHRSV && toTicker === Ticker.ZEPH) {
+  } else if ((fromTicker === Ticker.ZEPHRSV || fromTicker === Ticker.ZRS) && toTicker === Ticker.ZEPH) {
     return Math.min(reserve_rate, reserve_ma_rate);
   } else if (fromTicker === Ticker.ZYIELD || toTicker === Ticker.ZYIELD) {
     return yield_price;

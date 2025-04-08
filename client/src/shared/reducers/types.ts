@@ -15,6 +15,10 @@ export enum Ticker {
   ZEPHUSD = "ZEPHUSD",
   ZEPHRSV = "ZEPHRSV",
   ZYIELD = "ZYIELD",
+  ZEPH_V2 = "ZPH",
+  ZSD = "ZSD",
+  ZRS = "ZRS",
+  ZYS = "ZYS",
 }
 
 export type XFetchingItem = Partial<{ [key in Ticker]?: XFetchingStats }>;

@@ -65,7 +65,7 @@ class Menu extends Component {
             {item === "receive" ? <Chevron /> : <ChevronInactive />}
           </Item>
         </Wrapper>
-        <Wrapper>
+        {/* <Wrapper>
           <Item to="/wallet/transfer" onClick={() => this.handleClick("transfer")}>
             <Aligner>
               <Transfer item={item} />
@@ -73,12 +73,12 @@ class Menu extends Component {
             </Aligner>
             {item === "transfer" ? <Chevron /> : <ChevronInactive />}
           </Item>
-        </Wrapper>
+        </Wrapper> */}
         <Wrapper>
           <Item to="/wallet/convert" onClick={() => this.handleClick("convert")}>
             <Aligner>
               <Convert item={item} />
-              <Label>Swap</Label>
+              <Label>Audit</Label>
             </Aligner>
             {item === "convert" ? <Chevron /> : <ChevronInactive />}
           </Item>

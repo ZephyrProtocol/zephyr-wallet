@@ -78,7 +78,18 @@ const Cell = ({
           .replace("$", "");
   };
 
-  const logoImage = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZYIELD ? yieldLogo : reserveLogo;
+  let logoImage = null;
+  if (ticker === Ticker.ZEPH || ticker === Ticker.ZEPH_V2) {
+    logoImage = logo;
+  } else if (ticker === Ticker.ZEPHUSD || ticker === Ticker.ZSD) {
+    logoImage = stableLogo;
+  } else if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
+    logoImage = reserveLogo;
+  } else if (ticker === Ticker.ZYIELD || ticker === Ticker.ZYS) {
+    logoImage = yieldLogo;
+  }
+
+  const isOldAssetType = ticker === Ticker.ZEPH || ticker === Ticker.ZEPHUSD || ticker === Ticker.ZEPHRSV || ticker === Ticker.ZYIELD;
 
   return (
     <>
@@ -112,12 +123,12 @@ const Cell = ({
                 <Button to={`/wallet/assets/${ticker}`}>
                   <AddressBookIcon /> History
                 </Button>
-                <Button to={`/wallet/transfer/${ticker}`}>
+                {/* <Button to={`/wallet/transfer/${ticker}`}>
                   <SendIcon /> Send
-                </Button>
-                <Button to={`/wallet/convert/${ticker}`}>
-                  <SwapIcon /> Swap
-                </Button>
+                </Button> */}
+                {isOldAssetType && <Button to={`/wallet/convert/${ticker}`}>
+                  <SwapIcon /> Audit
+                </Button>}
               </Buttons>
             </Row>
           </Column>

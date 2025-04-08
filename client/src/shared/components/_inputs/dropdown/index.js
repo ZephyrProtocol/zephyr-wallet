@@ -45,7 +45,17 @@ class Dropdown extends React.Component {
     const { onClick, options } = this.props;
     return options.map((option) => {
       const { name, ticker } = option;
-      const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZEPHRSV ? reserveLogo : ticker === Ticker.ZYIELD ? yieldLogo : null;
+      let image = null;
+      if (ticker === Ticker.ZEPH || ticker === Ticker.ZEPH_V2) {
+        image = logo;
+      } else if (ticker === Ticker.ZEPHUSD || ticker === Ticker.ZSD) {
+        image = stableLogo;
+      } else if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
+        image = reserveLogo;
+      } else if (ticker === Ticker.ZYIELD || ticker === Ticker.ZYS) {
+        image = yieldLogo;
+      }
+
 
       return (
         <Item key={name} onClick={() => onClick(option)}>
@@ -63,7 +73,16 @@ class Dropdown extends React.Component {
     const { displayMenu } = this.state;
     const { label, error, placeholder, value, ticker, width, disabled } = this.props;
 
-    const image = ticker === Ticker.ZEPH ? logo : ticker === Ticker.ZEPHUSD ? stableLogo : ticker === Ticker.ZEPHRSV ? reserveLogo : ticker === Ticker.ZYIELD ? yieldLogo : null;
+    let image = null;
+    if (ticker === Ticker.ZEPH || ticker === Ticker.ZEPH_V2) {
+      image = logo;
+    } else if (ticker === Ticker.ZEPHUSD || ticker === Ticker.ZSD) {
+      image = stableLogo;
+    } else if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
+      image = reserveLogo;
+    } else if (ticker === Ticker.ZYIELD || ticker === Ticker.ZYS) {
+      image = yieldLogo;
+    }
 
     return (
       <Container width={width}>
