@@ -18,16 +18,10 @@
     "zephyr-javascript": "github:ZephyrProtocol/zephyr-javascript"
   },
   "scripts": {
-    "analyze": "npx webpack-bundle-analyzer './build/bundle-stats.json'",
-    "start:web": "bash -ac '. ./env/.env.net; . ./env/.env.web; react-scripts start'",
-    "build:web": "bash -ac '. ./env/.env.net; . ./env/.env.web; react-scripts build -- --stats'",
-    "start:desktop": "bash -ac '. ./env/.env.net; . ./env/.env.desktop; react-scripts start'",
-    "build:desktop": "bash -ac '. ./env/.env.net; . ./env/.env.desktop; . ./env/.env.desktop.build;  react-scripts build'",
-    "build:web:ci": "bash -ac \". ./env/.env.web; react-scripts build\"",
-    "build:desktop:ci": "bash -ac \". ./env/.env.desktop; . ./env/.env.desktop.build;  react-scripts build\"",
-    "copy-build": "rm -rf ../zephyr-desktop-app/client && rm -rf ./build/{ZephyrWebWorker*,zephyr*} && cp -rf ./build ../zephyr-desktop-app/client",
-    "copy-zephyr-core": "bash -ac 'cp ./node_modules/zephyr-javascript/dist/{MoneroWebWorker*,monero*} ./public'",
-    "test": "react-scripts test",
+    "analyze": "cross-env NODE_OPTIONS=--openssl-legacy-provider webpack-bundle-analyzer './build/bundle-stats.json'",
+    "start:common": "node ../scripts/setup-env.js && react-scripts start",
+    "build:common": "node ../scripts/setup-env.js && react-scripts build",
+    "test": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts test",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:17767",
@@ -51,8 +45,10 @@
     "@types/react-router": "^5.1.14",
     "@types/react-router-dom": "^5.1.7",
     "@types/redux-watch": "^1.1.0",
+    "cross-env": "^7.0.3",
     "react-error-overlay": "^6.0.9",
     "react-scripts": "^4.0.3",
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "webpack-bundle-analyzer": "^4.8.0"
   }
 }

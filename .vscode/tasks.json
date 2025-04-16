@@ -11,20 +11,28 @@
 		},
 		{
 			"type": "npm",
-			"script": "start:desktop:mainnet",
+			"script": "start:desktop",
 			"path": "client/",
 			"problemMatcher": [],
 			"label": "Client Desktop Mainnet",
-			"detail": "sh -ac '. ./env/.env.mainnet; . ./env/.env.desktop; react-scripts start'"
+			"options": {
+				"env": {
+					"REACT_APP_NET_TYPE_ID": "0",
+					"REACT_APP_PLATFORM": "desktop",
+					"BROWSER": "none"
+				}
+			}
 		},
 		{
-			"type": "process",
-			"command": "sh",
-			"args": [
-				"./sh/develop_mainnet.sh"
-			],
+			"type": "node-script",
+			"script": "${workspaceFolder}/scripts/develop.js",
 			"label": "Electron Desktop Mainnet",
-			"problemMatcher": []
+			"problemMatcher": [],
+			"options": {
+				"env": {
+					"REACT_APP_NET_TYPE_ID": "0"
+				}
+			}
 		}
 	]
 }

@@ -1,0 +1,51 @@
+name: CI Web Wallet
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  web-build:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_NET_TYPE_ID: ${{ matrix.network }}
+      CI: false
+      NODE_OPTIONS: --openssl-legacy-provider
+    strategy:
+      matrix:
+        network: [0, 1, 2]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Fix git protocol
+        run: git config --global url."https://".insteadOf git://
+
+      - name: Run setup
+        run: npm run setup
+
+      - name: Build web version
+        run: npm run build:web
+
+      - name: Upload web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: zephyr-wallet-web-net${{ matrix.network }}
+          path: client/build/
+          retention-days: 7

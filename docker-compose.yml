@@ -1,0 +1,20 @@
+services:
+  zephyr-wallet:
+    image: zephyr-wallet:${NETWORK_TYPE:-mainnet}
+    build:
+      dockerfile: .docker/Dockerfile
+      context: ./
+      args:
+        REACT_APP_NET_TYPE_ID: ${REACT_APP_NET_TYPE_ID:-0}
+        REACT_APP_ZEPHYR_DIRECT_HOST: ${REACT_APP_ZEPHYR_DIRECT_HOST:-https://wallet-node.zephyrprotocol.com:443}
+    ports:
+      - ${PORT:-80}:8080
+    restart: unless-stopped
+    environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
