@@ -1,0 +1,32 @@
+{
+  "name": "zephyr-wallet",
+  "version": "2.1.1",
+  "private": true,
+  "description": "Zephyr Wallet (Web & Desktop)",
+  "scripts": {
+    "postinstall": "npm run install:all",
+    "install:all": "npm run install:client && npm run install:desktop",
+    "install:client": "cd client && npm install",
+    "install:desktop": "cd zephyr-desktop-app && npm install",
+
+    "setup": "npm install && node scripts/setup.js",
+
+    "start:web": "cd client && cross-env NODE_OPTIONS=--openssl-legacy-provider REACT_APP_PLATFORM=web INLINE_RUNTIME_CHUNK=false npm run start:common",
+    "build:web": "cd client && cross-env NODE_OPTIONS=--openssl-legacy-provider REACT_APP_PLATFORM=web INLINE_RUNTIME_CHUNK=false npm run build:common -- --stats",
+
+    "start:desktop": "cd client && cross-env NODE_OPTIONS=--openssl-legacy-provider REACT_APP_PLATFORM=desktop BROWSER=none INLINE_RUNTIME_CHUNK=false npm run start:common",
+    "build:desktop": "cd client && cross-env NODE_OPTIONS=--openssl-legacy-provider REACT_APP_PLATFORM=desktop BROWSER=none INLINE_RUNTIME_CHUNK=false PUBLIC_URL=./ GENERATE_SOURCEMAP=false npm run build:common",
+
+    "develop": "node scripts/develop.js",
+    "make": "node scripts/make.js",
+    "package": "node scripts/package.js",
+
+    "copy-zephyr-core": "node scripts/copy-files.js --core-only",
+    "copy-build": "node scripts/copy-files.js --build-only",
+
+    "test": "cd client && npm test"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

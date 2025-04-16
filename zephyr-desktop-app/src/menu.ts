@@ -63,6 +63,12 @@ const zephyrMenu: MenuItemConstructorOptions[] = [
       { role: "zoomin" },
       { role: "zoomout" },
       { type: "separator" },
+      ...(isDevMode
+          ? [
+            { role: "toggledevtools", label: "Toggle Developer Tools" },
+            { type: "separator" },
+          ]
+          : []),
       { role: "togglefullscreen" },
     ],
   },

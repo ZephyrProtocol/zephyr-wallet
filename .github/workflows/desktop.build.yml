@@ -1,0 +1,123 @@
+name: CI Desktop Wallet
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  desktop-build:
+    runs-on: ${{ matrix.os }}
+    env:
+      REACT_APP_NET_TYPE_ID: ${{ matrix.network }}
+      ACTION_OS: ${{ matrix.os }}
+      CI: false
+      NODE_OPTIONS: --openssl-legacy-provider
+    strategy:
+      matrix:
+        os: [windows-latest, macOS-latest, ubuntu-latest]
+        network: [0, 1, 2]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Fix git protocol
+        run: git config --global url."https://".insteadOf git://
+
+      - name: Run setup
+        run: npm run setup
+
+      - name: Build client for desktop
+        run: npm run build:desktop
+
+      - name: Copy build to desktop app
+        run: npm run copy-build
+
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder elfutils
+
+      - name: Create portable packages (Windows/Linux)
+        if: runner.os != 'macOS'
+        run: npm run package
+
+      - name: Create portable packages (macOS arm64/x64)
+        if: runner.os == 'macOS'
+        run: |
+          cd zephyr-desktop-app
+          npm run build
+          npx --no -- electron-forge package --arch=arm64
+          
+          npm run build
+          npx --no -- electron-forge package --arch=x64
+          cd ..
+
+      - name: Upload Windows artifacts (portable)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zephyr-wallet-windows-net${{ matrix.network }}-portable
+          path: zephyr-desktop-app/out/Zephyr-win32-x64
+          retention-days: 7
+
+      - name: Upload Linux artifacts (portable)
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zephyr-wallet-linux-net${{ matrix.network }}-portable
+          path: zephyr-desktop-app/out/Zephyr-linux-x64
+          retention-days: 7
+
+      - name: Upload macOS artifacts (portable)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zephyr-wallet-macos-net${{ matrix.network }}-portable
+          path: |
+            zephyr-desktop-app/out/Zephyr-darwin-x64
+            zephyr-desktop-app/out/Zephyr-darwin-arm64
+          retention-days: 7
+
+      - name: Build installers
+        run: npm run make
+
+      - name: Upload Windows artifacts (setup)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zephyr-wallet-windows-net${{ matrix.network }}-setup
+          path: zephyr-desktop-app/out/make/squirrel.windows/x64/*.exe
+          retention-days: 7
+
+      - name: Upload Linux artifacts (setup)
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zephyr-wallet-linux-net${{ matrix.network }}-setup
+          path: zephyr-desktop-app/out/make/deb/x64/*.deb
+          retention-days: 7
+
+      - name: Upload macOS artifacts (setup)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zephyr-wallet-macos-net${{ matrix.network }}-setup
+          path: zephyr-desktop-app/out/make/*.dmg
+          retention-days: 7
