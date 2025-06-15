@@ -25,16 +25,16 @@ class DetailsContainer extends Component<DetailsProps & RouteProps, any> {
 
   render() {
     const ticker = this.props.assetId;
-    let xRate = selectXRate(this.props.rates, ticker, Ticker.ZEPHUSD, true);
-    if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
-      xRate = selectXRate(this.props.rates, Ticker.ZEPHRSV, Ticker.ZEPH);
+    let xRate = selectXRate(this.props.rates, ticker, Ticker.ZSD, true);
+    if (ticker === Ticker.ZRS) {
+      xRate = selectXRate(this.props.rates, Ticker.ZRS, Ticker.ZEPH_V2);
     }
 
     const latestBlockerHeader: BlockHeaderRate = this.props.rates[this.props.rates.length - 1];
     let spot = latestBlockerHeader?.stable?.toJSNumber() / Math.pow(10, 12) ?? 0;
     let ma = latestBlockerHeader?.stable_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
 
-    if (ticker === Ticker.ZEPH) {
+    if (ticker === Ticker.ZEPH_V2) {
       spot = latestBlockerHeader?.spot?.toJSNumber() / Math.pow(10, 12) ?? 0;
       ma = latestBlockerHeader?.moving_average?.toJSNumber() / Math.pow(10, 12) ?? 0;
     }
@@ -43,16 +43,16 @@ class DetailsContainer extends Component<DetailsProps & RouteProps, any> {
     let unlockedBalance: number = convertBalanceToMoney(this.props.balances[ticker].unlockedBalance, 12);
     let lockedBalance: number = convertBalanceToMoney(this.props.balances[ticker].lockedBalance, 12);
     let value = balance * xRate;
-    if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
-      const spotRate = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
+    if (ticker === Ticker.ZRS) {
+      const spotRate = selectXRate(this.props.rates, Ticker.ZEPH_V2, Ticker.ZSD, true);
       value *= spotRate;
 
       spot = latestBlockerHeader?.reserve?.toJSNumber() / Math.pow(10, 12) ?? 0;
       ma = latestBlockerHeader?.reserve_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
     }
 
-    if (ticker === Ticker.ZYIELD || ticker === Ticker.ZYS) {
-      const spotRate = selectXRate(this.props.rates, Ticker.ZYIELD, Ticker.ZYIELD, true);
+    if (ticker === Ticker.ZYS) {
+      const spotRate = selectXRate(this.props.rates, Ticker.ZYS, Ticker.ZYS, true);
       value *= spotRate;
 
       spot = (latestBlockerHeader?.yield_price?.toJSNumber() ?? 0) / Math.pow(10, 12) ?? 0;

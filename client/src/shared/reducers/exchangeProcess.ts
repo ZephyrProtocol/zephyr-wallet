@@ -31,8 +31,8 @@ const INITIAL_STATE: ExchangeProcessInfo = {
   created: false,
   succeed: false,
   //  txType: null,
-  toTicker: Ticker.ZEPHUSD,
-  fromTicker: Ticker.ZEPH,
+  toTicker: Ticker.ZSD,
+  fromTicker: Ticker.ZEPH_V2,
   metaList: [],
 };
 

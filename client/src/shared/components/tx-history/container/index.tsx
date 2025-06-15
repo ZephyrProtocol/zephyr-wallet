@@ -120,10 +120,10 @@ const prepareTxInfo = (
   ticker: Ticker,
   rates: BlockHeaderRate[],
 ): TransactionProps => {
-  let xRate = selectXRate(rates, ticker, Ticker.ZEPHUSD, true);
-  if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
-    const spotRate = selectXRate(rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
-    xRate = selectXRate(rates, ticker, Ticker.ZEPH) * spotRate;
+  let xRate = selectXRate(rates, ticker, Ticker.ZSD, true);
+  if (ticker === Ticker.ZRS) {
+    const spotRate = selectXRate(rates, Ticker.ZEPH_V2, Ticker.ZSD, true);
+    xRate = selectXRate(rates, ticker, Ticker.ZEPH_V2) * spotRate;
   }
 
   const transactionDate = new Date(tx.timestamp * 1000).toLocaleDateString();

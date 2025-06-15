@@ -25,14 +25,14 @@ class ChartWrapper extends Component<any, any> {
     let prices = [];
     let labels;
 
-    if (assetId === Ticker.ZEPH) {
+    if (assetId === Ticker.ZEPH_V2) {
       const priceRangeEntry = this.props.priceHistory.prices.find(
         (priceRangeEntry: PriceRangeHistory) => priceRangeEntry.rangeInDays === this.state.selectedRangeInDays,
       );
 
       prices = getPriceValues(priceRangeEntry.prices);
       labels = getPriceDates(priceRangeEntry.prices);
-    } else if (assetId === Ticker.ZEPHUSD) {
+    } else if (assetId === Ticker.ZSD) {
       prices = [1.0, 1.0];
       labels = [new Date(1792, 3, 2).toLocaleDateString(), new Date().toLocaleDateString()];
     }

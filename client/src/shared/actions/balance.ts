@@ -40,6 +40,10 @@ const convertBalance = (balances: ZephyrBalance, unlockedBalances: ZephyrBalance
   const xBalances: XBalance = {};
 
   for (const asset of assetArr) {
+    if (asset === "ZEPH" || asset === "ZEPHUSD" || asset === "ZEPHRSV" || asset === "ZYIELD") {
+      continue;
+    }
+
     const unlockedBalance = bigIntegerToBigInt(unlockedDict[asset]);
     const balance = bigIntegerToBigInt(balanceDict[asset]);
     const lockedBalance = balance.subtract(unlockedBalance);

@@ -30,6 +30,6 @@ const INITAL_FETCH_STATS: XFetchingStats = {
 };
 
 export const INITAL_FETCHING_STATE: { [key in Ticker]?: XFetchingStats } = {
-  [Ticker.ZEPHUSD]: INITAL_FETCH_STATS,
-  [Ticker.ZEPH]: INITAL_FETCH_STATS,
+  [Ticker.ZSD]: INITAL_FETCH_STATS,
+  [Ticker.ZEPH_V2]: INITAL_FETCH_STATS,
 };

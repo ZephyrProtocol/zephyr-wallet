@@ -106,18 +106,18 @@ export interface ExchangePrioOption {
   prio: number;
 }
 
-const zephOption = { name: "Zephyr", ticker: Ticker.ZEPH };
-const stableOption = { name: "Zephyr Stable Dollar", ticker: Ticker.ZEPHUSD };
-const rsvOption = { name: "Zephyr Reserve Share", ticker: Ticker.ZEPHRSV };
-const yieldOption = { name: "Zephyr Yield Share", ticker: Ticker.ZYIELD };
+// const zephOption = { name: "Zephyr", ticker: Ticker.ZEPH };
+// const stableOption = { name: "Zephyr Stable Dollar", ticker: Ticker.ZEPHUSD };
+// const rsvOption = { name: "Zephyr Reserve Share", ticker: Ticker.ZEPHRSV };
+// const yieldOption = { name: "Zephyr Yield Share", ticker: Ticker.ZYIELD };
 const ZPH_option = { name: "Zephyr", ticker: Ticker.ZEPH_V2 };
 const ZSD_option = { name: "Zephyr Stable Dollar", ticker: Ticker.ZSD };
 const ZRS_option = { name: "Zephyr Reserve Share", ticker: Ticker.ZRS };
 const ZYS_option = { name: "Zephyr Yield Share", ticker: Ticker.ZYS };
 
-const assetOptions: AssetOption[] = [zephOption, stableOption, rsvOption, yieldOption, ZPH_option, ZSD_option, ZRS_option, ZYS_option];
-const oldAssetOptions = [zephOption, stableOption, rsvOption, yieldOption];
-const newAssetOptions = [ZPH_option, ZSD_option, ZRS_option, ZYS_option];
+const assetOptions: AssetOption[] = [ZPH_option, ZSD_option, ZRS_option, ZYS_option];
+// // const oldAssetOptions = [zephOption, stableOption, rsvOption, yieldOption];
+// const newAssetOptions = [ZPH_option, ZSD_option, ZRS_option, ZYS_option];
 
 
 const exchangePrioOptions: ExchangePrioOption[] = [
@@ -137,25 +137,25 @@ const INITIAL_STATE: ExchangeState = {
   externAddress: "",
   selectedPrio: exchangePrioOptions[0],
   hasEnough: false,
-  fromOptions: [...oldAssetOptions],
-  toOptions: [...newAssetOptions],
+  fromOptions: [...assetOptions],
+  toOptions: [...assetOptions],
   txType: TxType.MintStable,
   selectedAddress: ALL_ADDRESSES,
 };
 
 class Exchange extends Component<ExchangeProps, ExchangeState> {
-  private sendTicker: Ticker = Ticker.ZEPH;
+  private sendTicker: Ticker = Ticker.ZEPH_V2;
 
   state: ExchangeState = INITIAL_STATE;
 
   componentDidMount() {
     window.scrollTo(0, 0);
     const { fromAsset } = this.props;
-    const defaultFromAsset = fromAsset ?? Ticker.ZEPH;
+    const defaultFromAsset = fromAsset ?? Ticker.ZEPH_V2;
     const defaultFromOption = assetOptions.find((o) => o.ticker === defaultFromAsset);
     if (!defaultFromOption) {
-      this.props.setFromTicker(Ticker.ZEPH);
-      this.props.setToTicker(Ticker.ZEPHUSD);
+      this.props.setFromTicker(Ticker.ZEPH_V2);
+      this.props.setToTicker(Ticker.ZSD);
     } else {
       this.setFromAsset(defaultFromOption);
     }
@@ -220,46 +220,25 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       return;
     }
 
-    if (fromTicker === Ticker.ZEPH) {
+    if (fromTicker === Ticker.ZEPH_V2) {
+      this.setState({ toOptions: [ZSD_option, ZRS_option] });
+    } else if (fromTicker === Ticker.ZSD) {
+      this.setState({ toOptions: [ZPH_option, ZYS_option] });
+    } else if (fromTicker === Ticker.ZRS) {
       this.setState({ toOptions: [ZPH_option] });
-    } else if (fromTicker === Ticker.ZEPHUSD) {
+    } else if (fromTicker === Ticker.ZYS) {
       this.setState({ toOptions: [ZSD_option] });
-    } else if (fromTicker === Ticker.ZEPHRSV) {
-      this.setState({ toOptions: [ZRS_option] });
-    } else if (fromTicker === Ticker.ZYIELD) {
-      this.setState({ toOptions: [ZYS_option] });
     }
-
-    // if (fromTicker === Ticker.ZEPH) {
-    //   this.setState({ toOptions: [stableOption, rsvOption] });
-    // } else if (fromTicker === Ticker.ZEPHUSD) {
-    //   this.setState({ toOptions: [zephOption, yieldOption] });
-    // } else if (fromTicker === Ticker.ZEPHRSV) {
-    //   this.setState({ toOptions: [zephOption] });
-    // } else if (fromTicker === Ticker.ZYIELD) {
-    //   this.setState({ toOptions: [stableOption] });
-    // }
   }
 
   setFromAsset = (option: AssetOption) => {
     // Call back function from Dropdown
     this.props.setFromTicker(option.ticker);
     //on mismatch, just reset the other ticker
-    // if (option.ticker === Ticker.ZEPH) {
-    //   this.props.setToTicker(Ticker.ZEPHUSD);
-    // } else if (option.ticker === Ticker.ZEPHUSD || option.ticker === Ticker.ZEPHRSV) {
-    //   this.props.setToTicker(Ticker.ZEPH);
-    // } else if (this.isTickerMismatch(option.ticker, this.props.toTicker)) {
-    //   this.props.setToTicker(null);
-    // }
-    if (option.ticker === Ticker.ZEPH) {
-      this.props.setToTicker(Ticker.ZEPH_V2);
-    } else if (option.ticker === Ticker.ZEPHUSD) {
+    if (option.ticker === Ticker.ZEPH_V2) {
       this.props.setToTicker(Ticker.ZSD);
-    } else if (option.ticker === Ticker.ZEPHRSV) {
-      this.props.setToTicker(Ticker.ZRS);
-    } else if (option.ticker === Ticker.ZYIELD) {
-      this.props.setToTicker(Ticker.ZYS);
+    } else if (option.ticker === Ticker.ZSD || option.ticker === Ticker.ZRS) {
+      this.props.setToTicker(Ticker.ZEPH_V2);
     } else if (this.isTickerMismatch(option.ticker, this.props.toTicker)) {
       this.props.setToTicker(null);
     }
@@ -269,19 +248,8 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     // Call back function from Dropdown
     this.props.setToTicker(option.ticker);
     //on mismatch, just reset the other ticker
-    // if (option.ticker === Ticker.ZEPHUSD || option.ticker === Ticker.ZEPHRSV) {
-    //   this.props.setFromTicker(Ticker.ZEPH);
-    // } else if (this.isTickerMismatch(this.props.fromTicker, option.ticker)) {
-    //   this.props.setFromTicker(null);
-    // }
-    if (option.ticker === Ticker.ZEPH_V2) {
-      this.props.setFromTicker(Ticker.ZEPH);
-    } else if (option.ticker === Ticker.ZSD) {
-      this.props.setFromTicker(Ticker.ZEPHUSD);
-    } else if (option.ticker === Ticker.ZRS) {
-      this.props.setFromTicker(Ticker.ZEPHRSV);
-    } else if (option.ticker === Ticker.ZYS) {
-      this.props.setFromTicker(Ticker.ZYIELD);
+    if (option.ticker === Ticker.ZSD || option.ticker === Ticker.ZRS) {
+      this.props.setFromTicker(Ticker.ZEPH_V2);
     } else if (this.isTickerMismatch(this.props.fromTicker, option.ticker)) {
       this.props.setFromTicker(null);
     }
@@ -299,19 +267,19 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
 
 
     // Not allowed ZSD -> ZRS
-    if (fromticker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPHRSV) {
+    if (fromticker === Ticker.ZSD && toTicker === Ticker.ZRS) {
       return true;
     }
     // Not allowed ZRS -> ZSD
-    if (fromticker === Ticker.ZEPHRSV && toTicker === Ticker.ZEPHUSD) {
+    if (fromticker === Ticker.ZRS && toTicker === Ticker.ZSD) {
       return true;
     }
     // Not allowed ZEPH or ZRS -> ZYS
-    if ((fromticker === Ticker.ZEPH || fromticker === Ticker.ZEPHRSV) && toTicker === Ticker.ZYIELD) {
+    if ((fromticker === Ticker.ZEPH_V2 || fromticker === Ticker.ZRS) && toTicker === Ticker.ZYS) {
       return true;
     }
     // Not allowed ZYS -> ZEPH or ZRS
-    if (fromticker === Ticker.ZYIELD && (toTicker === Ticker.ZEPH || toTicker === Ticker.ZEPHRSV)) {
+    if (fromticker === Ticker.ZYS && (toTicker === Ticker.ZEPH_V2 || toTicker === Ticker.ZRS)) {
       return true;
     }
 
@@ -324,17 +292,17 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       txType = TxType.None;
       this.setState({ fromAmount: 0, toAmount: 0 });
       return;
-    } else if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
+    } else if (fromTicker === Ticker.ZEPH_V2 && toTicker === Ticker.ZSD) {
       txType = TxType.MintStable;
-    } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZEPH) {
+    } else if (fromTicker === Ticker.ZSD && toTicker === Ticker.ZEPH_V2) {
       txType = TxType.RedeemStable;
-    } else if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHRSV) {
+    } else if (fromTicker === Ticker.ZEPH_V2 && toTicker === Ticker.ZRS) {
       txType = TxType.MintReserve;
-    } else if (fromTicker === Ticker.ZEPHRSV && toTicker === Ticker.ZEPH) {
+    } else if (fromTicker === Ticker.ZRS && toTicker === Ticker.ZEPH_V2) {
       txType = TxType.RedeemReserve;
-    } else if (fromTicker === Ticker.ZEPHUSD && toTicker === Ticker.ZYIELD) {
+    } else if (fromTicker === Ticker.ZSD && toTicker === Ticker.ZYS) {
       txType = TxType.MintYield;
-    } else if (fromTicker === Ticker.ZYIELD && toTicker === Ticker.ZEPHUSD) {
+    } else if (fromTicker === Ticker.ZYS && toTicker === Ticker.ZSD) {
       txType = TxType.RedeemYield;
     } else if (fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPH_V2) {
       txType = TxType.AuditZeph;
@@ -514,9 +482,9 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
       lastExchangeRates !== null &&
       lastExchangeRates !== undefined &&
       lastExchangeRates.hasOwnProperty("stable_ma") &&
-      (fromTicker === Ticker.ZEPH || toTicker === Ticker.ZEPH)
+      (fromTicker === Ticker.ZEPH_V2 || toTicker === Ticker.ZEPH_V2)
     ) {
-      if (fromTicker === Ticker.ZEPHUSD || toTicker === Ticker.ZEPHUSD) {
+      if (fromTicker === Ticker.ZSD || toTicker === Ticker.ZSD) {
         // let stable_rate = latestBlockerHeader["stable"].toJSNumber() / Math.pow(10, 12);
         let stable_ma_rate = lastExchangeRates["stable_ma"].toJSNumber() / Math.pow(10, 12);
         if (this.props.xRate === stable_ma_rate) usingSpot = false;
@@ -553,7 +521,7 @@ class Exchange extends Component<ExchangeProps, ExchangeState> {
     return (
       <Fragment>
         <Body>
-          <Header title="Audit" description="Audit Zephyr assets" />
+          <Header title="Swap" description="Swap between Zephyr assets" />
 
           <Fragment>
             <Form onSubmit={this.handleSubmit}>

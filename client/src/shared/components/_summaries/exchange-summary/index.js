@@ -32,7 +32,7 @@ export const ExchangeSummary = ({
     xToTicker = "-";
   }
 
-  if (fromTicker === Ticker.ZEPH || toTicker === Ticker.ZEPH) {
+  if (fromTicker === Ticker.ZEPH_V2 || toTicker === Ticker.ZEPH_V2) {
     if (usingSpot) {
       conversion_info = " (Spot Rate)";
     } else {
@@ -40,15 +40,15 @@ export const ExchangeSummary = ({
     }
   }
 
-  if (fromTicker === Ticker.ZYIELD || toTicker === Ticker.ZYIELD) {
-    xFromTicker = Ticker.ZEPHUSD;
-    xToTicker = Ticker.ZYIELD;
-  } else if (fromTicker === Ticker.ZEPHUSD) {
-    xFromTicker = Ticker.ZEPH;
-    xToTicker = Ticker.ZEPHUSD;
-  } else if (fromTicker === Ticker.ZEPHRSV) {
-    xFromTicker = Ticker.ZEPH;
-    xToTicker = Ticker.ZEPHRSV;
+  if (fromTicker === Ticker.ZYS || toTicker === Ticker.ZYS) {
+    xFromTicker = Ticker.ZSD;
+    xToTicker = Ticker.ZYS;
+  } else if (fromTicker === Ticker.ZSD) {
+    xFromTicker = Ticker.ZEPH_V2;
+    xToTicker = Ticker.ZSD;
+  } else if (fromTicker === Ticker.ZRS) {
+    xFromTicker = Ticker.ZEPH_V2;
+    xToTicker = Ticker.ZRS;
   }
 
   //unlock times
@@ -57,7 +57,7 @@ export const ExchangeSummary = ({
   return (
     <Wrapper>
       <Container>
-        {/* <Row>
+        <Row>
           <Key>Conversion Rate{conversion_info}</Key>
           <Value active={true}>
             {!hasLatestXRate ? (
@@ -66,28 +66,28 @@ export const ExchangeSummary = ({
               `1 ${convertToNewTicker(xToTicker)} : ${iNum(rate)} ${convertToNewTicker(xFromTicker)}`
             )}
           </Value>
-        </Row> */}
+        </Row>
         <Row>
-          <Key>Auditing From</Key>
+          <Key>Converting From</Key>
           <Value>
             {fromAmount}&#160;
             {fromTicker ? convertToNewTicker(fromTicker) : "--"}
           </Value>
         </Row>
         <Row>
-          <Key>Auditing To</Key>
+          <Key>Converting To</Key>
           <Value>
             {toAmount}&#160;
             {toTicker ? convertToNewTicker(toTicker) : "--"}
           </Value>
         </Row>
-        {/* <Row>
+        <Row>
           <Key>Conversion Fee</Key>
           <Value>
             {conversionFee}&#160;
             {toTicker ? convertToNewTicker(toTicker) : "--"}
           </Value>
-        </Row> */}
+        </Row>
         <Row>
           <Key>Unlock Time</Key>
           <Value>{unlock_time}</Value>

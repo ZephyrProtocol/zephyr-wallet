@@ -66,10 +66,10 @@ export function xBalance(state = INITIAL_STATE, action: { type: string; payload:
 
 export const selectBalances = (state: DesktopAppState | WebAppState): XViewBalance => {
   return {
-    [Ticker.ZEPH]: {
-      balance: convertBalanceToMoney(state.xBalance[Ticker.ZEPH].balance),
-      unlockedBalance: convertBalanceToMoney(state.xBalance[Ticker.ZEPH].unlockedBalance),
-      lockedBalance: convertBalanceToMoney(state.xBalance[Ticker.ZEPH].lockedBalance),
+    [Ticker.ZEPH_V2]: {
+      balance: convertBalanceToMoney(state.xBalance[Ticker.ZEPH_V2].balance),
+      unlockedBalance: convertBalanceToMoney(state.xBalance[Ticker.ZEPH_V2].unlockedBalance),
+      lockedBalance: convertBalanceToMoney(state.xBalance[Ticker.ZEPH_V2].lockedBalance),
     },
   };
 };
@@ -82,13 +82,13 @@ export const selectPortfolioInUSD = (state: DesktopAppState | WebAppState): XVie
   // iterate over all balance assets
   Object.entries(xBalance).forEach(([ticker, balance]: [string, Balance]) => {
     const fromTicker: Ticker = ticker as Ticker;
-    let spotRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPH, Ticker.ZEPHUSD, true);
+    let spotRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPH_V2, Ticker.ZSD, true);
     let xRate = spotRate;
 
     if (fromTicker === Ticker.ZEPHRSV || fromTicker === Ticker.ZRS) {
-      xRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPHRSV, Ticker.ZEPH) * spotRate;
+      xRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZRS, Ticker.ZEPH_V2) * spotRate;
     } else if (fromTicker === Ticker.ZYIELD || fromTicker === Ticker.ZYS) {
-      xRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZYIELD, Ticker.ZEPHUSD, true);
+      xRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZYS, Ticker.ZSD, true);
     } else if (fromTicker === Ticker.ZEPHUSD || fromTicker === Ticker.ZSD) {
       xRate = 1;
     }
@@ -104,39 +104,39 @@ export const selectPortfolioInUSD = (state: DesktopAppState | WebAppState): XVie
     });
   });
 
-  return { [Ticker.ZEPHUSD]: usdPortfolio, [Ticker.ZEPH]: zephPortfolio };
+  return { [Ticker.ZSD]: usdPortfolio, [Ticker.ZEPH_V2]: zephPortfolio };
 };
 
 export const selectTotalBalances = (state: DesktopAppState | WebAppState): XViewBalance => {
   const defaultBalance = {
-    [Ticker.ZEPH]: { ...INITIAL_VIEW_BALANCE },
-    [Ticker.ZEPHUSD]: { ...INITIAL_VIEW_BALANCE },
-    [Ticker.ZEPHRSV]: { ...INITIAL_VIEW_BALANCE },
+    [Ticker.ZEPH_V2]: { ...INITIAL_VIEW_BALANCE },
+    [Ticker.ZSD]: { ...INITIAL_VIEW_BALANCE },
+    [Ticker.ZRS]: { ...INITIAL_VIEW_BALANCE },
   };
 
   const xBalance = state.xBalance;
 
-  const zephToUSDRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPH, Ticker.ZEPHUSD, true);
+  const zephToUSDRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPH_V2, Ticker.ZSD, true);
 
-  const usdToZEPHRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPHUSD, Ticker.ZEPH);
+  const usdToZEPHRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZSD, Ticker.ZEPH_V2);
 
-  const zephToRSVRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPH, Ticker.ZEPHRSV);
+  const zephToRSVRate = selectXRate(state.blockHeaderExchangeRate, Ticker.ZEPH_V2, Ticker.ZRS);
 
   if (zephToUSDRate === null || usdToZEPHRate === null || zephToRSVRate === null) {
     return defaultBalance;
   }
 
-  const zephUSDTotalBalance: ViewBalance = Object.entries(xBalance[Ticker.ZEPHUSD]).reduce(
+  const zephUSDTotalBalance: ViewBalance = Object.entries(xBalance[Ticker.ZSD]).reduce(
     (result: any, [balanceType, balance]) => {
-      const total = xBalance.ZEPH[balanceType].toJSNumber() * zephToUSDRate + balance.toJSNumber();
+      const total = xBalance.ZPH[balanceType].toJSNumber() * zephToUSDRate + balance.toJSNumber();
       result[balanceType] = convertBalanceToMoney(total);
       return result;
     },
     {},
   );
 
-  const zephTotalBalance: ViewBalance = Object.entries(xBalance.ZEPH).reduce((result: any, [balanceType, balance]) => {
-    const total = xBalance[Ticker.ZEPHUSD][balanceType].toJSNumber() * usdToZEPHRate + balance.toJSNumber();
+  const zephTotalBalance: ViewBalance = Object.entries(xBalance.ZPH).reduce((result: any, [balanceType, balance]) => {
+    const total = xBalance[Ticker.ZSD][balanceType].toJSNumber() * usdToZEPHRate + balance.toJSNumber();
     result[balanceType] = convertBalanceToMoney(total);
     return result;
   }, {});
@@ -151,8 +151,8 @@ export const selectTotalBalances = (state: DesktopAppState | WebAppState): XView
   );
 
   return {
-    [Ticker.ZEPH]: zephUSDTotalBalance,
-    ZEPHRSV: rsvTotalBalance,
+    [Ticker.ZEPH_V2]: zephUSDTotalBalance,
+    ZRS: rsvTotalBalance,
   };
 };
 

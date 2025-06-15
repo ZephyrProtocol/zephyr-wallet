@@ -9,7 +9,7 @@ import { createTransfer } from "shared/actions/transfer";
 import { useNavigate, useParams } from "react-router";
 
 class Container extends Component<any, any> {
-  private sendTicker: Ticker = Ticker.ZEPH;
+  private sendTicker: Ticker = Ticker.ZEPH_V2;
   componentDidMount(): void {}
 
   componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any): void {
@@ -19,7 +19,7 @@ class Container extends Component<any, any> {
     }
   }
 
-  onSendFunds = (address: string, amount: number, ticker: Ticker = Ticker.ZEPH, sweepAll: boolean) => {
+  onSendFunds = (address: string, amount: number, ticker: Ticker = Ticker.ZEPH_V2, sweepAll: boolean) => {
     this.sendTicker = ticker;
     this.props.createTransfer(address, amount, ticker, sweepAll);
   };

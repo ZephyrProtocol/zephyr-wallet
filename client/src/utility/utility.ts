@@ -28,9 +28,9 @@ export const getCurrentValueInUSD = (amount: number, ticker: Ticker, priceInUSD:
   const humanAmount: number = convertBalanceToMoney(Math.abs(amount));
 
   switch (ticker) {
-    case Ticker.ZEPHUSD:
+    case Ticker.ZSD:
       return humanAmount;
-    case Ticker.ZEPH:
+    case Ticker.ZEPH_V2:
       return humanAmount * priceInUSD;
   }
 };

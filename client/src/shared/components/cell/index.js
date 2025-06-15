@@ -89,7 +89,7 @@ const Cell = ({
     logoImage = yieldLogo;
   }
 
-  const isOldAssetType = ticker === Ticker.ZEPH || ticker === Ticker.ZEPHUSD || ticker === Ticker.ZEPHRSV || ticker === Ticker.ZYIELD;
+  // const isOldAssetType = ticker === Ticker.ZEPH || ticker === Ticker.ZEPHUSD || ticker === Ticker.ZEPHRSV || ticker === Ticker.ZYIELD;
 
   return (
     <>
@@ -123,12 +123,12 @@ const Cell = ({
                 <Button to={`/wallet/assets/${ticker}`}>
                   <AddressBookIcon /> History
                 </Button>
-                {/* <Button to={`/wallet/transfer/${ticker}`}>
+                <Button to={`/wallet/transfer/${ticker}`}>
                   <SendIcon /> Send
-                </Button> */}
-                {isOldAssetType && <Button to={`/wallet/convert/${ticker}`}>
-                  <SwapIcon /> Audit
-                </Button>}
+                </Button>
+                <Button to={`/wallet/convert/${ticker}`}>
+                  <SwapIcon /> Swap
+                </Button>
               </Buttons>
             </Row>
           </Column>

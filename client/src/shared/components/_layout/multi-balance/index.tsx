@@ -36,7 +36,7 @@ class Balances extends Component<BalanceProps, BalanceState> {
   };
 
   render() {
-    const ticker = Ticker.ZEPHUSD;
+    const ticker = Ticker.ZSD;
 
     if (ticker === null)
       return (
@@ -47,7 +47,7 @@ class Balances extends Component<BalanceProps, BalanceState> {
       );
 
     const { balance } = this.props.balances[ticker]!;
-    const { balance: zephBalance } = this.props.balances[Ticker.ZEPH]!;
+    const { balance: zephBalance } = this.props.balances[Ticker.ZEPH_V2]!;
 
     const { isSyncing, blockHeight, scannedHeight } = this.props.syncState;
     const percentage = ((scannedHeight / blockHeight) * 100).toFixed(2);

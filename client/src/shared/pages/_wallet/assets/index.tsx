@@ -57,7 +57,7 @@ class AssetsPage extends Component<AssetsProps, any> {
       name = "Yield Shares";
     }
 
-    const toTicker = (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) ? Ticker.ZEPH : ticker;
+    const toTicker = (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) ? Ticker.ZEPH_V2 : ticker;
     let value = selectValueInOtherAsset(this.props.balances[ticker], this.props.rates, ticker, toTicker); // this.props.assetsInUSD[xTicker]!.unlockedBalance;
     const xRate = selectXRate(this.props.rates, ticker, toTicker);
 
@@ -66,7 +66,7 @@ class AssetsPage extends Component<AssetsProps, any> {
     let ma = latestBlockerHeader?.stable_ma?.toJSNumber() / Math.pow(10, 12) ?? 0;
 
     if (ticker === Ticker.ZEPHRSV || ticker === Ticker.ZRS) {
-      const spotPrice = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
+      const spotPrice = selectXRate(this.props.rates, Ticker.ZEPH_V2, Ticker.ZSD, true);
       value.balance *= spotPrice;
       value.unlockedBalance *= spotPrice;
       value.lockedBalance *= spotPrice;
@@ -76,7 +76,7 @@ class AssetsPage extends Component<AssetsProps, any> {
     }
 
     if (ticker === Ticker.ZYIELD || ticker === Ticker.ZYS) {
-      const spotPrice = selectXRate(this.props.rates, Ticker.ZEPHUSD, Ticker.ZYIELD, true);
+      const spotPrice = selectXRate(this.props.rates, Ticker.ZSD, Ticker.ZYS, true);
       value.balance *= spotPrice;
       value.unlockedBalance *= spotPrice;
       value.lockedBalance *= spotPrice;
@@ -107,27 +107,27 @@ class AssetsPage extends Component<AssetsProps, any> {
   };
 
   render() {
-    const unlockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.unlockedBalance, 12);
-    const totalBalance = convertBalanceToMoney(this.props.balances.ZEPH.balance, 12);
-    const lockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.lockedBalance, 12);
+    // const unlockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.unlockedBalance, 12);
+    // const totalBalance = convertBalanceToMoney(this.props.balances.ZEPH.balance, 12);
+    // const lockedBalance = convertBalanceToMoney(this.props.balances.ZEPH.lockedBalance, 12);
 
     const unlockedBalance_v2 = convertBalanceToMoney(this.props.balances.ZPH.unlockedBalance, 12);
     const totalBalance_v2 = convertBalanceToMoney(this.props.balances.ZPH.balance, 12);
     const lockedBalance_v2 = convertBalanceToMoney(this.props.balances.ZPH.lockedBalance, 12);
 
-    const zephInUSD = selectValueInOtherAsset(
-      this.props.balances.ZEPH,
-      this.props.rates,
-      Ticker.ZEPH,
-      Ticker.ZEPHUSD,
-      true,
-    );
+    // const zephInUSD = selectValueInOtherAsset(
+    //   this.props.balances.ZEPH,
+    //   this.props.rates,
+    //   Ticker.ZEPH,
+    //   Ticker.ZEPHUSD,
+    //   true,
+    // );
 
     const zephInUSD_v2 = selectValueInOtherAsset(
       this.props.balances.ZPH,
       this.props.rates,
-      Ticker.ZEPH,
-      Ticker.ZEPHUSD,
+      Ticker.ZEPH_V2,
+      Ticker.ZSD,
       true,
     );
 
@@ -135,13 +135,13 @@ class AssetsPage extends Component<AssetsProps, any> {
     const spot = latestBlockerHeader?.spot?.toJSNumber() / Math.pow(10, 12) ?? 0;
     const ma = latestBlockerHeader?.moving_average?.toJSNumber() / Math.pow(10, 12) ?? 0;
 
-    const xRate = selectXRate(this.props.rates, Ticker.ZEPH, Ticker.ZEPHUSD, true);
+    const xRate = selectXRate(this.props.rates, Ticker.ZEPH_V2, Ticker.ZSD, true);
     return (
       <Body>
         <Header title="Balances" description="Overview of your Zephyr assets" />
 
         <Overview />
-        {totalBalance !== 0 && (
+        {/* {totalBalance !== 0 && (
           <>
           <Cell
             //@ts-ignore
@@ -159,7 +159,7 @@ class AssetsPage extends Component<AssetsProps, any> {
             showPrivateDetails={this.props.showPrivateDetails}
           />
           </>
-        )}
+        )} */}
         {totalBalance_v2 !== 0 && (
           <>
           <Cell
@@ -179,11 +179,11 @@ class AssetsPage extends Component<AssetsProps, any> {
           />
           </>
         )}
-        {this.renderBalance(Ticker.ZEPHUSD)}
+        {/* {this.renderBalance(Ticker.ZEPHUSD)} */}
         {this.renderBalance(Ticker.ZSD)}
-        {this.renderBalance(Ticker.ZEPHRSV)}
+        {/* {this.renderBalance(Ticker.ZEPHRSV)} */}
         {this.renderBalance(Ticker.ZRS)}
-        {this.renderBalance(Ticker.ZYIELD)}
+        {/* {this.renderBalance(Ticker.ZYIELD)} */}
         {this.renderBalance(Ticker.ZYS)}
       </Body>
     );

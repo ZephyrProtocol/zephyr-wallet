@@ -68,7 +68,7 @@ export const selectXRate = (
 
   const latestBlockerHeader: BlockHeaderRate = blockHeaderExchangeRate[blockHeaderExchangeRate.length - 1];
 
-  if (useSpot && fromTicker === Ticker.ZEPH && toTicker === Ticker.ZEPHUSD) {
+  if (useSpot && fromTicker === Ticker.ZEPH_V2 && toTicker === Ticker.ZSD) {
     let spot_rate = latestBlockerHeader["spot"].toJSNumber() / Math.pow(10, 12);
     return spot_rate;
   }
@@ -81,15 +81,15 @@ export const selectXRate = (
 
   let yield_price = (latestBlockerHeader["yield_price"]?.toJSNumber() ?? 0) / Math.pow(10, 12);
 
-  if ((fromTicker === Ticker.ZEPH || fromTicker === Ticker.ZEPH_V2) && toTicker === Ticker.ZEPHUSD) {
+  if (fromTicker === Ticker.ZEPH_V2 && toTicker === Ticker.ZSD) {
     return Math.max(stable_rate, stable_ma_rate);
-  } else if ((fromTicker === Ticker.ZEPHUSD || fromTicker === Ticker.ZSD) && toTicker === Ticker.ZEPH) {
+  } else if (fromTicker === Ticker.ZSD && toTicker === Ticker.ZEPH_V2) {
     return Math.min(stable_rate, stable_ma_rate);
-  } else if ((fromTicker === Ticker.ZEPH || fromTicker === Ticker.ZEPH_V2) && toTicker === Ticker.ZEPHRSV) {
+  } else if (fromTicker === Ticker.ZEPH_V2 && toTicker === Ticker.ZRS) {
     return Math.max(reserve_rate, reserve_ma_rate);
-  } else if ((fromTicker === Ticker.ZEPHRSV || fromTicker === Ticker.ZRS) && toTicker === Ticker.ZEPH) {
+  } else if (fromTicker === Ticker.ZRS && toTicker === Ticker.ZEPH_V2) {
     return Math.min(reserve_rate, reserve_ma_rate);
-  } else if (fromTicker === Ticker.ZYIELD || toTicker === Ticker.ZYIELD) {
+  } else if (fromTicker === Ticker.ZYS || toTicker === Ticker.ZYS) {
     return yield_price;
   }
 

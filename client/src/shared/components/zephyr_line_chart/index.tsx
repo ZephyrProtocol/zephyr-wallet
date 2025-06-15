@@ -23,7 +23,7 @@ export class ZephyrLineChart extends Component<ZephyrLineChartProps, {}> {
     const pricePoints = prices.map((price: number, index: number) => {
       const xPos = index * xPointDistance;
       let yPos;
-      if (this.props.ticker === Ticker.ZEPHUSD) {
+      if (this.props.ticker === Ticker.ZSD) {
         yPos = graphHeight / 2;
       } else {
         yPos = (highestPrice - price) * yPointDelta;
