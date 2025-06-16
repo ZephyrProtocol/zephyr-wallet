@@ -110,7 +110,7 @@ class ProtocolInfoPage extends Component<AssetsProps, any> {
 
         <Header title="Exchange Rates" description="" />
         <Row>
-          <ChartContainer assetId="ZEPH" price={spot} />
+          <ChartContainer assetId="ZPH" price={spot} />
         </Row>
         <Row>
           <Statistic label="Spot" value={<div>${spot}</div>} />

@@ -78,7 +78,7 @@ class Chart extends Component {
         >
           1M
         </Button>
-        {/* <Button
+        <Button
           onClick={() => {
             this.props.onChangePriceRange(PRICE_RANGE_YEAR);
             this.toggleDay("1Y");
@@ -86,8 +86,8 @@ class Chart extends Component {
           active={activeDay === "1Y" && true}
         >
           1Y
-        </Button> */}
-        <Button
+        </Button>
+        {/* <Button
           onClick={() => {
             this.props.onChangePriceRange(PRICE_RANGE_MAX);
             this.toggleDay("ALL");
@@ -95,7 +95,7 @@ class Chart extends Component {
           active={activeDay === "ALL" && true}
         >
           ALL
-        </Button>
+        </Button> */}
       </Buttons>
     );
     if (!this.props.prices || this.props.prices.length === 0) {
